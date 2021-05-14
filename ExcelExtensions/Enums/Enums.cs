@@ -5,7 +5,7 @@
         /// <summary>
         /// Format of data to transcribe to and from excel data into c# objects.
         /// </summary>
-        public enum ExcelColumnFormatType
+        public enum ExcelFormatType
         {
             /// <summary>
             /// String type
@@ -26,7 +26,7 @@
             /// <summary>
             /// Time span type
             /// </summary>
-            Duration = 4,
+            Duration = 4, //TODO this might be a datetime...
             /// <summary>
             /// Percent type (%)
             /// </summary>

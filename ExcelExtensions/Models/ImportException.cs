@@ -4,7 +4,7 @@
 namespace ExcelExtensions.Models
 {
     /// <summary>
-    /// Represents an exception when using the parse funtions of EE
+    /// Represents an exception when using the parse functions of EE
     /// </summary>
     public class ImportException : Exception
     {

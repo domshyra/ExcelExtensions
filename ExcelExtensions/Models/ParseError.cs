@@ -11,7 +11,7 @@ namespace ExcelExtensions.Models
         /// Represents the sheet the error occurred on
         /// </summary>
         public string Sheet { get; set; }
-        public ExcelColumnFormatType? FormatType { get; set; }
+        public ExcelFormatType? FormatType { get; set; }
         /// <summary>
         /// Represents the column the error occurred on
         /// </summary>
