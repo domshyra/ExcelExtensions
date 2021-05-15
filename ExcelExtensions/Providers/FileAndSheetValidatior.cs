@@ -28,7 +28,7 @@ namespace ExcelExtensions.Providers
                 exception = new()
                 {
                     Sheet = sheetName,
-                    Type = ParseExceptionType.SheetMissingError,
+                    ExceptionType = ParseExceptionType.SheetMissingError,
                     Severity = ParseExceptionSeverity.Error,
                 };
 
@@ -49,7 +49,7 @@ namespace ExcelExtensions.Providers
             {
                 exception = new()
                 {
-                    Type = ParseExceptionType.NoFileFound,
+                    ExceptionType = ParseExceptionType.NoFileFound,
                     Severity = ParseExceptionSeverity.Error,
                 };
             }
@@ -66,7 +66,7 @@ namespace ExcelExtensions.Providers
                 exception = new()
                 {
                     Message = "Wrong file type uploaded. Please upload an excel file",
-                    Type = ParseExceptionType.Generic,
+                    ExceptionType = ParseExceptionType.Generic,
                     Severity = ParseExceptionSeverity.Error,
                 };
             }
@@ -131,7 +131,7 @@ namespace ExcelExtensions.Providers
             ParseException exception = new()
             {
                 Message = $"This file is encrypted with a password, which was {passwordStatus}.",
-                Type = ParseExceptionType.WrongFilePassword,
+                ExceptionType = ParseExceptionType.WrongFilePassword,
                 Severity = ParseExceptionSeverity.Error,
             };
 

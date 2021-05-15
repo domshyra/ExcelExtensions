@@ -11,7 +11,7 @@ namespace ExcelExtensions.Providers
         /// <inheritdoc/>
         public decimal? ParsePercent(ExcelRange cell)
         {
-            string valueTypeInExcel = "a decimal value";
+            string valueTypeInExcel = Constants.DecimalExceptionTypeString;
             CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
 
             try
@@ -37,7 +37,7 @@ namespace ExcelExtensions.Providers
         /// <inheritdoc/>
         public int? ParseInt(ExcelRange cell)
         {
-            string valueTypeInExcel = "an int value";
+            string valueTypeInExcel = Constants.IntExceptionTypeString;
             CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
 
             try
@@ -64,7 +64,7 @@ namespace ExcelExtensions.Providers
         /// <inheritdoc/>
         public decimal? ParseDecimal(ExcelRange cell)
         {
-            string valueTypeInExcel = "a decimal value";
+            string valueTypeInExcel = Constants.DecimalExceptionTypeString;
             CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
 
             try
@@ -90,7 +90,7 @@ namespace ExcelExtensions.Providers
         /// <inheritdoc/>
         public double? ParseDouble(ExcelRange cell)
         {
-            string valueTypeInExcel = "a double value";
+            string valueTypeInExcel = Constants.DoubleExceptionTypeString;
             CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
 
             try
@@ -116,7 +116,7 @@ namespace ExcelExtensions.Providers
         /// <inheritdoc/>
         public DateTime? ParseDate(ExcelRange cell)
         {
-            string valueTypeInExcel = "a DateTime value";
+            string valueTypeInExcel = Constants.DateTimeExceptionTypeString;
             CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
 
             try
@@ -166,8 +166,16 @@ namespace ExcelExtensions.Providers
         /// <inheritdoc/>
         public TimeSpan? ParseTimeSpan(ExcelRange cell)
         {
-            string valueTypeInExcel = "a TimeSpan value";
+            string valueTypeInExcel = Constants.TimeSpanExceptionTypeString;
             CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
+
+
+            //https://docs.microsoft.com/en-us/dotnet/api/system.timespan.tryparseexact?view=net-5.0
+            //https://docs.microsoft.com/en-us/dotnet/api/system.timespan.parseexact?view=net-5.0
+            //https://docs.microsoft.com/en-us/dotnet/standard/base-types/composite-formatting
+            //https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-timespan-format-strings
+            //https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-timespan-format-strings
+            //well lets figure this out later
 
             try
             {
@@ -208,7 +216,7 @@ namespace ExcelExtensions.Providers
         public bool ParseBool(ExcelRange cell)
         {
             bool? returnValue = null;
-            string valueTypeInExcel = "a bool value";
+            string valueTypeInExcel = Constants.BoolExceptionTypeString;
             CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
 
             if (!string.IsNullOrEmpty(cell.Value?.ToString()))
@@ -232,7 +240,7 @@ namespace ExcelExtensions.Providers
         /// <inheritdoc/>
         public decimal? ParseCurrency(ExcelRange cell)
         {
-            string valueTypeInExcel = "a decimal value";
+            string valueTypeInExcel = Constants.DecimalExceptionTypeString;
             CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
 
             try
@@ -252,6 +260,32 @@ namespace ExcelExtensions.Providers
             {
                 //Throw the exception to the calling method
                 throw new FormatException($"{Constants.DefaultCannotString} \"{cell.Text}\" to {valueTypeInExcel}.");
+            }
+        }
+
+        /// <inheritdoc/>
+        //TODO: add unit test for this one
+        public string? ParseString(ExcelRange cell)
+        {
+            string valueTypeInExcel = Constants.StringExceptionTypeString;
+            CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
+
+            try
+            {
+                string cellVal = cell.Value.ToString().Trim();
+
+                if (string.IsNullOrEmpty(cellVal) && !string.IsNullOrEmpty(cell.Formula))
+                {
+                    //We have a formula which is setting the field to blank instead of null
+                    throw new NullReferenceException();
+                }
+
+                return cellVal;
+            }
+
+            catch (NullReferenceException)
+            {
+                throw;
             }
         }
 
@@ -279,13 +313,8 @@ namespace ExcelExtensions.Providers
             return null;
         }
 
-        /// <summary>
-        /// provides a check for invalid or empty data
-        /// </summary>
-        /// <param name="cell"></param>
-        /// <param name="valueTypeInExcel"></param>
-        /// <exception cref="NullReferenceException"></exception>
-        private static void CheckIfCellIsNullOrEmpty(ExcelRange cell, string valueTypeInExcel)
+        /// <inheritdoc/>
+        public void CheckIfCellIsNullOrEmpty(ExcelRange cell, string valueTypeInExcel)
         {
             string nullErrorMsg = $"{Constants.DefaultCannotString} {Constants.DefaultIsNullOrEmptyString} to {valueTypeInExcel}.";
 

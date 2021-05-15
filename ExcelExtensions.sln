@@ -5,6 +5,13 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelExtensions", "ExcelExtensions\ExcelExtensions.csproj", "{75EDF274-F31E-420A-AF41-C044B976B9B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelExtensionsTests", "ExcelExtensionsTests\ExcelExtensionsTests.csproj", "{FB3858CA-D5A6-45AA-8F63-1AE0C63BA2B9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DADB85F7-E65A-455D-BFE0-AC63A8119D22}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +22,10 @@ Global
 		{75EDF274-F31E-420A-AF41-C044B976B9B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75EDF274-F31E-420A-AF41-C044B976B9B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75EDF274-F31E-420A-AF41-C044B976B9B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB3858CA-D5A6-45AA-8F63-1AE0C63BA2B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB3858CA-D5A6-45AA-8F63-1AE0C63BA2B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB3858CA-D5A6-45AA-8F63-1AE0C63BA2B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB3858CA-D5A6-45AA-8F63-1AE0C63BA2B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -25,6 +25,14 @@ namespace ExcelExtensions.Interfaces
         /// <exception cref="FormatException">If trying to convert an invalid text value</exception>
         decimal? ParseCurrency(ExcelRange cell);
         /// <summary>
+        /// Provides a <see cref="string"/> from an <see cref="ExcelRange"/>
+        /// </summary>
+        /// <param name="cell"></param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException">If input value or text is null</exception>
+        /// <exception cref="FormatException">If trying to convert an invalid text value</exception>
+        string? ParseString(ExcelRange cell);
+        /// <summary>
         /// Provides a <see cref="DateTime"/> from an <see cref="ExcelRange"/>
         /// </summary>
         /// <param name="cell"></param>
@@ -73,5 +81,13 @@ namespace ExcelExtensions.Interfaces
         /// <exception cref="NullReferenceException">If input value or text is null</exception>
         /// <exception cref="FormatException">If trying to convert an invalid text value</exception>
         decimal? ParsePercent(ExcelRange cell);
+
+        /// <summary>
+        /// provides a check for invalid or empty data
+        /// </summary>
+        /// <param name="cell"></param>
+        /// <param name="valueTypeInExcel"></param>
+        /// <exception cref="NullReferenceException"></exception>
+        public void CheckIfCellIsNullOrEmpty(ExcelRange cell, string valueTypeInExcel);
     }
 }

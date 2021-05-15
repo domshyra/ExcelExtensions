@@ -8,20 +8,100 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using static ExcelExtensions.Enums.Enums;
 
 namespace ExcelExtensions.Providers
 {
     /// <inheritdoc/>
     public class ExcelExtensionsProvider : IExcelExtensionsProvider
     {
+        #region developer exeptpons 
+        public KeyValuePair<string, ParseException> LogDeveloperException(string worksheetName, ImportColumnTemplate importColumn, string cellAddress, string message, string modelPropertyName)
+        {
+            ParseException messageSpecification = LogDeveloperExceptionParseException(worksheetName, importColumn, cellAddress, message);
 
+            return new KeyValuePair<string, ParseException>(modelPropertyName, messageSpecification);
+        }
+        public KeyValuePair<int, ParseException> LogDeveloperException(string worksheetName, ImportColumnTemplate importColumn, string cellAddress, int rowNumber, string message)
+        {
+            ParseException messageSpecification = LogDeveloperExceptionParseException(worksheetName, importColumn, cellAddress, message);
+
+            return new KeyValuePair<int, ParseException>(rowNumber, messageSpecification);
+        }
+
+        private ParseException LogDeveloperExceptionParseException(string worksheetName, ImportColumnTemplate importColumn, string cellAddress, string exeptionMessage)
+        {
+            //ParseException messageSpecification = new(worksheetName, displayName, cellAddress, null, "An error occurred when trying to set the property info. The error is: " + message)
+            ParseException messageSpecification = new(worksheetName, importColumn.Column)
+            {
+                ColumnLetter = GetColumnLetter(cellAddress),
+                Message = $"An error occurred when trying to set the property info. The error is: {exeptionMessage}",
+                Row = GetRowNumber(cellAddress),
+                ExceptionType = ParseExceptionType.Generic,
+                Severity = ParseExceptionSeverity.Error,
+            };
+            return messageSpecification;
+        }
+
+        public KeyValuePair<string, ParseException> LogNullReferenceException(string worksheetName, ImportColumnTemplate displayName, string cellAddress, string modelPropertyName)
+        {
+            ParseException messageSpecification = LogNullReferenceExceptionParseException(worksheetName, displayName, cellAddress);
+
+            return new KeyValuePair<string, ParseException>(modelPropertyName, messageSpecification);
+        }
+
+        public KeyValuePair<int, ParseException> LogNullReferenceException(string worksheetName, ImportColumnTemplate displayName, string cellAddress, int rowNumber)
+        {
+            ParseException messageSpecification = LogNullReferenceExceptionParseException(worksheetName, displayName, cellAddress);
+
+            return new KeyValuePair<int, ParseException>(rowNumber, messageSpecification);
+        }
+
+        private ParseException LogNullReferenceExceptionParseException(string worksheetName, ImportColumnTemplate column, string cellAddress)
+        {
+            //ErrorLocation errorLocation = new ErrorLocation(worksheetName, displayName, cellAddress, null, "Missing data");
+            ParseException messageSpecification = new(worksheetName, column)
+            {
+                ColumnLetter = GetColumnLetter(cellAddress),
+                Row = GetRowNumber(cellAddress),
+                ExceptionType = ParseExceptionType.MissingData,
+            };
+
+            return messageSpecification;
+        }
+
+        public KeyValuePair<string, ParseException> LogCellException(string worksheetName, ImportColumnTemplate displayName, string cellAddress, string modelPropertyName)
+        {
+            ParseException messageSpecification = LogCellExceptionParseException(worksheetName, displayName, cellAddress);
+
+            return new KeyValuePair<string, ParseException>(modelPropertyName, messageSpecification);
+        }
+
+        public KeyValuePair<int, ParseException> LogCellException(string worksheetName, ImportColumnTemplate displayName, string cellAddress, int rowNumber)
+        {
+            ParseException messageSpecification = LogCellExceptionParseException(worksheetName, displayName, cellAddress);
+
+            return new KeyValuePair<int, ParseException>(rowNumber, messageSpecification);
+        }
+
+        private ParseException LogCellExceptionParseException(string worksheetName, ImportColumnTemplate column, string cellAddress)
+        {
+            ParseException messageSpecification = new(worksheetName, column)
+            {
+                ColumnLetter = GetColumnLetter(cellAddress),
+                Row = GetRowNumber(cellAddress),
+                ExceptionType = ParseExceptionType.DataTypeExpectedError,
+            };
+            return messageSpecification;
+        }
+        #endregion
         /// <inheritdoc/>
         public string GetCellAddress(int columnNumber, int rowNumber)
-            => $"{GetColumnName(columnNumber)}{rowNumber}";
+            => $"{GetColumnLetter(columnNumber)}{rowNumber}";
 
         /// <inheritdoc/>
         public string GetCellAddress(int columnNumber, string rowNumber)
-            => $"{GetColumnName(columnNumber)}{rowNumber}";
+            => $"{GetColumnLetter(columnNumber)}{rowNumber}";
 
         /// <inheritdoc/>
         public int GetRowNumber(string cellAddress)
@@ -82,7 +162,7 @@ namespace ExcelExtensions.Providers
             => (row: GetRowNumber(cellAddress), column: GetColumnNumber(cellAddress));
 
         /// <inheritdoc/>
-        public string GetColumnName(int columnNumber)
+        public string GetColumnLetter(int columnNumber)
         {
             if (columnNumber <= 0)
             {
@@ -100,7 +180,15 @@ namespace ExcelExtensions.Providers
 
             return columnName;
         }
-
+        /// <summary>
+        /// Returns the column name from a cell. Ex "C6" returns C.
+        /// </summary>
+        /// <param name="cell">Cell as a string, ex "C6"</param>
+        /// <returns>The column name as an string</returns>
+        private static string GetColumnLetter(string cell)
+        {
+            return Regex.Replace(cell, "[^A-Z]+", string.Empty);
+        }
         /// <inheritdoc/>
         public int FindMaxRow(List<Cell> cells)
             => cells.Select(cell => Convert.ToInt32(Regex.Replace(cell.ValueCellLocation, "[^0-9]+", string.Empty))).Concat(new[] { 0 }).Max();

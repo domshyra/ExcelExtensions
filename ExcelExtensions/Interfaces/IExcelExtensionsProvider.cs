@@ -68,7 +68,7 @@ namespace ExcelExtensions.Interfaces
         /// </summary>
         /// <param name="columnNumber">Column number as an <see cref="int"/></param>
         /// <returns>the column name as a string from the column number. Returns empty string if null or zero</returns>
-        string GetColumnName(int columnNumber);
+        string GetColumnLetter(int columnNumber);
         /// <summary>
         /// Get column number. Ex "J14" returns 10.
         /// </summary>
@@ -93,6 +93,21 @@ namespace ExcelExtensions.Interfaces
         /// <returns>The row number as an <see cref="int"/></returns>
         /// <exception cref="NullReferenceException">If input value or text is null</exception>
         int GetRowNumber(string cellAddress);
+
+
+
+
+
+
+
+        ///
+
+        KeyValuePair<string, ParseException> LogDeveloperException(string worksheetName, ImportColumnTemplate displayName, string cellAddress, string message, string modelPropertyName);
+        KeyValuePair<int, ParseException> LogDeveloperException(string worksheetName, ImportColumnTemplate displayName, string cellAddress, int rowNumber, string message);
+        KeyValuePair<string, ParseException> LogNullReferenceException(string worksheetName, ImportColumnTemplate displayName, string cellAddress, string modelPropertyName);
+        KeyValuePair<int, ParseException> LogNullReferenceException(string worksheetName, ImportColumnTemplate displayName, string cellAddress, int rowNumber);
+        KeyValuePair<int, ParseException> LogCellException(string worksheetName, ImportColumnTemplate displayName, string cellAddress, int rowNumber);
+        KeyValuePair<string, ParseException> LogCellException(string worksheetName, ImportColumnTemplate displayName, string cellAddress, string modelPropertyName);
 
     }
 }
