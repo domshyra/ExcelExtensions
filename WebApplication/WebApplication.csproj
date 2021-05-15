@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>71f0cea9-1232-4285-b692-fdaffe527a8c</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,11 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ExcelExtensions\ExcelExtensions.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Views\" />
   </ItemGroup>
 
 </Project>
