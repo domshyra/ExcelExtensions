@@ -10,6 +10,11 @@ namespace ExcelExtensions.Models
     {
         public ImportException() : base() { }
         public ImportException(string message) : base(message) { }
+
+        public ImportException(ParseException exception)
+        {
+        }
+
         public ImportException(string message, Exception inner) : base(message, inner) { }
     }
 }

@@ -26,7 +26,7 @@
             /// <summary>
             /// Time span type
             /// </summary>
-            Duration = 4, //TODO this might be a datetime...
+            Duration = 4,
             /// <summary>
             /// Percent type (%)
             /// </summary>
@@ -54,5 +54,43 @@
             /// <remarks>Does not work with exports</remarks>
             DecimalList = 10,
         }
+
+        /// <summary>
+        /// Represents the severity of the parser exception
+        /// </summary>
+        public enum ParseExceptionSeverity
+        {
+            /// <summary>
+            /// Error condition
+            /// </summary>
+            Error = 0,
+            /// <summary>
+            /// Warning condition
+            /// </summary>
+            Warning = 1
+        }
+
+        /// <summary>
+        /// Represents the exception type the parser ran into 
+        /// </summary>
+        public enum ParseExceptionType
+        {
+            DataTypeExpectedError = 0,
+            DuplicateData = 1,
+            DuplicateKey = 2,
+            Generic = 3,
+            InvalidData = 4,
+            MaxLength = 5,
+            MissingData = 6,
+            MissMatchData = 7,
+            NoColumnTemplatesFound = 8,
+            NoFileFound = 9,
+            NoValidDataToSave = 10,
+            OptionalFieldMissing = 11,
+            RequiredFieldMissing = 12,
+            SheetMissingError = 13,
+            WrongFilePassword = 14
+        }
     }
+
 }
