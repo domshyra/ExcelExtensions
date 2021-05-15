@@ -1,4 +1,6 @@
-﻿namespace ExcelExtensions.Enums
+﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
+
+namespace ExcelExtensions.Enums
 {
     public class Enums
     {

@@ -1,4 +1,5 @@
-﻿using ExcelExtensions.Globals;
+﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
+
 using ExcelExtensions.Interfaces;
 using ExcelExtensions.Models;
 using OfficeOpenXml;

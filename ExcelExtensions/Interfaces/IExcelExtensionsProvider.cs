@@ -1,4 +1,6 @@
-﻿using ExcelExtensions.Models;
+﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
+
+using ExcelExtensions.Models;
 using System;
 using System.Collections.Generic;
 

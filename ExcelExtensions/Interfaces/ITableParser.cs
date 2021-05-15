@@ -1,10 +1,8 @@
-﻿using ExcelExtensions.Models;
+﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
+
+using ExcelExtensions.Models;
 using OfficeOpenXml;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExcelExtensions.Interfaces
 {

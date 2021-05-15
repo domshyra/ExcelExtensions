@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
+
+using System;
 
 //TODO
 namespace ExcelExtensions.Models

@@ -1,4 +1,6 @@
-﻿using ExcelExtensions.Globals;
+﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
+
+using ExcelExtensions.Globals;
 using static ExcelExtensions.Enums.Enums;
 
 namespace ExcelExtensions.Models

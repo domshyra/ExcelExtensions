@@ -1,3 +1,5 @@
+// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
+
 using ExcelExtensions.Providers;
 using OfficeOpenXml;
 using Xunit;
