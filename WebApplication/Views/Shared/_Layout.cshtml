@@ -3,14 +3,26 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
+    <meta name="author" content="Dominic Schira">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@ViewData["Title"]</title>
 </head>
 <body>
+    <nav class="navbar fixed-top navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Fixed top</a>
+        </div>
+    </nav>
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
+    </div>
+    <div class="container mt-1 pt-3 border-top border-light">
+        <footer>
+            <p>&copy; @DateTime.Now.Year - dominic schira</p>
+            <p>View this websites code on <a href="https://github.com/domshyra/ExcelExtensions" target="_blank">github</a>.</p>
+        </footer>
     </div>
     <script src="~/public/main.bundle.js"></script>
 </body>
