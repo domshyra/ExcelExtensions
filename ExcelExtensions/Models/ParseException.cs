@@ -68,7 +68,8 @@ namespace ExcelExtensions.Models
         }
         public ParseException(string sheetName, Column column) : this (sheetName)
         {
-            ColumnHeader = column.HeaderName;
+            ColumnHeader = column.ModelProperty;
+            //ColumnHeader = column.ColumnHeader; //todo
             FormatType = column.Format;
         }
         public ParseException(string sheetName, ImportColumnTemplate column) : this (sheetName, column.Column)

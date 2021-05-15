@@ -42,7 +42,7 @@ namespace ExcelExtensions.Models
 
         public ImportColumnWithCellAddress(IExcelExtensionsProvider excelExtensions, ImportColumnTemplate template) : base(template.ColumnHeaderOptions, template.IsRequired, template.Column)
         {
-            ColumnNumber = excelExtensions.GetColumnNumber(template.Column.ColumnLetter);
+            ColumnNumber = template.Column.ColumnLetter == null ? 0 : excelExtensions.GetColumnNumber(template.Column.ColumnLetter);
         }
     }
 

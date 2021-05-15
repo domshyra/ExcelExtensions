@@ -17,24 +17,24 @@ namespace ExcelExtensions.Providers
     /// <inheritdoc/>
     public class ExcelExtensionsProvider : IExcelExtensionsProvider
     {
-        #region developer exeptpons 
+        #region developer exemptions 
         public KeyValuePair<string, ParseException> LogDeveloperException(string worksheetName, ImportColumnTemplate importColumn, string cellAddress, string message, string modelPropertyName)
         {
-            ParseException messageSpecification = LogDeveloperExceptionParseException(worksheetName, importColumn, cellAddress, message);
+            ParseException parseException = LogDeveloperExceptionParseException(worksheetName, importColumn, cellAddress, message);
 
-            return new KeyValuePair<string, ParseException>(modelPropertyName, messageSpecification);
+            return new KeyValuePair<string, ParseException>(modelPropertyName, parseException);
         }
         public KeyValuePair<int, ParseException> LogDeveloperException(string worksheetName, ImportColumnTemplate importColumn, string cellAddress, int rowNumber, string message)
         {
-            ParseException messageSpecification = LogDeveloperExceptionParseException(worksheetName, importColumn, cellAddress, message);
+            ParseException parseException = LogDeveloperExceptionParseException(worksheetName, importColumn, cellAddress, message);
 
-            return new KeyValuePair<int, ParseException>(rowNumber, messageSpecification);
+            return new KeyValuePair<int, ParseException>(rowNumber, parseException);
         }
 
         private ParseException LogDeveloperExceptionParseException(string worksheetName, ImportColumnTemplate importColumn, string cellAddress, string exeptionMessage)
         {
-            //ParseException messageSpecification = new(worksheetName, displayName, cellAddress, null, "An error occurred when trying to set the property info. The error is: " + message)
-            ParseException messageSpecification = new(worksheetName, importColumn.Column)
+            //ParseException parseException = new(worksheetName, displayName, cellAddress, null, "An error occurred when trying to set the property info. The error is: " + message)
+            ParseException parseException = new(worksheetName, importColumn.Column)
             {
                 ColumnLetter = GetColumnLetter(cellAddress),
                 Message = $"An error occurred when trying to set the property info. The error is: {exeptionMessage}",
@@ -42,59 +42,59 @@ namespace ExcelExtensions.Providers
                 ExceptionType = ParseExceptionType.Generic,
                 Severity = ParseExceptionSeverity.Error,
             };
-            return messageSpecification;
+            return parseException;
         }
 
         public KeyValuePair<string, ParseException> LogNullReferenceException(string worksheetName, ImportColumnTemplate displayName, string cellAddress, string modelPropertyName)
         {
-            ParseException messageSpecification = LogNullReferenceExceptionParseException(worksheetName, displayName, cellAddress);
+            ParseException parseException = LogNullReferenceExceptionParseException(worksheetName, displayName, cellAddress);
 
-            return new KeyValuePair<string, ParseException>(modelPropertyName, messageSpecification);
+            return new KeyValuePair<string, ParseException>(modelPropertyName, parseException);
         }
 
         public KeyValuePair<int, ParseException> LogNullReferenceException(string worksheetName, ImportColumnTemplate displayName, string cellAddress, int rowNumber)
         {
-            ParseException messageSpecification = LogNullReferenceExceptionParseException(worksheetName, displayName, cellAddress);
+            ParseException parseException = LogNullReferenceExceptionParseException(worksheetName, displayName, cellAddress);
 
-            return new KeyValuePair<int, ParseException>(rowNumber, messageSpecification);
+            return new KeyValuePair<int, ParseException>(rowNumber, parseException);
         }
 
         private ParseException LogNullReferenceExceptionParseException(string worksheetName, ImportColumnTemplate column, string cellAddress)
         {
             //ErrorLocation errorLocation = new ErrorLocation(worksheetName, displayName, cellAddress, null, "Missing data");
-            ParseException messageSpecification = new(worksheetName, column)
+            ParseException parseException = new(worksheetName, column)
             {
                 ColumnLetter = GetColumnLetter(cellAddress),
                 Row = GetRowNumber(cellAddress),
                 ExceptionType = ParseExceptionType.MissingData,
             };
 
-            return messageSpecification;
+            return parseException;
         }
 
         public KeyValuePair<string, ParseException> LogCellException(string worksheetName, ImportColumnTemplate displayName, string cellAddress, string modelPropertyName)
         {
-            ParseException messageSpecification = LogCellExceptionParseException(worksheetName, displayName, cellAddress);
+            ParseException parseException = LogCellExceptionParseException(worksheetName, displayName, cellAddress);
 
-            return new KeyValuePair<string, ParseException>(modelPropertyName, messageSpecification);
+            return new KeyValuePair<string, ParseException>(modelPropertyName, parseException);
         }
 
         public KeyValuePair<int, ParseException> LogCellException(string worksheetName, ImportColumnTemplate displayName, string cellAddress, int rowNumber)
         {
-            ParseException messageSpecification = LogCellExceptionParseException(worksheetName, displayName, cellAddress);
+            ParseException parseException = LogCellExceptionParseException(worksheetName, displayName, cellAddress);
 
-            return new KeyValuePair<int, ParseException>(rowNumber, messageSpecification);
+            return new KeyValuePair<int, ParseException>(rowNumber, parseException);
         }
 
         private ParseException LogCellExceptionParseException(string worksheetName, ImportColumnTemplate column, string cellAddress)
         {
-            ParseException messageSpecification = new(worksheetName, column)
+            ParseException parseException = new(worksheetName, column)
             {
                 ColumnLetter = GetColumnLetter(cellAddress),
                 Row = GetRowNumber(cellAddress),
                 ExceptionType = ParseExceptionType.DataTypeExpectedError,
             };
-            return messageSpecification;
+            return parseException;
         }
         #endregion
         /// <inheritdoc/>

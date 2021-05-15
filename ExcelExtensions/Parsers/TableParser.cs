@@ -68,7 +68,7 @@ namespace ExcelExtensions.Parsers
                 throw new ArgumentOutOfRangeException(nameof(columns), "All ColumnTemplate's must have a ColumnNumber. If the ColumnNumber is unknown use the ScanForColumnsAndParseTable method.");
             }
             //Assign required columns
-            foreach (ImportColumnWithCellAddress col in columns.Where(x => x.IsRequired))
+            foreach (ImportColumnWithCellAddress col in columnsWithCellAddresses.Where(x => x.IsRequired))
             {
                 _requiredFieldsColumnLocations.Add(col.Column.ColumnLetter);
             }
@@ -115,14 +115,14 @@ namespace ExcelExtensions.Parsers
                 {
                     //skip adding this row since it is only invalid data.
 
-                    ParseException messageSpecification = new()
+                    ParseException parseException = new()
                     {
                         ExceptionType = ParseExceptionType.MissingData,
                         Severity = ParseExceptionSeverity.Warning,
                         Message = $"Missing all required data for row {rowNumber}. Skipping row import."
                     };
 
-                    KeyValuePair<int, ParseException> missingRow = new(rowNumber, messageSpecification);
+                    KeyValuePair<int, ParseException> missingRow = new(rowNumber, parseException);
 
                     _parseResults.Errors.Add(missingRow);
                 }
@@ -210,13 +210,13 @@ namespace ExcelExtensions.Parsers
             {
                 //searched all, but couldn't find one of more in same row
                 _parseResults.Errors.Clear();
-                ParseException messageSpecification = new()
+                ParseException parseException = new()
                 {
                     ExceptionType = ParseExceptionType.Generic,
                     Severity = ParseExceptionSeverity.Error,
                     Message = "Could not find columns. Please check spelling of header columns and make sure all required columns are in the worksheet."
                 };
-                _parseResults.Errors.Add(new KeyValuePair<int, ParseException>(headerRowId, messageSpecification));
+                _parseResults.Errors.Add(new KeyValuePair<int, ParseException>(headerRowId, parseException));
 
                 return true;
             }
@@ -265,23 +265,23 @@ namespace ExcelExtensions.Parsers
                 if (coltemplate.IsRequired && coltemplate.ColumnNumber == 0)
                 {
 
-                    ParseException messageSpecification = new(workSheet.Name, coltemplate.Column)
+                    ParseException parseException = new(workSheet.Name, coltemplate.Column)
                     {
                         ExceptionType = ParseExceptionType.RequiredFieldMissing,
                         Severity = ParseExceptionSeverity.Error,
 
                     };
-                    _parseResults.Errors.Add(new KeyValuePair<int, ParseException>(headerRowId, messageSpecification));
+                    _parseResults.Errors.Add(new KeyValuePair<int, ParseException>(headerRowId, parseException));
                 }
                 else if (coltemplate.ColumnNumber == 0 && coltemplate.IsRequired == false)
                 {
-                    ParseException messageSpecification = new(workSheet.Name, coltemplate.Column)
+                    ParseException parseException = new(workSheet.Name, coltemplate.Column)
                     {
                         ExceptionType = ParseExceptionType.OptionalFieldMissing,
                         Severity = ParseExceptionSeverity.Warning,
                     };
 
-                    _parseResults.Errors.Add(new KeyValuePair<int, ParseException>(headerRowId, messageSpecification));
+                    _parseResults.Errors.Add(new KeyValuePair<int, ParseException>(headerRowId, parseException));
 
                 }
 
