@@ -36,12 +36,6 @@ namespace ExcelExtensionsTests
             //mockRepository.VerifyAll();
         }
 
-        private static ParserProvider CreateParserProvider()
-        {
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-
-            return new ParserProvider();
-        }
         private static void SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet)
         {
             excel = new ExcelPackage();
@@ -197,7 +191,7 @@ namespace ExcelExtensionsTests
         public void ParseTable_BasicTest_Pass()
         {
             //Arrange
-            SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
+            SetUpBasicExcelTest(out _, out ExcelWorksheet worksheet);
 
             List<ParseTableTestBaseModel> rowsOfTestData = GetOneRow();
 
@@ -237,7 +231,7 @@ namespace ExcelExtensionsTests
         public void SearchAndParseTable_BasicTest_Pass()
         {
             //Arrange
-            SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
+            SetUpBasicExcelTest(out _, out ExcelWorksheet worksheet);
 
             List<ParseTableTestBaseModel> rowsOfTestData = GetOneRow();
 
@@ -259,7 +253,7 @@ namespace ExcelExtensionsTests
         public void SearchAndParseTable_ShiftedLocations_WithHeaderRowInput_Pass(int row, int col)
         {
             //Arrange
-            SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
+            SetUpBasicExcelTest(out _, out ExcelWorksheet worksheet);
 
             List<ParseTableTestBaseModel> rowsOfTestData = GetOneRow();
 
@@ -293,7 +287,7 @@ namespace ExcelExtensionsTests
         public void SearchAndParseTable_ShiftedLocations_WithoutHeaderRowInput_Pass(int row, int col)
         {
             //Arrange
-            SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
+            SetUpBasicExcelTest(out _, out ExcelWorksheet worksheet);
 
             List<ParseTableTestBaseModel> rowsOfTestData = GetOneRow();
 
@@ -312,7 +306,7 @@ namespace ExcelExtensionsTests
         public void SearchAndParseTable_WithHeaderRowInput_LastRowOfSearch_Pass()
         {
             //Arrange
-            SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
+            SetUpBasicExcelTest(out _, out ExcelWorksheet worksheet);
 
             List<ParseTableTestBaseModel> rowsOfTestData = GetOneRow();
 
@@ -331,7 +325,7 @@ namespace ExcelExtensionsTests
         public void SearchAndParseTable_MissingOptionalColumn_Pass()
         {
             //Arrange
-            SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
+            SetUpBasicExcelTest(out _, out ExcelWorksheet worksheet);
 
 
             List<ParseTableTestBaseModel> rowsOfTestData = GetOneRow();
@@ -380,7 +374,7 @@ namespace ExcelExtensionsTests
         public void SearchAndParseTable_HeaderGreaterThanMaxSearch_Error()
         {
             //Arrange
-            SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
+            SetUpBasicExcelTest(out _, out ExcelWorksheet worksheet);
 
             List<ParseTableTestBaseModel> rowsOfTestData = GetOneRow();
 
@@ -397,7 +391,7 @@ namespace ExcelExtensionsTests
         public void SearchAndParseTable_MissingRequiredColumn_Error()
         {
             //Arrange
-            SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
+            SetUpBasicExcelTest(out _, out ExcelWorksheet worksheet);
 
             List<ParseTableTestBaseModel> rowsOfTestData = GetOneRow();
             ParseException errorMessage = new()
