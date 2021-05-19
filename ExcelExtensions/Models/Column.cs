@@ -1,5 +1,7 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
+using ExcelExtensions.Interfaces;
+using System;
 using static ExcelExtensions.Enums.Enums;
 
 namespace ExcelExtensions.Models
@@ -18,9 +20,9 @@ namespace ExcelExtensions.Models
         /// </summary>
         public string ModelProperty { get; set; }
         /// <summary>
-        /// Represents the human readable column header name
+        /// Represents the human readable column header name/title
         /// </summary>
-        public string HeaderName { get; set; }
+        public string HeaderTitle { get; set; }
         /// <summary>
         /// Represents the format type for the excel object
         /// </summary>
@@ -33,6 +35,23 @@ namespace ExcelExtensions.Models
         public Column()
         {
 
+        }
+        public Column(string modelPropertyName, string headerTitle, string columnLetter, ExcelFormatType format, int? decimalPrecision = null)
+        {
+            ColumnLetter = columnLetter;
+            ModelProperty = modelPropertyName;
+            HeaderTitle = headerTitle;
+            Format = format;
+            DecimalPrecision = decimalPrecision;
+        }
+        public Column(IExcelExtensionsProvider _excelExtensions, Type modelType, string modelPropertyName, string columnLetter, ExcelFormatType format, int? decimalPrecision = null)
+        {
+            _excelExtensions.GetExportModelPropertyNameAndDisplayName(modelType, modelPropertyName, out string textTitle);
+            ColumnLetter = columnLetter;
+            ModelProperty = modelPropertyName;
+            HeaderTitle = textTitle;
+            Format = format;
+            DecimalPrecision = decimalPrecision;
         }
     }
 }
