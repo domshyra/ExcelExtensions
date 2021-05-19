@@ -53,5 +53,14 @@ namespace ExcelExtensions.Models
             Format = format;
             DecimalPrecision = decimalPrecision;
         }
+        public Column(IExcelExtensionsProvider _excelExtensions, Type modelType, string modelPropertyName, int columnLetterAsInt, ExcelFormatType format, int? decimalPrecision = null)
+        {
+            _excelExtensions.GetExportModelPropertyNameAndDisplayName(modelType, modelPropertyName, out string textTitle);
+            ColumnLetter = _excelExtensions.GetColumnLetter(columnLetterAsInt);
+            ModelProperty = modelPropertyName;
+            HeaderTitle = textTitle;
+            Format = format;
+            DecimalPrecision = decimalPrecision;
+        }
     }
 }

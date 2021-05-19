@@ -57,6 +57,7 @@ namespace WebApplication
 
             #region Interfaces
             services.AddTransient<IExcelExtensionsProvider, ExcelExtensionsProvider>();
+            services.AddTransient<IFileAndSheetValidatior, FileAndSheetValidatior>();
             services.AddTransient<IParserProvider, ParserProvider>();
 
             services.AddSingleton(Configuration);
