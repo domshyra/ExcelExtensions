@@ -12,4 +12,4 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import UploadForm from './UploadForm';
 
-ReactDOM.render(<UploadForm title="Test" action="test" sheetName="Sheet1" />, document.getElementById('main'));
+ReactDOM.render(<UploadForm title="Test" action="ScanForColumnsAndParseTable" sheetName="Sheet1" />, document.getElementById('main'));

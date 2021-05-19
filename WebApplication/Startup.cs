@@ -1,5 +1,6 @@
+// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
+
 using ExcelExtensions.Interfaces;
-using ExcelExtensions.Parsers;
 using ExcelExtensions.Providers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,17 +8,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-
+using WebApplication.Interfaces;
+using WebApplication.Providers;
 
 namespace WebApplication
 {
@@ -59,6 +51,7 @@ namespace WebApplication
             services.AddTransient<IExcelExtensionsProvider, ExcelExtensionsProvider>();
             services.AddTransient<IFileAndSheetValidatior, FileAndSheetValidatior>();
             services.AddTransient<IParserProvider, ParserProvider>();
+            services.AddTransient<ISampleProvider, SampleProvider>();
 
             services.AddSingleton(Configuration);
             #endregion

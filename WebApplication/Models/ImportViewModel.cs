@@ -8,6 +8,7 @@ namespace WebApplication.Models
     public class ImportViewModel
     {
         public List<ParseException> Exceptions { get; set; }
+        public string ScanForColumnsAndParseTable { get; internal set; }
 
         public ImportViewModel()
         {

@@ -44,16 +44,19 @@ namespace ExcelExtensions.Models
             Format = format;
             DecimalPrecision = decimalPrecision;
         }
-        public Column(IExcelExtensionsProvider _excelExtensions, Type modelType, string modelPropertyName, string columnLetter, ExcelFormatType format, int? decimalPrecision = null)
+        public Column(IExcelExtensionsProvider _excelExtensions, Type modelType, string modelPropertyName, ExcelFormatType format, string columnLetter = null, int? decimalPrecision = null)
         {
             _excelExtensions.GetExportModelPropertyNameAndDisplayName(modelType, modelPropertyName, out string textTitle);
-            ColumnLetter = columnLetter;
+            if (columnLetter != null)
+            {
+                ColumnLetter = columnLetter;
+            }
             ModelProperty = modelPropertyName;
             HeaderTitle = textTitle;
             Format = format;
             DecimalPrecision = decimalPrecision;
         }
-        public Column(IExcelExtensionsProvider _excelExtensions, Type modelType, string modelPropertyName, int columnLetterAsInt, ExcelFormatType format, int? decimalPrecision = null)
+        public Column(IExcelExtensionsProvider _excelExtensions, Type modelType, string modelPropertyName, ExcelFormatType format, int columnLetterAsInt, int? decimalPrecision = null)
         {
             _excelExtensions.GetExportModelPropertyNameAndDisplayName(modelType, modelPropertyName, out string textTitle);
             ColumnLetter = _excelExtensions.GetColumnLetter(columnLetterAsInt);

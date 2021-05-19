@@ -42681,7 +42681,7 @@ __webpack_require__.r(__webpack_exports__);
 
 react_dom__WEBPACK_IMPORTED_MODULE_5__.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4__.createElement(_UploadForm__WEBPACK_IMPORTED_MODULE_6__.default, {
   title: "Test",
-  action: "test",
+  action: "ScanForColumnsAndParseTable",
   sheetName: "Sheet1"
 }), document.getElementById('main'));
 })();
