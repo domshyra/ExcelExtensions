@@ -6004,7 +6004,7 @@ var UploadForm = function UploadForm(props) {
     className: "form-horizontal needs-validation",
     noValidate: true
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    className: "form-group"
+    className: "form-group mb-3"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", {
     htmlFor: "formFile",
     className: "form-label"

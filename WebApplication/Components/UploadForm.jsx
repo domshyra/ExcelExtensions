@@ -19,7 +19,7 @@ const UploadForm = (props) => {
                             method="post"
                             className="form-horizontal needs-validation"
                             noValidate>
-                            <div className="form-group">
+                            <div className="form-group mb-3">
                                 <label htmlFor="formFile" className="form-label">
                                     Table file
                                 </label>
