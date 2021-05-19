@@ -1,31 +1,35 @@
-﻿import React from 'react';
+﻿import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import bsCustomFileInput from 'bs-custom-file-input';
 
-
-function UploadForm() {
-
+const UploadForm = (props) => {
     useEffect(() => {
-        bsCustomFileInput.init()
+        bsCustomFileInput.init();
     }, []);
 
     return (
         <>
-            <h2 className="text-primary">{props.FormTitle}</h2>
+            <h2 className="text-primary">{props.title}</h2>
             <div className="row mb-2">
                 <div className="col-12">
                     <div className="bg-light px-3 pt-2 pb-3 border rounded">
-                        <form asp-action="ImportTable" asp-controller="Home" enctype="multipart/form-data" method="post" className="form-horizontal needs-validation" novalidate>
+                        <form
+                            action={ props.action}
+                            controller="Home"
+                            encType="multipart/form-data"
+                            method="post"
+                            className="form-horizontal needs-validation"
+                            noValidate>
                             <div className="form-group">
-                                <label>Table file</label>
-                                <div className="custom-file">
-                                    <input type="file" className="custom-file-input" name="file" accept=".xls,.xlsx" required />
-                                    <label className="custom-file-label" for="customFile">Choose file</label>
-                                </div>
-                                    <small className="form-text text-muted">
-                                        This requires an excel sheet a sheet named { props.SheetName }.
-                                    </small>
-                                </div>
-                                <button className="btn btn-primary" type="submit">Import</button>
+                                <label htmlFor="formFile" className="form-label">Table file</label>
+                                <input className="form-control form-control-sm" type="file" id="formFile" />
+                                <small className="form-text text-muted">
+                                    This requires an excel sheet a sheet named {props.sheetName}.
+                                </small>
+                            </div>
+                            <button className="btn btn-outline-primary" type="submit">
+                                Import
+                            </button>
                         </form>
                         {/*TODO: add back react component*/}
                     </div>
@@ -33,4 +37,11 @@ function UploadForm() {
             </div>
         </>
     );
-}
+};
+UploadForm.propTypes = {
+    title: PropTypes.string,
+    action: PropTypes.string,
+    sheetName: PropTypes.string,
+};
+
+export default UploadForm;

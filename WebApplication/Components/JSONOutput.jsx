@@ -74,8 +74,8 @@ const JSONOutput = (props) => {
                         {isExpanded ? (
                             <FontAwesomeIcon icon={faChevronDown} />
                         ) : (
-                                <FontAwesomeIcon icon={faChevronLeft} />
-                            )}
+                            <FontAwesomeIcon icon={faChevronLeft} />
+                        )}
                     </div>
                 </a>
             </h5>
