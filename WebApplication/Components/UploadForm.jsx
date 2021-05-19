@@ -1,10 +1,9 @@
 ﻿import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import bsCustomFileInput from 'bs-custom-file-input';
 
 const UploadForm = (props) => {
     useEffect(() => {
-        bsCustomFileInput.init();
+        //later
     }, []);
 
     return (
@@ -14,14 +13,16 @@ const UploadForm = (props) => {
                 <div className="col-12">
                     <div className="bg-light px-3 pt-2 pb-3 border rounded">
                         <form
-                            action={ props.action}
+                            action={props.action}
                             controller="Home"
                             encType="multipart/form-data"
                             method="post"
                             className="form-horizontal needs-validation"
                             noValidate>
                             <div className="form-group">
-                                <label htmlFor="formFile" className="form-label">Table file</label>
+                                <label htmlFor="formFile" className="form-label">
+                                    Table file
+                                </label>
                                 <input className="form-control form-control-sm" type="file" id="formFile" />
                                 <small className="form-text text-muted">
                                     This requires an excel sheet a sheet named {props.sheetName}.
