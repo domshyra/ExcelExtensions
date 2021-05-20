@@ -3,8 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WebApplication.Models
 {
@@ -16,11 +14,17 @@ namespace WebApplication.Models
         public DateTime Date { get; set; }
         public DateTime DateAsText { get; set; }
         public DateTime DateAsGeneral { get; set; }
+        public TimeSpan Duration { get; set; }
         public decimal Percent { get; set; }
+        [Display(Name = "Percent as text")]
         public decimal PercentAsText { get; set; }
+        [Display(Name = "Percent as number")]
         public decimal PercentAsNumber { get; set; }
+        [Display(Name = "Bool as yes no")]
         public bool BoolAsYESNO { get; set; }
+        [Display(Name = "Bool as true false")]
         public bool BoolAsTrueFalse { get; set; }
+        [Display(Name = "Bool as binary")]
         public bool BoolAs10 { get; set; }
         [Display(Name = "Budget")]
         public decimal Currency { get; set; }
