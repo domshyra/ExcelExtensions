@@ -26,7 +26,6 @@ const ParseExceptionsModal = (props) => {
                         <div className="modal-footer">
                             <button
                                 data-dismiss="modal"
-                                id="Cancel"
                                 type="button"
                                 className="btn btn-outline-secondary">
                                 Dismiss

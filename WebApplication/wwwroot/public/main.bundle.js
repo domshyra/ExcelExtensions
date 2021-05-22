@@ -6133,7 +6133,6 @@ var ParseExceptionsModal = function ParseExceptionsModal(props) {
     className: "modal-footer"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
     "data-dismiss": "modal",
-    id: "Cancel",
     type: "button",
     className: "btn btn-outline-secondary"
   }, "Dismiss"))))));

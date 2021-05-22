@@ -13,6 +13,7 @@ namespace WebApplication.Models
         public ImportViewModel()
         {
             Exceptions = new List<ParseException>();
+            ScanForColumnsAndParseTable = "[]";
         }
     }
 }
