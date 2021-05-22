@@ -14,7 +14,14 @@ namespace ExcelExtensions.Providers
         public decimal? ParsePercent(ExcelRange cell)
         {
             string valueTypeInExcel = Constants.DecimalExceptionTypeString;
-            CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
+            try
+            {
+                CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
+            }
+            catch (NullReferenceException)
+            {
+                throw;
+            }
 
             try
             {
@@ -40,7 +47,14 @@ namespace ExcelExtensions.Providers
         public int? ParseInt(ExcelRange cell)
         {
             string valueTypeInExcel = Constants.IntExceptionTypeString;
-            CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
+            try
+            {
+                CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
+            }
+            catch (NullReferenceException)
+            {
+                throw;
+            }
 
             try
             {
@@ -67,7 +81,14 @@ namespace ExcelExtensions.Providers
         public decimal? ParseDecimal(ExcelRange cell)
         {
             string valueTypeInExcel = Constants.DecimalExceptionTypeString;
-            CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
+            try
+            {
+                CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
+            }
+            catch (NullReferenceException)
+            {
+                throw;
+            }
 
             try
             {
@@ -93,7 +114,14 @@ namespace ExcelExtensions.Providers
         public double? ParseDouble(ExcelRange cell)
         {
             string valueTypeInExcel = Constants.DoubleExceptionTypeString;
-            CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
+            try
+            {
+                CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
+            }
+            catch (NullReferenceException)
+            {
+                throw;
+            }
 
             try
             {
@@ -119,7 +147,14 @@ namespace ExcelExtensions.Providers
         public DateTime? ParseDate(ExcelRange cell)
         {
             string valueTypeInExcel = Constants.DateTimeExceptionTypeString;
-            CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
+            try
+            {
+                CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
+            }
+            catch (NullReferenceException)
+            {
+                throw;
+            }
 
             try
             {
@@ -169,7 +204,14 @@ namespace ExcelExtensions.Providers
         public TimeSpan? ParseTimeSpan(ExcelRange cell)
         {
             string valueTypeInExcel = Constants.TimeSpanExceptionTypeString;
-            CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
+            try
+            {
+                CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
+            }
+            catch (NullReferenceException)
+            {
+                throw;
+            }
 
 
             //https://docs.microsoft.com/en-us/dotnet/api/system.timespan.tryparseexact?view=net-5.0
@@ -219,7 +261,14 @@ namespace ExcelExtensions.Providers
         {
             bool? returnValue = null;
             string valueTypeInExcel = Constants.BoolExceptionTypeString;
-            CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
+            try
+            {
+                CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
+            }
+            catch (NullReferenceException)
+            {
+                throw;
+            }
 
             if (!string.IsNullOrEmpty(cell.Value?.ToString()))
             {
@@ -243,7 +292,15 @@ namespace ExcelExtensions.Providers
         public decimal? ParseCurrency(ExcelRange cell)
         {
             string valueTypeInExcel = Constants.DecimalExceptionTypeString;
-            CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
+            
+            try
+            {
+                CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
+            }
+            catch (NullReferenceException)
+            {
+                throw;
+            }
 
             try
             {
@@ -270,7 +327,14 @@ namespace ExcelExtensions.Providers
         public string? ParseString(ExcelRange cell)
         {
             string valueTypeInExcel = Constants.StringExceptionTypeString;
-            CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
+            try
+            {
+                CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
+            }
+            catch (NullReferenceException)
+            {
+                throw;
+            }
 
             try
             {
@@ -331,6 +395,7 @@ namespace ExcelExtensions.Providers
                 //We have nothing to parse because there is a formula causing a blank cell
                 throw new NullReferenceException(nullErrorMsg);
             }
+
         }
 
     }

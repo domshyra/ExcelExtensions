@@ -5997,8 +5997,7 @@ var UploadForm = function UploadForm(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "bg-light px-3 pt-2 pb-3 border rounded"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("form", {
-    action: props.action,
-    controller: "Home",
+    action: "".concat(props.controller, "/").concat(props.action),
     encType: "multipart/form-data",
     method: "post",
     className: "form-horizontal needs-validation",
@@ -6006,12 +6005,13 @@ var UploadForm = function UploadForm(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "form-group mb-3"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", {
-    htmlFor: "formFile",
+    htmlFor: "file",
     className: "form-label"
   }, "Table file"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
     className: "form-control form-control-sm",
     type: "file",
-    id: "formFile"
+    id: "file",
+    name: "file"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("small", {
     className: "form-text text-muted"
   }, "This requires an excel sheet a sheet named ", props.sheetName, ".")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
@@ -6023,6 +6023,7 @@ var UploadForm = function UploadForm(props) {
 UploadForm.propTypes = {
   title: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string),
   action: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string),
+  controller: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string),
   sheetName: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string)
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (UploadForm);
@@ -42682,7 +42683,8 @@ __webpack_require__.r(__webpack_exports__);
 react_dom__WEBPACK_IMPORTED_MODULE_5__.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4__.createElement(_UploadForm__WEBPACK_IMPORTED_MODULE_6__.default, {
   title: "Test",
   action: "ScanForColumnsAndParseTable",
-  sheetName: "Sheet1"
+  sheetName: "Sheet1",
+  controller: "Home"
 }), document.getElementById('main'));
 })();
 

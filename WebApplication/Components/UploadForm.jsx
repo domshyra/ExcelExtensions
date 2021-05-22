@@ -1,7 +1,9 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 const UploadForm = (props) => {
+
+    
     useEffect(() => {
         //later
     }, []);
@@ -13,17 +15,16 @@ const UploadForm = (props) => {
                 <div className="col-12">
                     <div className="bg-light px-3 pt-2 pb-3 border rounded">
                         <form
-                            action={props.action}
-                            controller="Home"
+                            action={`${props.controller}/${props.action}`}
                             encType="multipart/form-data"
                             method="post"
                             className="form-horizontal needs-validation"
                             noValidate>
                             <div className="form-group mb-3">
-                                <label htmlFor="formFile" className="form-label">
+                                <label htmlFor="file" className="form-label">
                                     Table file
                                 </label>
-                                <input className="form-control form-control-sm" type="file" id="formFile" />
+                                <input className="form-control form-control-sm" type="file" id="file" name="file" />
                                 <small className="form-text text-muted">
                                     This requires an excel sheet a sheet named {props.sheetName}.
                                 </small>
@@ -42,6 +43,7 @@ const UploadForm = (props) => {
 UploadForm.propTypes = {
     title: PropTypes.string,
     action: PropTypes.string,
+    controller: PropTypes.string,
     sheetName: PropTypes.string,
 };
 

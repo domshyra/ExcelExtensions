@@ -46,10 +46,10 @@ namespace WebApplication.Providers
 
                 ParsedTable<SampleTableModel> parsedTable = _tableParser.ScanForColumnsAndParseTable(GetTableColumnTemplates(), sheet);
 
-                if (parsedTable.Errors.Any(x => x.Value.Severity == ParseExceptionSeverity.Error))
+                if (parsedTable.Exceptions.Any(x => x.Value.Severity == ParseExceptionSeverity.Error))
                 {
                     //If we encountered any errors in the parse lets throw them to the controller
-                    throw new ImportException(model.Exceptions);
+                    throw new ImportException(parsedTable.Exceptions.Select(x => x.Value).ToList());
                 }
 
                 return parsedTable.Rows;

@@ -319,9 +319,9 @@ namespace ExcelExtensionsTests
 
             //Assert
             Assert.Equal(rowsOfTestData.First(), result.Rows.First().Value);
-            Assert.Equal(errorMessage.Severity, result.Errors.First().Value.Severity);
-            Assert.Equal(errorMessage.ExceptionType, result.Errors.First().Value.ExceptionType);
-            Assert.Equal(errorMessage.ColumnHeader, result.Errors.First().Value.ColumnHeader);
+            Assert.Equal(errorMessage.Severity, result.Exceptions.First().Value.Severity);
+            Assert.Equal(errorMessage.ExceptionType, result.Exceptions.First().Value.ExceptionType);
+            Assert.Equal(errorMessage.ColumnHeader, result.Exceptions.First().Value.ColumnHeader);
         }
 
 
@@ -339,7 +339,7 @@ namespace ExcelExtensionsTests
             CreateTestFile(ref worksheet, rowsOfTestData, 101, 1);
 
             //Act
-            var result = _tableParser.ScanForColumnsAndParseTable(GetScannedColumns(), worksheet).Errors;
+            var result = _tableParser.ScanForColumnsAndParseTable(GetScannedColumns(), worksheet).Exceptions;
             string errorMsg = "Could not find columns. Please check spelling of header columns and make sure all required columns are in the worksheet.";
             //Assert
             Assert.Equal(errorMsg, result.First().Value.Message);
@@ -380,7 +380,7 @@ namespace ExcelExtensionsTests
             }
 
             //Act
-            ParseException result = _tableParser.ScanForColumnsAndParseTable(GetScannedColumns(), worksheet).Errors.First().Value;
+            ParseException result = _tableParser.ScanForColumnsAndParseTable(GetScannedColumns(), worksheet).Exceptions.First().Value;
 
             //Assert
             Assert.Equal(errorMessage.Severity, result.Severity);
@@ -415,7 +415,7 @@ namespace ExcelExtensionsTests
             //Assert
             Assert.Equal(rowsOfTestData.First(x => x.RequiredText == "First Valid Data"), result.Rows[2]);
 
-            var resultErrorMSG = result.Errors.First().Value;
+            var resultErrorMSG = result.Exceptions.First().Value;
 
             Assert.Equal(errorMessage.Severity, resultErrorMSG.Severity);
             Assert.Equal(errorMessage.ExceptionType, resultErrorMSG.ExceptionType);

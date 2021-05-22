@@ -54,6 +54,7 @@ namespace ExcelExtensions.Providers
                     ExceptionType = ParseExceptionType.NoFileFound,
                     Severity = ParseExceptionSeverity.Error,
                 };
+                throw new ImportException(exception);
             }
 
             if (PropertyExist(excelFile, "ContentType") == false || PropertyExist(excelFile, "FileName") == false)
