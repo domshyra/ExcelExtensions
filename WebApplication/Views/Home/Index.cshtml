@@ -1,11 +1,22 @@
 ﻿@using WebApplication.Models
+
 @model ImportViewModel
 
 @{
     ViewData["Title"] = "Excel extensions";
+
 }
 
+
+<script>
+    const jsonParseTable = JSON.parse("@Model.ScanForColumnsAndParseTable");
+    window.jsonParseTable = jsonParseTable;
+
+</script>
 <h2 class="text-primary">@ViewData["Title"]</h2>
 
 
 <div id="main"></div>
+
+
+<div id="modal"></div>

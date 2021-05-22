@@ -5968,6 +5968,185 @@ function within(min, value, max) {
 
 /***/ }),
 
+/***/ "./Components/ParseExceptions.jsx":
+/*!****************************************!*\
+  !*** ./Components/ParseExceptions.jsx ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
+var ParseExceptions = function ParseExceptions(props) {
+  var index = 1;
+  var items = props.json.map(function (exception) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(ParseException, {
+      exception: exception,
+      key: index++
+    });
+  });
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("ul", {
+    className: "list-group"
+  }, items));
+};
+
+ParseExceptions.propTypes = {
+  json: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().array)
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ParseExceptions);
+
+var Exception = /*#__PURE__*/function () {
+  function Exception(parseException) {
+    _classCallCheck(this, Exception);
+
+    this.sheet = parseException.sheet;
+    this.formatType = parseException.formatType;
+    this.columnLetter = parseException.columnLetter;
+    this.columnHeaderName = parseException.columnHeader;
+    this.row = parseException.row;
+    this.message = parseException.message;
+    this.severity = parseException.severity;
+    this.exceptionType = parseException.exceptionType;
+    this.expectedDateType = parseException.expectedDateType;
+  }
+
+  _createClass(Exception, [{
+    key: "getDisplayMessage",
+    value: function getDisplayMessage() {
+      var sheetMsg = '';
+
+      if (this.sheet !== '') {
+        sheetMsg = "On sheet ".concat(this.sheet, ".");
+      }
+
+      var locationMsg = '';
+
+      if (this.row !== '' && this.columnLetter !== '') {
+        locationMsg = "At cell ".concat(this.columnLetter).concat(this.row, ".");
+      } else if (this.row !== '') {
+        locationMsg = "At row ".concat(this.row, ".");
+      } else if (this.columnLetter !== '') {
+        locationMsg = "At column ".concat(this.columnLetter, ".");
+      } else if (this.columnHeaderName !== '') {
+        locationMsg = "At column named ".concat(this.columnHeaderName, ".");
+      } //TODO maybe split these up to make it easier to write errors
+
+
+      return "".concat(sheetMsg, " ").concat(locationMsg, " ").concat(this.expectedDateType, ". ").concat(this.message);
+    }
+  }]);
+
+  return Exception;
+}();
+
+Exception.propTypes = {
+  sheet: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string),
+  formatType: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string),
+  columnLetter: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string),
+  columnHeaderName: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string),
+  row: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().int),
+  message: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string),
+  severity: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().int),
+  exceptionType: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string),
+  expectedDateType: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string)
+};
+
+var ParseException = function ParseException(props) {
+  var exception = new Exception(props.exception); //severity 0: Error, severity 1: Warning
+
+  var bootsrapClass = exception.severity === 0 ? 'danger' : 'warning';
+  var severityMessage = exception.severity === 0 ? 'Error' : 'Warning';
+  var displayMessge = exception.getDisplayMessage();
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("li", {
+    className: "list-group-item list-group-item-".concat(bootsrapClass)
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("b", null, severityMessage, "."), " ", displayMessge);
+};
+
+ParseException.propTypes = {
+  exception: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().object)
+};
+
+/***/ }),
+
+/***/ "./Components/ParseExceptionsModal.jsx":
+/*!*********************************************!*\
+  !*** ./Components/ParseExceptionsModal.jsx ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _ParseExceptions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ParseExceptions */ "./Components/ParseExceptions.jsx");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+
+var ParseExceptionsModal = function ParseExceptionsModal(props) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    id: "parse-exceptions-modal",
+    className: "modal fade",
+    tabIndex: "-1",
+    role: "dialog",
+    "aria-labelledby": "parse-exceptions-modal",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "modal-dialog",
+    role: "document"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "modal-content"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "modal-header"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h5", {
+    className: "modal-title"
+  }, props.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
+    type: "button",
+    className: "close",
+    "data-dismiss": "modal",
+    "aria-label": "Close"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
+    "aria-hidden": "true"
+  }, "\xD7"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "modal-body"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_ParseExceptions__WEBPACK_IMPORTED_MODULE_1__.default, {
+    json: props.json
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "modal-footer"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
+    "data-dismiss": "modal",
+    id: "Cancel",
+    type: "button",
+    className: "btn btn-outline-secondary"
+  }, "Dismiss"))))));
+};
+
+ParseExceptionsModal.propTypes = {
+  json: (prop_types__WEBPACK_IMPORTED_MODULE_2___default().array),
+  title: (prop_types__WEBPACK_IMPORTED_MODULE_2___default().string)
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ParseExceptionsModal);
+
+/***/ }),
+
 /***/ "./Components/UploadForm.jsx":
 /*!***********************************!*\
   !*** ./Components/UploadForm.jsx ***!
@@ -42669,7 +42848,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var _UploadForm__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./UploadForm */ "./Components/UploadForm.jsx");
+/* harmony import */ var _ParseExceptionsModal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./ParseExceptionsModal */ "./Components/ParseExceptionsModal.jsx");
  //styles
+
 
 
 
@@ -42686,6 +42867,10 @@ react_dom__WEBPACK_IMPORTED_MODULE_5__.render( /*#__PURE__*/react__WEBPACK_IMPOR
   sheetName: "Sheet1",
   controller: "Home"
 }), document.getElementById('main'));
+react_dom__WEBPACK_IMPORTED_MODULE_5__.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4__.createElement(_ParseExceptionsModal__WEBPACK_IMPORTED_MODULE_7__.default, {
+  json: window.jsonParseTable,
+  title: "Import messages"
+}), document.getElementById('modal'));
 })();
 
 /******/ })()

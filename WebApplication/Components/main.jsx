@@ -11,8 +11,13 @@ import '../Styles/scss/main.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import UploadForm from './UploadForm';
+import ParseExceptionsModal from './ParseExceptionsModal';
 
 ReactDOM.render(
     <UploadForm title="Test" action="ScanForColumnsAndParseTable" sheetName="Sheet1" controller="Home" />,
     document.getElementById('main')
+);
+ReactDOM.render(
+    <ParseExceptionsModal json={window.jsonParseTable} title="Import messages" />,
+    document.getElementById('modal')
 );

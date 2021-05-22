@@ -2,8 +2,6 @@
 import PropTypes from 'prop-types';
 
 const UploadForm = (props) => {
-
-    
     useEffect(() => {
         //later
     }, []);
