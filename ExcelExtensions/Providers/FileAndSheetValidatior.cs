@@ -62,8 +62,8 @@ namespace ExcelExtensions.Providers
                 throw new FormatException("file must be type IFormFile or HttpPostedFileBase");
             }
 
-            //TODO: accept more formats later
-            //Make sure the file is an excel type
+            //TODO: accept more formats later (https://github.com/domshyra/ExcelExtensions/issues/10)
+            //Make sure the file is a xlsx type
             if (excelFile.ContentType != "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
             {
                 exception = new()
