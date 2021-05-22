@@ -7,8 +7,16 @@ const ParseExceptionsModal = (props) => {
     const [modal, setModal] = useState(null);
     const parseExceptionModal = useRef();
 
+
+    //asked an issue https://stackoverflow.com/questions/67653772/issue-showing-modal-with-react-hooks-on-bootstrap-5
+
+    //https://dev.to/tefoh/use-bootstrap-5-in-react-2l4i
     useEffect(() => {
-        setModal(new Modal(parseExceptionModal.current));
+        setModal(new Modal(parseExceptionModal.current), {
+            keyboard: false,
+        });
+        console.log(parseExceptionModal.current);
+        console.log(parseExceptionModal);
         if (props.json.length > 0) {
             modal.show();
         }
@@ -17,12 +25,11 @@ const ParseExceptionsModal = (props) => {
     return (
         <>
             <div
-                id="parse-exceptions-modal"
                 className="modal fade"
                 tabIndex="-1"
                 role="dialog"
                 ref={parseExceptionModal}
-                aria-labelledby="parse-exceptions-modal"
+                aria-labelledby="parseExceptionModal"
                 aria-hidden="true">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">

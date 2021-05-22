@@ -18,6 +18,6 @@ ReactDOM.render(
     document.getElementById('main')
 );
 ReactDOM.render(
-    <ParseExceptionsModal json={window.jsonParseTable} title="Import messages" />,
+    <ParseExceptionsModal json={window.jsonParseExceptions} title="Import messages" />,
     document.getElementById('modal')
 );

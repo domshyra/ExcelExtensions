@@ -29,7 +29,7 @@ namespace WebApplication.Controllers
             {
                 form = new ImportViewModel();
             }
-            return View(form);
+            return View("Index", form);
         }
 
         public ActionResult ScanForColumnsAndParseTable(ImportViewModel form, IFormFile file, string password = "")
@@ -37,15 +37,13 @@ namespace WebApplication.Controllers
             try
             {
                 form.ScanForColumnsAndParseTable = JsonConvert.SerializeObject(_sampleProvider.ScanForColumnsAndParseTable(file, form, password));
-
-                return View("Index", form);
             }
             catch (ImportException ex)
             {
                 form.Exceptions = ex.Exceptions;
-
-                return View("Index", form);
             }
+
+            return View("Index", form);
 
         }
 

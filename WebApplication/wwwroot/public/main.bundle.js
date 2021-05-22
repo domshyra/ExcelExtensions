@@ -6121,21 +6121,26 @@ var ParseExceptionsModal = function ParseExceptionsModal(props) {
       modal = _useState2[0],
       setModal = _useState2[1];
 
-  var parseExceptionModal = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)();
+  var parseExceptionModal = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(); //asked an issue https://stackoverflow.com/questions/67653772/issue-showing-modal-with-react-hooks-on-bootstrap-5
+  //https://dev.to/tefoh/use-bootstrap-5-in-react-2l4i
+
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
-    setModal(new bootstrap__WEBPACK_IMPORTED_MODULE_0__.Modal(parseExceptionModal.current));
+    setModal(new bootstrap__WEBPACK_IMPORTED_MODULE_0__.Modal(parseExceptionModal.current), {
+      keyboard: false
+    });
+    console.log(parseExceptionModal.current);
+    console.log(parseExceptionModal);
 
     if (props.json.length > 0) {
       modal.show();
     }
   }, []);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
-    id: "parse-exceptions-modal",
     className: "modal fade",
     tabIndex: "-1",
     role: "dialog",
     ref: parseExceptionModal,
-    "aria-labelledby": "parse-exceptions-modal",
+    "aria-labelledby": "parseExceptionModal",
     "aria-hidden": "true"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
     className: "modal-dialog",
@@ -42897,7 +42902,7 @@ react_dom__WEBPACK_IMPORTED_MODULE_5__.render( /*#__PURE__*/react__WEBPACK_IMPOR
   controller: "Home"
 }), document.getElementById('main'));
 react_dom__WEBPACK_IMPORTED_MODULE_5__.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4__.createElement(_ParseExceptionsModal__WEBPACK_IMPORTED_MODULE_7__.default, {
-  json: window.jsonParseTable,
+  json: window.jsonParseExceptions,
   title: "Import messages"
 }), document.getElementById('modal'));
 })();
