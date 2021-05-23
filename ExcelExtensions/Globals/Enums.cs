@@ -77,21 +77,19 @@ namespace ExcelExtensions.Enums
         /// </summary>
         public enum ParseExceptionType
         {
-            DataTypeExpectedError = 0,
+            UnexpectedDataType = 0,
             DuplicateData = 1,
             DuplicateKey = 2,
             Generic = 3,
             InvalidData = 4,
             MaxLength = 5,
             MissingData = 6,
-            MissMatchData = 7,
-            NoColumnTemplatesFound = 8,
-            NoFileFound = 9,
-            NoValidDataToSave = 10,
-            OptionalFieldMissing = 11,
-            RequiredFieldMissing = 12,
-            SheetMissingError = 13,
-            WrongFilePassword = 14
+            NoFileFound = 7,
+            NoValidDataToSave = 8,
+            OptionalFieldMissing = 9,
+            RequiredFieldMissing = 10,
+            SheetMissingError = 11,
+            WrongFilePassword = 12
         }
     }
 

@@ -92,7 +92,7 @@ namespace ExcelExtensions.Providers
             {
                 ColumnLetter = GetColumnLetter(cellAddress),
                 Row = GetRowNumber(cellAddress),
-                ExceptionType = ParseExceptionType.DataTypeExpectedError,
+                ExceptionType = ParseExceptionType.UnexpectedDataType,
             };
             return parseException;
         }

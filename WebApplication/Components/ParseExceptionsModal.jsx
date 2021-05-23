@@ -12,6 +12,7 @@ const ParseExceptionsModal = (props) => {
         setModal(modal);
         if (props.json.length > 0) {
             modal.show();
+            console.log(props.json);
         }
     }, []);
 

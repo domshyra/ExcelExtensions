@@ -6013,15 +6013,15 @@ var Exception = /*#__PURE__*/function () {
   function Exception(parseException) {
     _classCallCheck(this, Exception);
 
-    this.sheet = parseException.sheet;
-    this.formatType = parseException.formatType;
-    this.columnLetter = parseException.columnLetter;
-    this.columnHeaderName = parseException.columnHeader;
-    this.row = parseException.row;
-    this.message = parseException.message;
-    this.severity = parseException.severity;
-    this.exceptionType = parseException.exceptionType;
-    this.expectedDateType = parseException.expectedDateType;
+    this.sheet = parseException.Sheet;
+    this.formatType = parseException.FormatType;
+    this.columnLetter = parseException.ColumnLetter;
+    this.columnHeaderName = parseException.ColumnHeader;
+    this.row = parseException.Row;
+    this.message = parseException.Message;
+    this.severity = parseException.Severity === 0 ? 'Error' : 'Warning';
+    this.exceptionType = parseException.ExceptionType;
+    this.expectedDateType = parseException.ExpectedDateType;
   }
 
   _createClass(Exception, [{
@@ -6029,24 +6029,116 @@ var Exception = /*#__PURE__*/function () {
     value: function getDisplayMessage() {
       var sheetMsg = '';
 
-      if (this.sheet !== '') {
-        sheetMsg = "On sheet ".concat(this.sheet, ".");
+      if (this.sheet != null) {
+        sheetMsg = "on sheet \"".concat(this.sheet, "\"");
       }
 
-      var locationMsg = '';
+      var excelLocation = '';
 
-      if (this.row !== '' && this.columnLetter !== '') {
-        locationMsg = "At cell ".concat(this.columnLetter).concat(this.row, ".");
-      } else if (this.row !== '') {
-        locationMsg = "At row ".concat(this.row, ".");
-      } else if (this.columnLetter !== '') {
-        locationMsg = "At column ".concat(this.columnLetter, ".");
-      } else if (this.columnHeaderName !== '') {
-        locationMsg = "At column named ".concat(this.columnHeaderName, ".");
-      } //TODO maybe split these up to make it easier to write errors
+      if (this.columnHeaderName != null) {
+        excelLocation = "at column named \"".concat(this.columnHeaderName, "\"");
+      } else if (this.row > 0 && this.columnLetter != null) {
+        excelLocation = "at cell \"".concat(this.columnLetter).concat(this.row, "\"");
+      } else if (this.row > 0) {
+        excelLocation = "at row \"".concat(this.row, "\"");
+      } else if (this.columnLetter != null) {
+        excelLocation = "at column \"".concat(this.columnLetter, "\"");
+      }
+
+      var expectedDataType = '';
+
+      if (this.expectedDateType != null) {
+        expectedDataType = "Expected \"".concat(this.expectedDateType, "\". ");
+      } //TODO define enums for these in the jsx
 
 
-      return "".concat(sheetMsg, " ").concat(locationMsg, " ").concat(this.expectedDateType, ". ").concat(this.message);
+      var exceptionTypeMessage = ''; //UnExpectedDataType = 0
+
+      if (this.exceptionType === 0) {
+        exceptionTypeMessage = 'Unexpected data type';
+      } //DuplicateData = 1
+
+
+      if (this.exceptionType === 1) {
+        exceptionTypeMessage = 'Duplicate data found';
+      } //DuplicateKey = 2
+
+
+      if (this.exceptionType === 2) {
+        exceptionTypeMessage = 'Duplicate key found';
+      } //Generic = 3
+
+
+      if (this.exceptionType === 3) {
+        exceptionTypeMessage = this.message;
+        this.message = null; //null this out so we swap the message for generic types
+      } //InvalidData = 4
+
+
+      if (this.exceptionType === 4) {
+        exceptionTypeMessage = 'Invalid data found';
+      } //MaxLength = 5
+
+
+      if (this.exceptionType === 5) {
+        exceptionTypeMessage = 'Exceeded character limit';
+      } //MissingData = 6
+
+
+      if (this.exceptionType === 6) {
+        exceptionTypeMessage = 'Missing data';
+      } //NoFileFound = 7
+
+
+      if (this.exceptionType === 7) {
+        exceptionTypeMessage = 'No file found';
+      } //NoValidDataToSave = 8
+
+
+      if (this.exceptionType === 8) {
+        exceptionTypeMessage = 'No valid data found';
+      } //OptionalFieldMissing = 9
+
+
+      if (this.exceptionType === 9) {
+        exceptionTypeMessage = 'Optional field not found';
+      } //RequiredFieldMissing = 10
+
+
+      if (this.exceptionType === 10) {
+        exceptionTypeMessage = 'Required field not found';
+      } //SheetMissingError = 11
+
+
+      if (this.exceptionType === 11) {
+        exceptionTypeMessage = 'Sheet not found';
+      } //WrongFilePassword = 12
+
+
+      if (this.exceptionType === 12) {
+        exceptionTypeMessage = 'Invalid password provided';
+      }
+
+      exceptionTypeMessage = exceptionTypeMessage + ' ';
+      var location = '';
+
+      if (sheetMsg != '' && excelLocation != '') {
+        location = "".concat(sheetMsg, ", ").concat(excelLocation, ". ");
+      } else if (sheetMsg != '') {
+        location = "".concat(sheetMsg, ". ");
+      } else if (excelLocation != '') {
+        location = "".concat(excelLocation, ". ");
+      }
+
+      var msg = '';
+
+      if (this.message != null && this.message !== '') {
+        msg = this.message;
+      } //TODO; would be useful to split these method out in order to bold them and add emphasis later... 
+
+
+      var finalMessage = "".concat(exceptionTypeMessage).concat(location).concat(expectedDataType).concat(msg);
+      return finalMessage;
     }
   }]);
 
@@ -6066,14 +6158,14 @@ Exception.propTypes = {
 };
 
 var ParseException = function ParseException(props) {
-  var exception = new Exception(props.exception); //severity 0: Error, severity 1: Warning
+  var exception = new Exception(props.exception);
+  console.log(exception); //severity 0: Error, severity 1: Warning
 
-  var bootsrapClass = exception.severity === 0 ? 'danger' : 'warning';
-  var severityMessage = exception.severity === 0 ? 'Error' : 'Warning';
+  var bootsrapClass = exception.severity === 'Error' ? 'danger' : 'warning';
   var displayMessge = exception.getDisplayMessage();
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("li", {
     className: "list-group-item list-group-item-".concat(bootsrapClass)
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("b", null, severityMessage, "."), " ", displayMessge);
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("b", null, exception.severity, "."), " ", displayMessge);
 };
 
 ParseException.propTypes = {
@@ -6130,6 +6222,7 @@ var ParseExceptionsModal = function ParseExceptionsModal(props) {
 
     if (props.json.length > 0) {
       modal.show();
+      console.log(props.json);
     }
   }, []);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
