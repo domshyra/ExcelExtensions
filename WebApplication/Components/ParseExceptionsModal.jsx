@@ -25,7 +25,7 @@ const ParseExceptionsModal = (props) => {
                 ref={parseExceptionModal}
                 aria-labelledby="parseExceptionModal"
                 aria-hidden="true">
-                <div className="modal-dialog" role="document">
+                <div className="modal-dialog modal-lg" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title">{props.title}</h5>

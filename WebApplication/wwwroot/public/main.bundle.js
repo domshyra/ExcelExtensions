@@ -6233,7 +6233,7 @@ var ParseExceptionsModal = function ParseExceptionsModal(props) {
     "aria-labelledby": "parseExceptionModal",
     "aria-hidden": "true"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
-    className: "modal-dialog",
+    className: "modal-dialog modal-lg",
     role: "document"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
     className: "modal-content"
