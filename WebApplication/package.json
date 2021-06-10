@@ -6,9 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode=development --watch",
+    "build-pretty": "npm run prettier && webpack --mode=development --watch",
     "fix": "eslint Components/*.jsx Components/*.jsx --fix",
-    "prettier": "npx prettier --write Components/*.jsx Components/*.jsx webpack.config.js",
-    "checkJS": "npx prettier --check  Components/*.jsx Components/*.jsx webpack.config.js"
+    "prettier": "npx prettier --write Components/*.{js,jsx} webpack.config.js",
+    "checkJS": "npx prettier --check  Components/*.{js,jsx} webpack.config.js"
   },
   "repository": {
     "type": "git",

@@ -2,6 +2,8 @@
 const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
+const BundleAnalyzerPlugin =
+    require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 module.exports = (env) => {
     //where react is getting is elements to load into the DOM
@@ -65,16 +67,20 @@ module.exports = (env) => {
             filename: '[name].bundle.js',
             clean: true,
         },
-        //optimization: {
-        //    splitChunks: {
-        //        chunks: 'all',
-        //    },
-        //},
+        optimization: {
+            splitChunks: {
+                chunks: 'all',
+            },
+        },
         plugins: [
             new CleanWebpackPlugin(),
             new ESLintPlugin({
                 extensions: ['.js', '.jsx'],
             }),
+            new BundleAnalyzerPlugin({
+                analyzerMode: "static",
+                openAnalyzer: false,
+            })
         ],
     };
 };
