@@ -2,8 +2,7 @@
 const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
-const BundleAnalyzerPlugin =
-    require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = (env) => {
     //where react is getting is elements to load into the DOM
@@ -78,9 +77,9 @@ module.exports = (env) => {
                 extensions: ['.js', '.jsx'],
             }),
             new BundleAnalyzerPlugin({
-                analyzerMode: "static",
+                analyzerMode: 'static',
                 openAnalyzer: false,
-            })
+            }),
         ],
     };
 };

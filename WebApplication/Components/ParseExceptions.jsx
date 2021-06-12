@@ -37,8 +37,7 @@ class Exception {
         let excelLocation = '';
         if (this.columnHeaderName != null) {
             excelLocation = `at column named "${this.columnHeaderName}"`;
-        }
-        else if (this.row > 0 && this.columnLetter != null) {
+        } else if (this.row > 0 && this.columnLetter != null) {
             excelLocation = `at cell "${this.columnLetter}${this.row}"`;
         } else if (this.row > 0) {
             excelLocation = `at row "${this.row}"`;
@@ -55,15 +54,15 @@ class Exception {
         let exceptionTypeMessage = '';
         //UnExpectedDataType = 0
         if (this.exceptionType === 0) {
-            exceptionTypeMessage = 'Unexpected data type'
+            exceptionTypeMessage = 'Unexpected data type';
         }
         //DuplicateData = 1
         if (this.exceptionType === 1) {
-            exceptionTypeMessage = 'Duplicate data found'
+            exceptionTypeMessage = 'Duplicate data found';
         }
         //DuplicateKey = 2
         if (this.exceptionType === 2) {
-            exceptionTypeMessage = 'Duplicate key found'
+            exceptionTypeMessage = 'Duplicate key found';
         }
         //Generic = 3
         if (this.exceptionType === 3) {
@@ -72,60 +71,57 @@ class Exception {
         }
         //InvalidData = 4
         if (this.exceptionType === 4) {
-            exceptionTypeMessage = 'Invalid data found'
+            exceptionTypeMessage = 'Invalid data found';
         }
         //MaxLength = 5
         if (this.exceptionType === 5) {
-            exceptionTypeMessage = 'Exceeded character limit'
+            exceptionTypeMessage = 'Exceeded character limit';
         }
         //MissingData = 6
         if (this.exceptionType === 6) {
-            exceptionTypeMessage = 'Missing data'
+            exceptionTypeMessage = 'Missing data';
         }
         //NoFileFound = 7
         if (this.exceptionType === 7) {
-            exceptionTypeMessage = 'No file found'
+            exceptionTypeMessage = 'No file found';
         }
         //NoValidDataToSave = 8
         if (this.exceptionType === 8) {
-            exceptionTypeMessage = 'No valid data found'
+            exceptionTypeMessage = 'No valid data found';
         }
         //OptionalFieldMissing = 9
         if (this.exceptionType === 9) {
-            exceptionTypeMessage = 'Optional field not found'
+            exceptionTypeMessage = 'Optional field not found';
         }
         //RequiredFieldMissing = 10
         if (this.exceptionType === 10) {
-            exceptionTypeMessage = 'Required field not found'
+            exceptionTypeMessage = 'Required field not found';
         }
         //SheetMissingError = 11
         if (this.exceptionType === 11) {
-            exceptionTypeMessage = 'Sheet not found'
+            exceptionTypeMessage = 'Sheet not found';
         }
         //WrongFilePassword = 12
         if (this.exceptionType === 12) {
-            exceptionTypeMessage = 'Invalid password provided'
+            exceptionTypeMessage = 'Invalid password provided';
         }
         exceptionTypeMessage = exceptionTypeMessage + ' ';
-
 
         let location = '';
         if (sheetMsg != '' && excelLocation != '') {
             location = `${sheetMsg}, ${excelLocation}. `;
-        }
-        else if (sheetMsg != '') {
-            location = `${sheetMsg}. `; 
-        }
-        else if (excelLocation != '') {
-            location = `${excelLocation}. `; 
+        } else if (sheetMsg != '') {
+            location = `${sheetMsg}. `;
+        } else if (excelLocation != '') {
+            location = `${excelLocation}. `;
         }
 
-        let msg = ''
+        let msg = '';
         if (this.message != null && this.message !== '') {
             msg = this.message;
         }
 
-        //TODO; would be useful to split these method out in order to bold them and add emphasis later... 
+        //TODO; would be useful to split these method out in order to bold them and add emphasis later...
         let finalMessage = `${exceptionTypeMessage}${location}${expectedDataType}${msg}`;
 
         return finalMessage;

@@ -167,7 +167,7 @@ var Exception = /*#__PURE__*/function () {
 
       if (this.message != null && this.message !== '') {
         msg = this.message;
-      } //TODO; would be useful to split these method out in order to bold them and add emphasis later... 
+      } //TODO; would be useful to split these method out in order to bold them and add emphasis later...
 
 
       var finalMessage = "".concat(exceptionTypeMessage).concat(location).concat(expectedDataType).concat(msg);
@@ -321,7 +321,9 @@ __webpack_require__.r(__webpack_exports__);
 
 var UploadForm = function UploadForm(props) {
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {//later
-  }, []);
+  }, []); //function handleSubmit(event) {
+  //};
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", {
     className: "text-primary"
   }, props.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
@@ -331,7 +333,7 @@ var UploadForm = function UploadForm(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "bg-light px-3 pt-2 pb-3 border rounded"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("form", {
-    action: "".concat(props.controller, "/").concat(props.action),
+    action: "../".concat(props.controller, "/").concat(props.action),
     encType: "multipart/form-data",
     method: "post",
     className: "form-horizontal needs-validation",
