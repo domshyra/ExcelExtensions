@@ -62,9 +62,13 @@ namespace WebApplication.Providers
             }
         }
 
-
+        /// <summary>
+        /// Sets the requiredments for import and our model property.  
+        /// </summary>
+        /// <returns></returns>
         private List<ImportColumnTemplate> GetTableColumnTemplates()
         {
+            //TODO USE REFLECTION https://github.com/domshyra/ExcelExtensions/issues/15
             List<Column> cols = SampleTableColumns();
 
             return new List<ImportColumnTemplate>()
@@ -101,8 +105,13 @@ namespace WebApplication.Providers
         {
             return cols.First(x => x.ModelProperty == modelPropertyName);
         }
+        /// <summary>
+        /// These are the columns used for excel, the format is needed for the parse and the colNumber is needed for the export column letter
+        /// </summary>
+        /// <returns></returns>
         private List<Column> SampleTableColumns()
         {
+            //TODO USE REFLECTION https://github.com/domshyra/ExcelExtensions/issues/16
             int colNumber = 1;
             Type objType = typeof(SampleTableModel);
             List<Column> excelColumnDefinitionArray = new()
