@@ -4,7 +4,7 @@ using ExcelExtensions.Models;
 using OfficeOpenXml;
 using System.Collections.Generic;
 
-namespace ExcelExtensions.Interfaces
+namespace ExcelExtensions.Interfaces.Import.Parse
 {
     /// <summary>
     /// Provides methods to parse a table of data in excel.

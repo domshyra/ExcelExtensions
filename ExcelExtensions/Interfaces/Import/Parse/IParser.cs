@@ -3,12 +3,12 @@
 using OfficeOpenXml;
 using System;
 
-namespace ExcelExtensions.Interfaces
+namespace ExcelExtensions.Interfaces.Import.Parse
 {
     /// <summary>
     /// Provides methods for parsing excel data and returning as in memory data
     /// </summary>
-    public interface IParserProvider
+    public interface IParser
     {
         /// <summary>
         /// Provides a <see cref="bool"/> from an <see cref="ExcelRange"/>
@@ -33,7 +33,7 @@ namespace ExcelExtensions.Interfaces
         /// <returns></returns>
         /// <exception cref="NullReferenceException">If input value or text is null</exception>
         /// <exception cref="FormatException">If trying to convert an invalid text value</exception>
-        string? ParseString(ExcelRange cell);
+        string ParseString(ExcelRange cell);
         /// <summary>
         /// Provides a <see cref="DateTime"/> from an <see cref="ExcelRange"/>
         /// </summary>

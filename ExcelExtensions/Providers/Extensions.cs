@@ -15,7 +15,7 @@ using static ExcelExtensions.Enums.Enums;
 namespace ExcelExtensions.Providers
 {
     /// <inheritdoc/>
-    public class ExcelExtensionsProvider : IExcelExtensionsProvider
+    public class Extensions : IExtensions
     {
         #region developer exemptions 
         public KeyValuePair<string, ParseException> LogDeveloperException(string worksheetName, ImportColumnTemplate importColumn, string cellAddress, string message, string modelPropertyName)
@@ -234,7 +234,7 @@ namespace ExcelExtensions.Providers
 
                 DisplayAttribute attribute = property.GetCustomAttribute<DisplayAttribute>();
 
-                string? displayName = property.GetCustomAttribute<DisplayAttribute>()?.Name;
+                string displayName = property.GetCustomAttribute<DisplayAttribute>()?.Name;
                 if (string.IsNullOrEmpty(displayName))
                 {
                     displayNameAsTitleString = usEnglishTextInfo.ToTitleCase(modelPropertyName);

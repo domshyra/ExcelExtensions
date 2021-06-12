@@ -9,7 +9,7 @@ namespace ExcelExtensions.Interfaces
     /// <summary>
     /// Provides extensions methods for translating excel addresses, and export helpers.
     /// </summary>
-    public interface IExcelExtensionsProvider
+    public interface IExtensions
     {
         /// <summary>
         /// Provides a setter for decimal places for export.

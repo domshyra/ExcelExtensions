@@ -3,7 +3,7 @@
 using ExcelExtensions.Models;
 using OfficeOpenXml;
 
-namespace ExcelExtensions.Interfaces
+namespace ExcelExtensions.Interfaces.Import
 {
     /// <summary>
     /// Provides methods to get <see cref="ExcelWorksheet"/> and <see cref="ExcelPackage"/>.

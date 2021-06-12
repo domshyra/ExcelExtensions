@@ -47,7 +47,7 @@ namespace ExcelExtensions.Models
 
         }
 
-        public ImportColumnWithCellAddress(IExcelExtensionsProvider excelExtensions, ImportColumnTemplate template) : base(template.Column, template.IsRequired, template.ColumnHeaderOptions)
+        public ImportColumnWithCellAddress(IExtensions excelExtensions, ImportColumnTemplate template) : base(template.Column, template.IsRequired, template.ColumnHeaderOptions)
         {
             ColumnNumber = template.Column.ColumnLetter == null ? 0 : excelExtensions.GetColumnNumber(template.Column.ColumnLetter);
         }

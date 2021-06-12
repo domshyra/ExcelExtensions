@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using ExcelExtensions.Interfaces;
+using ExcelExtensions.Interfaces.Import;
 using ExcelExtensions.Models;
 using OfficeOpenXml;
 using System;
@@ -9,7 +9,7 @@ using System.Dynamic;
 using System.IO;
 using static ExcelExtensions.Enums.Enums;
 
-namespace ExcelExtensions.Providers
+namespace ExcelExtensions.Providers.Import
 {
     /// <inheritdoc/>
     public class FileAndSheetValidatior : IFileAndSheetValidatior

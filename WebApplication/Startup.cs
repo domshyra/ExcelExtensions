@@ -1,7 +1,9 @@
 // Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using ExcelExtensions.Interfaces;
-using ExcelExtensions.Providers;
+using ExcelExtensions.Interfaces.Import;
+using ExcelExtensions.Interfaces.Import.Parse;
+using ExcelExtensions.Providers.Import;
+using ExcelExtensions.Providers.Import.Parse;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +12,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebApplication.Interfaces;
 using WebApplication.Providers;
+using ExcelExtensions.Interfaces.Export;
+using ExcelExtensions.Providers.Export;
+using ExcelExtensions.Providers;
+using ExcelExtensions.Interfaces;
 
 namespace WebApplication
 {
@@ -48,9 +54,10 @@ namespace WebApplication
             });
 
             #region Interfaces
-            services.AddTransient<IExcelExtensionsProvider, ExcelExtensionsProvider>();
+            services.AddTransient<IExtensions, Extensions>();
             services.AddTransient<IFileAndSheetValidatior, FileAndSheetValidatior>();
-            services.AddTransient<IParserProvider, ParserProvider>();
+            services.AddTransient<IParser, Parser>();
+            services.AddTransient<IExporter, Exporter>();
             services.AddTransient<ISampleProvider, SampleProvider>();
 
             services.AddSingleton(Configuration);
