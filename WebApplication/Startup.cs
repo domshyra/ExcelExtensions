@@ -13,6 +13,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebApplication.Interfaces;
 using WebApplication.Providers;
+using Extensions.Interfaces.Export;
+using Extensions.Providers.Export;
 
 namespace WebApplication
 {
@@ -54,6 +56,7 @@ namespace WebApplication
             services.AddTransient<IExtensions, Extensions.Providers.Extension.Extensions>();
             services.AddTransient<IFileAndSheetValidatior, FileAndSheetValidatior>();
             services.AddTransient<IParser, Parser>();
+            services.AddTransient<IExporter, Exporter>();
             services.AddTransient<ISampleProvider, SampleProvider>();
 
             services.AddSingleton(Configuration);
