@@ -10,9 +10,9 @@ const ParseExceptionsModal = (props) => {
     useEffect(() => {
         const modal = new Modal(parseExceptionModal.current, { keyboard: false });
         setModal(modal);
-        if (props.json.length > 0) {
+        if (props.exceptions.length > 0) {
             modal.show();
-            console.log(props.json);
+            console.log(props.exceptions);
         }
     }, []);
 
@@ -34,7 +34,7 @@ const ParseExceptionsModal = (props) => {
                             </button>
                         </div>
                         <div className="modal-body">
-                            <ParseExceptions json={props.json} />
+                            <ParseExceptions json={props.exceptions} />
                         </div>
                         <div className="modal-footer">
                             <button onClick={() => modal.hide()} type="button" className="btn btn-outline-secondary">
@@ -48,7 +48,7 @@ const ParseExceptionsModal = (props) => {
     );
 };
 ParseExceptionsModal.propTypes = {
-    json: PropTypes.array,
+    exceptions: PropTypes.array,
     title: PropTypes.string,
 };
 export default ParseExceptionsModal;

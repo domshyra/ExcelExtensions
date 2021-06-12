@@ -25,21 +25,21 @@ namespace WebApplication.Controllers
             {
                 form = new ImportViewModel();
             }
-            return View("Index", form);
+            return View("Index", JsonConvert.SerializeObject(form));
         }
 
         public ActionResult ScanForColumnsAndParseTable(ImportViewModel form, IFormFile file, string password = "")
         {
             try
             {
-                form.ScanForColumnsAndParseTable = JsonConvert.SerializeObject(_sampleProvider.ScanForColumnsAndParseTable(file, form, password));
+                form.ScanForColumnsAndParseTable = _sampleProvider.ScanForColumnsAndParseTable(file, form, password);
             }
             catch (ImportException ex)
             {
                 form.Exceptions = ex.Exceptions;
             }
 
-            return View("Index", form);
+            return View("Index", JsonConvert.SerializeObject(form));
 
         }
         public ActionResult ExportTableSample()

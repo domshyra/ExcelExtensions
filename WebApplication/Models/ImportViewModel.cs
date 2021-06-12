@@ -8,12 +8,12 @@ namespace WebApplication.Models
     public class ImportViewModel
     {
         public List<ParseException> Exceptions { get; set; }
-        public string ScanForColumnsAndParseTable { get; internal set; }
+        public Dictionary<int, SampleTableModel> ScanForColumnsAndParseTable { get; set; }
 
         public ImportViewModel()
         {
             Exceptions = new List<ParseException>();
-            ScanForColumnsAndParseTable = "[]";
+            ScanForColumnsAndParseTable = new Dictionary<int, SampleTableModel>();
         }
     }
 }

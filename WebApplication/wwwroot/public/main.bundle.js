@@ -2,6 +2,137 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./Components/JSONOutput.jsx":
+/*!***********************************!*\
+  !*** ./Components/JSONOutput.jsx ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fortawesome/react-fontawesome */ "./node_modules/@fortawesome/react-fontawesome/index.es.js");
+/* harmony import */ var _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fortawesome/free-solid-svg-icons */ "./node_modules/@fortawesome/free-solid-svg-icons/index.es.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+ //import Skeleton from 'react-loading-skeleton';
+//styles
+
+
+
+
+function syntaxHighlight(obj) {
+  if (obj !== undefined) {
+    var json = JSON.stringify(obj, undefined, 4);
+    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+/-]?\d+)?)/g, function (match) {
+      var cls = 'number';
+
+      if (/^"/.test(match)) {
+        if (/:$/.test(match)) {
+          cls = 'key';
+        } else {
+          cls = 'string';
+        }
+      } else if (/true|false/.test(match)) {
+        cls = 'boolean';
+      } else if (/null/.test(match)) {
+        cls = 'null';
+      }
+
+      return "<span class=\"".concat(cls, "\">").concat(match, "</span>");
+    });
+  }
+
+  return "<span></span>";
+}
+
+var JSONOutput = function JSONOutput(props) {
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      isExpanded = _useState2[0],
+      setIsExpanded = _useState2[1];
+
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+      _useState4 = _slicedToArray(_useState3, 2),
+      output = _useState4[0],
+      setOutput = _useState4[1]; //TODO USE REF
+
+
+  var collapseId = "".concat(props.id, "-output");
+  var cheveronIconId = "".concat(props.id, "-icon"); //Handle collapse click
+
+  function handleCollapseClick() {
+    setIsExpanded(!isExpanded);
+  }
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    setOutput(syntaxHighlight(props.value));
+  }, []); //TODO: fix this colappse funciotn 
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (!isExpanded) {
+      setTimeout(function () {//(`#${collapseId}`).removeClass('show');
+      }, 351);
+    }
+  }, [isExpanded]);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "output-content"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h5", {
+    className: "mb-0"
+  }, "JSON output", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("a", {
+    id: props.id,
+    className: "font-weight-bold pull-right",
+    "data-toggle": "collapse",
+    href: "#".concat(collapseId),
+    "aria-expanded": isExpanded,
+    "aria-controls": collapseId,
+    title: "".concat(isExpanded ? 'Collapse' : 'Expand'),
+    onClick: handleCollapseClick
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "header-chevron",
+    id: cheveronIconId
+  }, isExpanded ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__.FontAwesomeIcon, {
+    icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faChevronDown
+  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__.FontAwesomeIcon, {
+    icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faChevronLeft
+  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "row mb-2 pt-2 collapse",
+    id: collapseId
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "col-12 px-0"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "json-output",
+    id: "".concat(props.id, "-json")
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("pre", {
+    className: "code-wrap",
+    id: "".concat(props.id, "-json-txt")
+  }, output)))));
+};
+
+JSONOutput.propTypes = {
+  id: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string),
+  value: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().object)
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (JSONOutput);
+
+/***/ }),
+
 /***/ "./Components/ParseExceptions.jsx":
 /*!****************************************!*\
   !*** ./Components/ParseExceptions.jsx ***!
@@ -252,9 +383,9 @@ var ParseExceptionsModal = function ParseExceptionsModal(props) {
     });
     setModal(modal);
 
-    if (props.json.length > 0) {
+    if (props.exceptions.length > 0) {
       modal.show();
-      console.log(props.json);
+      console.log(props.exceptions);
     }
   }, []);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
@@ -283,7 +414,7 @@ var ParseExceptionsModal = function ParseExceptionsModal(props) {
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
     className: "modal-body"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_ParseExceptions__WEBPACK_IMPORTED_MODULE_2__.default, {
-    json: props.json
+    json: props.exceptions
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
     className: "modal-footer"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("button", {
@@ -296,7 +427,7 @@ var ParseExceptionsModal = function ParseExceptionsModal(props) {
 };
 
 ParseExceptionsModal.propTypes = {
-  json: (prop_types__WEBPACK_IMPORTED_MODULE_3___default().array),
+  exceptions: (prop_types__WEBPACK_IMPORTED_MODULE_3___default().array),
   title: (prop_types__WEBPACK_IMPORTED_MODULE_3___default().string)
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ParseExceptionsModal);
@@ -316,6 +447,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _JSONOutput__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./JSONOutput */ "./Components/JSONOutput.jsx");
+
 
 
 
@@ -334,7 +467,7 @@ var UploadForm = function UploadForm(props) {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "col-8"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, "Export a sample table with the required columns and sheet name to test the ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("b", null, props.title), ".")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, "Export a sample table with the required columns and sheet name to test the", ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("b", null, props.title), ".")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "col-4"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("a", {
     role: "button",
@@ -361,11 +494,15 @@ var UploadForm = function UploadForm(props) {
   }, "This requires an excel sheet a sheet named ", props.sheetName, ".")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
     className: "btn btn-primary",
     type: "submit"
-  }, "Import"))))));
+  }, "Import")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_JSONOutput__WEBPACK_IMPORTED_MODULE_2__.default, {
+    id: "sample",
+    value: props.parseResults
+  })))));
 };
 
 UploadForm.propTypes = {
   title: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string),
+  parseResults: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().object),
   "import": (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string),
   "export": (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string),
   controller: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string),
@@ -402,15 +539,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+/*global model*/
+
+/*eslint no-undef: "error"*/
+
 react_dom__WEBPACK_IMPORTED_MODULE_5__.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4__.createElement(_UploadForm__WEBPACK_IMPORTED_MODULE_6__.default, {
   title: "Scan Table Parser",
   "export": "ExportTableSample",
   "import": "ScanForColumnsAndParseTable",
   sheetName: "Sample Sheet",
-  controller: "Home"
+  controller: "Home",
+  jsonParseValue: model.ScanForColumnsAndParseTable
 }), document.getElementById('main'));
 react_dom__WEBPACK_IMPORTED_MODULE_5__.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4__.createElement(_ParseExceptionsModal__WEBPACK_IMPORTED_MODULE_7__.default, {
-  json: window.jsonParseExceptions,
+  exceptions: model.Exceptions,
   title: "Import messages"
 }), document.getElementById('modal'));
 
@@ -906,7 +1048,7 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_bootstrap_dist_js-fded6a"], () => (__webpack_require__("./Components/main.jsx")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["vendors-node_modules_fortawesome_free-solid-svg-icons_index_es_js-node_modules_fortawesome_re-a2f205"], () => (__webpack_require__("./Components/main.jsx")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

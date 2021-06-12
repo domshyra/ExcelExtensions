@@ -7,35 +7,35 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 function syntaxHighlight(obj) {
-    let json = JSON.stringify(obj, undefined, 4);
-    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    return json.replace(
-        /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+/-]?\d+)?)/g,
-        function (match) {
-            var cls = 'number';
-            if (/^"/.test(match)) {
-                if (/:$/.test(match)) {
-                    cls = 'key';
-                } else {
-                    cls = 'string';
+    if (obj !== undefined) {
+        let json = JSON.stringify(obj, undefined, 4);
+        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return json.replace(
+            /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+/-]?\d+)?)/g,
+            function (match) {
+                var cls = 'number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'key';
+                    } else {
+                        cls = 'string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'null';
                 }
-            } else if (/true|false/.test(match)) {
-                cls = 'boolean';
-            } else if (/null/.test(match)) {
-                cls = 'null';
+                return `<span class="${cls}">${match}</span>`;
             }
-            return `<span class="${cls}">${match}</span>`;
-        }
-    );
+        );
+    }
+    return `<span></span>`;
 }
 
-//Popssilby just rerender it any time the ajax is called and just have the props take care of the update, but have to check the life cycel of creating a and re rendering a react componet
 const JSONOutput = (props) => {
     const [isExpanded, setIsExpanded] = useState(false);
-    const [input, setInput] = useState(input);
-
-    //TODO:
-    const [output, setOutput] = useState(props.input);
+    const [output, setOutput] = useState("");
+    //TODO USE REF
     const collapseId = `${props.id}-output`;
     const cheveronIconId = `${props.id}-icon`;
 
@@ -44,15 +44,15 @@ const JSONOutput = (props) => {
         setIsExpanded(!isExpanded);
     }
 
-    //useEffect(() => {
-    //    setOutput(syntaxHighlight(input))
-    //}, [input]);
+    useEffect(() => {
+        setOutput(syntaxHighlight(props.value));
+    }, []);
 
-    //TODO: fix this animation, but it will at lease collapse now
+    //TODO: fix this colappse funciotn 
     useEffect(() => {
         if (!isExpanded) {
             setTimeout(() => {
-                $(`#${collapseId}`).removeClass('show');
+                //(`#${collapseId}`).removeClass('show');
             }, 351);
         }
     }, [isExpanded]);
@@ -93,7 +93,7 @@ const JSONOutput = (props) => {
 };
 JSONOutput.propTypes = {
     id: PropTypes.string,
-    input: PropTypes.string,
+    value: PropTypes.object,
 };
 
 export default JSONOutput;
