@@ -7,7 +7,7 @@ namespace ExcelExtensions.Enums
         /// <summary>
         /// Format of data to transcribe to and from excel data into c# objects.
         /// </summary>
-        public enum ExcelFormatType
+        public enum FormatType
         {
             /// <summary>
             /// String type

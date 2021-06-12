@@ -1,8 +1,9 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using ExcelExtensions.Interfaces;
+using ExcelExtensions.Interfaces.Import;
+using ExcelExtensions.Interfaces.Import.Parse;
 using ExcelExtensions.Models;
-using ExcelExtensions.Parsers;
+using ExcelExtensions.Providers.Import.Parse;
 using Microsoft.AspNetCore.Http;
 using OfficeOpenXml;
 using System;
@@ -11,20 +12,32 @@ using System.Linq;
 using WebApplication.Interfaces;
 using WebApplication.Models;
 using static ExcelExtensions.Enums.Enums;
+using ExcelExtensions.Interfaces;
+using ExcelExtensions.Interfaces.Export;
+using System.Drawing;
 
 namespace WebApplication.Providers
 {
     public class SampleProvider : ISampleProvider
     {
-        private readonly IExcelExtensionsProvider _excelExtensions;
-        private readonly IFileAndSheetValidatior _excelValidatior;
+        private readonly IExtensions _excelExtensions;
+        private readonly IFileAndSheetValidatior _validatior;
+        private readonly IExporter _exporter;
+        private readonly Style _style;
+
+        private readonly string _sheetName = Constants.Constants.SheetName;
 
         private readonly TableParser<SampleTableModel> _tableParser;
 
-        public SampleProvider(IExcelExtensionsProvider excelUtilityProvider, IFileAndSheetValidatior validationProvider, IParserProvider parserProvider)
+        public SampleProvider(IExtensions excelUtilityProvider, IFileAndSheetValidatior validationProvider, IParser parserProvider, IExporter exporter)
         {
             _excelExtensions = excelUtilityProvider;
-            _excelValidatior = validationProvider;
+            _validatior = validationProvider;
+            _exporter = exporter;
+            _style = new Style()
+            {
+                BackgroundColor = ColorTranslator.FromHtml("#001762")
+            };
 
             _tableParser = new TableParser<SampleTableModel>(_excelExtensions, parserProvider);
         }
@@ -34,9 +47,9 @@ namespace WebApplication.Providers
         {
             try
             {
-                ExcelPackage package = _excelValidatior.GetExcelPackage(file, password);
+                ExcelPackage package = _validatior.GetExcelPackage(file, password);
 
-                ExcelWorksheet sheet = _excelValidatior.GetExcelWorksheet(package, "Sheet1", out ParseException exception);
+                ExcelWorksheet sheet = _validatior.GetExcelWorksheet(package, _sheetName, out ParseException exception);
 
                 if (sheet == null)
                 {
@@ -108,27 +121,67 @@ namespace WebApplication.Providers
             List<Column> excelColumnDefinitionArray = new()
             {
                 //                                            PropertyName                          format                      col           text
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.Text),                ExcelFormatType.String,     colNumber++), //A
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.Date),                ExcelFormatType.Date,       colNumber++), //B
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.DateAsText),          ExcelFormatType.Date,       colNumber++), //C
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.DateAsGeneral),       ExcelFormatType.Date,       colNumber++), //D
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.Percent),             ExcelFormatType.Percent,    colNumber++), //E
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.PercentAsText),       ExcelFormatType.Percent,    colNumber++), //F
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.PercentAsNumber),     ExcelFormatType.Percent,    colNumber++), //G
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.BoolAsYESNO),         ExcelFormatType.Bool,       colNumber++), //H
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.BoolAsTrueFalse),     ExcelFormatType.Bool,       colNumber++), //I
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.BoolAs10),            ExcelFormatType.Bool,       colNumber++), //J
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.Currency),            ExcelFormatType.Currency,   colNumber++), //K
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.CurrencyAsText),      ExcelFormatType.Currency,   colNumber++), //L
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.CurrencyAsGeneral),   ExcelFormatType.Currency,   colNumber++), //M
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.Decimal),             ExcelFormatType.Decimal,    colNumber++), //N
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.DecimalAsText),       ExcelFormatType.Decimal,    colNumber++), //O
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.Duration),            ExcelFormatType.Duration,   colNumber++), //P
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.RequiredText),        ExcelFormatType.String,     colNumber++), //Q
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.OptionalText),        ExcelFormatType.String,     colNumber++), //R
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.Text),                FormatType.String,     colNumber++), //A
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.Date),                FormatType.Date,       colNumber++), //B
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.DateAsText),          FormatType.Date,       colNumber++), //C
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.DateAsGeneral),       FormatType.Date,       colNumber++), //D
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.Percent),             FormatType.Percent,    colNumber++), //E
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.PercentAsText),       FormatType.Percent,    colNumber++), //F
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.PercentAsNumber),     FormatType.Percent,    colNumber++), //G
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.BoolAsYESNO),         FormatType.Bool,       colNumber++), //H
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.BoolAsTrueFalse),     FormatType.Bool,       colNumber++), //I
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.BoolAs10),            FormatType.Bool,       colNumber++), //J
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.Currency),            FormatType.Currency,   colNumber++), //K
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.CurrencyAsText),      FormatType.Currency,   colNumber++), //L
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.CurrencyAsGeneral),   FormatType.Currency,   colNumber++), //M
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.Decimal),             FormatType.Decimal,    colNumber++), //N
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.DecimalAsText),       FormatType.Decimal,    colNumber++), //O
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.Duration),            FormatType.Duration,   colNumber++), //P
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.RequiredText),        FormatType.String,     colNumber++), //Q
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.OptionalText),        FormatType.String,     colNumber++), //R
             };
 
             return excelColumnDefinitionArray;
+        }
+
+
+        public ExcelPackage ExportSampleTable()
+        {
+            ExcelPackage package = new();
+            package.Workbook.Worksheets.Add(_sheetName);
+            ExcelWorksheet sheet = package.Workbook.Worksheets[_sheetName];
+
+            List<Column> cols = SampleTableColumns();
+
+            List<SampleTableModel> objects = new() {
+                new SampleTableModel() {
+                    Text = "Test 1",
+                    BoolAs10 = true,
+                    Currency = 10.4M,
+                    Date = DateTime.Now,
+                    RequiredText = "Required Text",
+                    Percent = 0.3M,
+                    DateAsText = DateTime.Now,
+                    Duration = TimeSpan.FromMinutes(30)
+                },
+                new SampleTableModel() {
+                    Text = "Test 2",
+                    BoolAs10 = false,
+                    Currency = 12.4M,
+                    Date = DateTime.Now.AddDays(1),
+                    RequiredText = "Required Text Required Text",
+                    Percent = 0.4M,
+                    DateAsText = DateTime.Now.AddDays(1),
+                    Duration = TimeSpan.FromHours(1)
+                }
+            };
+
+
+
+            _exporter.ExportTable(ref sheet, objects, cols, _style);
+
+
+            return package;
         }
     }
 }
