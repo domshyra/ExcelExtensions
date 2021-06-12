@@ -28,12 +28,16 @@ namespace WebApplication.Models
         public bool BoolAs10 { get; set; }
         [Display(Name = "Budget")]
         public decimal Currency { get; set; }
+        [Display(Name = "Currency as text")]
         public decimal CurrencyAsText { get; set; }
+        [Display(Name = "Currency as feneral")]
         public decimal CurrencyAsGeneral { get; set; }
         public decimal Decimal { get; set; }
+        [Display(Name = "Decimal as text")]
         public decimal DecimalAsText { get; set; }
-        [Display(Name = "Location")]
+        [Display(Name = "Required text")]
         public string RequiredText { get; set; }
+        [Display(Name = "Optional text")]
         public string OptionalText { get; set; }
 
         public Dictionary<string, string> ListOfStrings { get; set; }
