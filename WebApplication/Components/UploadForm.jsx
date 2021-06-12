@@ -6,6 +6,10 @@ const UploadForm = (props) => {
         //later
     }, []);
 
+    //function handleSubmit(event) {
+
+    //};
+
     return (
         <>
             <h2 className="text-primary">{props.title}</h2>
@@ -13,7 +17,7 @@ const UploadForm = (props) => {
                 <div className="col-12">
                     <div className="bg-light px-3 pt-2 pb-3 border rounded">
                         <form
-                            action={`${props.controller}/${props.action}`}
+                            action={`../${props.controller}/${props.action}`}
                             encType="multipart/form-data"
                             method="post"
                             className="form-horizontal needs-validation"
