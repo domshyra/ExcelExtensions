@@ -14,7 +14,13 @@ import UploadForm from './UploadForm';
 import ParseExceptionsModal from './ParseExceptionsModal';
 
 ReactDOM.render(
-    <UploadForm title="Test" action="ScanForColumnsAndParseTable" sheetName="Sheet1" controller="Home" />,
+    <UploadForm
+        title="Scan Table"
+        export="ExportTableSample"
+        import="ScanForColumnsAndParseTable"
+        sheetName="Sample Sheet"
+        controller="Home"
+    />,
     document.getElementById('main')
 );
 ReactDOM.render(

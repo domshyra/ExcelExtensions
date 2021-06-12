@@ -17,7 +17,7 @@ const UploadForm = (props) => {
                 <div className="col-12">
                     <div className="bg-light px-3 pt-2 pb-3 border rounded">
                         <form
-                            action={`../${props.controller}/${props.action}`}
+                            action={`../${props.controller}/${props.import}`}
                             encType="multipart/form-data"
                             method="post"
                             className="form-horizontal needs-validation"
@@ -31,9 +31,17 @@ const UploadForm = (props) => {
                                     This requires an excel sheet a sheet named {props.sheetName}.
                                 </small>
                             </div>
-                            <button className="btn btn-outline-primary" type="submit">
-                                Import
-                            </button>
+                            <div className="form-footer">
+                                <button className="btn btn-outline-primary pr-2 mr-2" type="submit">
+                                    Import
+                                </button>
+                                <a
+                                    role="button"
+                                    className="btn btn-outline-success pl-2 ml-2"
+                                    href={`../${props.controller}/${props.export}`}>
+                                    Export
+                                </a>
+                            </div>
                         </form>
                         {/*TODO: add back react component*/}
                     </div>
@@ -44,7 +52,8 @@ const UploadForm = (props) => {
 };
 UploadForm.propTypes = {
     title: PropTypes.string,
-    action: PropTypes.string,
+    import: PropTypes.string,
+    export: PropTypes.string,
     controller: PropTypes.string,
     sheetName: PropTypes.string,
 };

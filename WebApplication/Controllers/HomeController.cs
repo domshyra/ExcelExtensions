@@ -42,7 +42,7 @@ namespace WebApplication.Controllers
             return View("Index", form);
 
         }
-        public ActionResult ExportTableExample()
+        public ActionResult ExportTableSample()
         {
             ExcelPackage package = _sampleProvider.ExportSampleTable();
             string fileName = "Table example";
