@@ -23,7 +23,7 @@ namespace ExcelExtensionsTests
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-            return new ExcelExtensions.Providers.Extension.Extensions();
+            return new ExcelExtensions.Providers.Extensions();
         }
 
         [Theory]

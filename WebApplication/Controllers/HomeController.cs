@@ -4,6 +4,8 @@ using ExcelExtensions.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using OfficeOpenXml;
+using System.IO;
 using WebApplication.Interfaces;
 using WebApplication.Models;
 
@@ -40,20 +42,18 @@ namespace WebApplication.Controllers
             return View("Index", form);
 
         }
+        public ActionResult ExportTableExample()
+        {
+            ExcelPackage package = _sampleProvider.ExportSampleTable();
+            string fileName = "Table example";
+            return Export(package, ref fileName);
+        }
 
-        //TODO
-        //public ActionResult ExportTableExample()
-        //{
-        //    ExcelPackage package = _sampleProvider.ExportSampleTable();
-        //    string fileName = "Table example";
-        //    return Export(package, ref fileName);
-        //}
-
-        //private ActionResult Export(ExcelPackage package, ref string fileName)
-        //{
-        //    fileName = string.Join("_", fileName.Split(Path.GetInvalidFileNameChars()));
-        //    Response.Headers["content-disposition"] = $"attachment;  filename={fileName}.xlsx";
-        //    return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        //}
+        private ActionResult Export(ExcelPackage package, ref string fileName)
+        {
+            fileName = string.Join("_", fileName.Split(Path.GetInvalidFileNameChars()));
+            Response.Headers["content-disposition"] = $"attachment;  filename={fileName}.xlsx";
+            return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        }
     }
 }

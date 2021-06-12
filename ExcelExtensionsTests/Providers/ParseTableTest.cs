@@ -23,7 +23,7 @@ namespace ExcelExtensionsTests
         public ParseTableTest()
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            _excelExtensionsProvider = new ExcelExtensions.Providers.Extension.Extensions();
+            _excelExtensionsProvider = new ExcelExtensions.Providers.Extensions();
             _parserProvider = new Parser();
             _tableParser = new TableParser<ParseTableTestBaseModel>(_excelExtensionsProvider, _parserProvider);
         }

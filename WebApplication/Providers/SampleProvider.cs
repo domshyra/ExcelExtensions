@@ -13,20 +13,31 @@ using WebApplication.Interfaces;
 using WebApplication.Models;
 using static ExcelExtensions.Enums.Enums;
 using ExcelExtensions.Interfaces;
+using ExcelExtensions.Interfaces.Export;
+using System.Drawing;
 
 namespace WebApplication.Providers
 {
     public class SampleProvider : ISampleProvider
     {
         private readonly IExtensions _excelExtensions;
-        private readonly IFileAndSheetValidatior _excelValidatior;
+        private readonly IFileAndSheetValidatior _validatior;
+        private readonly IExporter _exporter;
+        private readonly Style _style;
+
+        private readonly string _sheetName = Constants.Constants.SheetName;
 
         private readonly TableParser<SampleTableModel> _tableParser;
 
-        public SampleProvider(IExtensions excelUtilityProvider, IFileAndSheetValidatior validationProvider, IParser parserProvider)
+        public SampleProvider(IExtensions excelUtilityProvider, IFileAndSheetValidatior validationProvider, IParser parserProvider, IExporter exporter)
         {
             _excelExtensions = excelUtilityProvider;
-            _excelValidatior = validationProvider;
+            _validatior = validationProvider;
+            _exporter = exporter;
+            _style = new Style()
+            {
+                BackgroundColor = ColorTranslator.FromHtml("#001762")
+            };
 
             _tableParser = new TableParser<SampleTableModel>(_excelExtensions, parserProvider);
         }
@@ -36,9 +47,9 @@ namespace WebApplication.Providers
         {
             try
             {
-                ExcelPackage package = _excelValidatior.GetExcelPackage(file, password);
+                ExcelPackage package = _validatior.GetExcelPackage(file, password);
 
-                ExcelWorksheet sheet = _excelValidatior.GetExcelWorksheet(package, "Sheet1", out ParseException exception);
+                ExcelWorksheet sheet = _validatior.GetExcelWorksheet(package, _sheetName, out ParseException exception);
 
                 if (sheet == null)
                 {
@@ -131,6 +142,46 @@ namespace WebApplication.Providers
             };
 
             return excelColumnDefinitionArray;
+        }
+
+
+        public ExcelPackage ExportSampleTable()
+        {
+            ExcelPackage package = new();
+            package.Workbook.Worksheets.Add(_sheetName);
+            ExcelWorksheet sheet = package.Workbook.Worksheets[_sheetName];
+
+            List<Column> cols = SampleTableColumns();
+
+            List<SampleTableModel> objects = new() {
+                new SampleTableModel() {
+                    Text = "Test 1",
+                    BoolAs10 = true,
+                    Currency = 10.4M,
+                    Date = DateTime.Now,
+                    RequiredText = "Required Text",
+                    Percent = 0.3M,
+                    DateAsText = DateTime.Now,
+                    Duration = TimeSpan.FromMinutes(30)
+                },
+                new SampleTableModel() {
+                    Text = "Test 2",
+                    BoolAs10 = false,
+                    Currency = 12.4M,
+                    Date = DateTime.Now.AddDays(1),
+                    RequiredText = "Required Text Required Text",
+                    Percent = 0.4M,
+                    DateAsText = DateTime.Now.AddDays(1),
+                    Duration = TimeSpan.FromHours(1)
+                }
+            };
+
+
+
+            _exporter.ExportTable(ref sheet, objects, cols, _style);
+
+
+            return package;
         }
     }
 }
