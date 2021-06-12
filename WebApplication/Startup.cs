@@ -1,10 +1,9 @@
 // Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using Extensions.Interfaces.Import;
-using Extensions.Interfaces.Import.Parse;
-using Extensions.Interfaces.Extension;
-using Extensions.Providers.Import;
-using Extensions.Providers.Import.Parse;
+using ExcelExtensions.Interfaces.Import;
+using ExcelExtensions.Interfaces.Import.Parse;
+using ExcelExtensions.Providers.Import;
+using ExcelExtensions.Providers.Import.Parse;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,8 +12,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebApplication.Interfaces;
 using WebApplication.Providers;
-using Extensions.Interfaces.Export;
-using Extensions.Providers.Export;
+using ExcelExtensions.Interfaces.Export;
+using ExcelExtensions.Providers.Export;
+using ExcelExtensions.Providers;
+using ExcelExtensions.Interfaces;
 
 namespace WebApplication
 {
@@ -53,7 +54,7 @@ namespace WebApplication
             });
 
             #region Interfaces
-            services.AddTransient<IExtensions, Extensions.Providers.Extension.Extensions>();
+            services.AddTransient<IExtensions, Extensions>();
             services.AddTransient<IFileAndSheetValidatior, FileAndSheetValidatior>();
             services.AddTransient<IParser, Parser>();
             services.AddTransient<IExporter, Exporter>();

@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using Extensions.Models;
+using ExcelExtensions.Models;
 using OfficeOpenXml;
 using System.Collections.Generic;
-using static Extensions.Enums.Enums;
+using static ExcelExtensions.Enums.Enums;
 
-namespace Extensions.Interfaces.Export
+namespace ExcelExtensions.Interfaces.Export
 {
     /// <summary>
     /// Provides export methods to an <see cref="ExcelWorksheet"/> 

@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using Extensions.Globals;
-using Extensions.Interfaces.Extension;
-using Extensions.Models;
+using ExcelExtensions.Globals;
+using ExcelExtensions.Interfaces;
+using ExcelExtensions.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,9 +10,9 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using static Extensions.Enums.Enums;
+using static ExcelExtensions.Enums.Enums;
 
-namespace Extensions.Providers.Extension
+namespace ExcelExtensions.Providers
 {
     /// <inheritdoc/>
     public class Extensions : IExtensions

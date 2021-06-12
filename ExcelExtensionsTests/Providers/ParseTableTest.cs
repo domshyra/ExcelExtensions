@@ -1,16 +1,16 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using Extensions.Interfaces.Import.Parse;
-using Extensions.Interfaces.Extension;
-using Extensions.Models;
-using Extensions.Providers.Import.Parse;
+using ExcelExtensions.Interfaces.Import.Parse;
+using ExcelExtensions.Models;
+using ExcelExtensions.Providers.Import.Parse;
 using ExcelExtensionsTests.Models;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
-using static Extensions.Enums.Enums;
+using static ExcelExtensions.Enums.Enums;
+using ExcelExtensions.Interfaces;
 
 namespace ExcelExtensionsTests
 {
@@ -23,7 +23,7 @@ namespace ExcelExtensionsTests
         public ParseTableTest()
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            _excelExtensionsProvider = new Extensions.Providers.Extension.Extensions();
+            _excelExtensionsProvider = new ExcelExtensions.Providers.Extension.Extensions();
             _parserProvider = new Parser();
             _tableParser = new TableParser<ParseTableTestBaseModel>(_excelExtensionsProvider, _parserProvider);
         }

@@ -1,9 +1,9 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using Extensions.Globals;
-using static Extensions.Enums.Enums;
+using ExcelExtensions.Globals;
+using static ExcelExtensions.Enums.Enums;
 
-namespace Extensions.Models
+namespace ExcelExtensions.Models
 {
     /// <summary>
     /// Represents the exception as it occurs in the parse. 

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Extensions.Models
+namespace ExcelExtensions.Models
 {
     /// <summary>
     /// Represents an exception when using the parse functions of excel extensions

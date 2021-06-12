@@ -1,16 +1,16 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using Extensions.Interfaces.Import.Parse;
-using Extensions.Interfaces.Extension;
-using Extensions.Models;
+using ExcelExtensions.Interfaces.Import.Parse;
+using ExcelExtensions.Models;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using static Extensions.Enums.Enums;
+using static ExcelExtensions.Enums.Enums;
+using ExcelExtensions.Interfaces;
 
-namespace Extensions.Providers.Import.Parse
+namespace ExcelExtensions.Providers.Import.Parse
 {
     public class TableParser<T> : ITableParser<T> where T : class
     {

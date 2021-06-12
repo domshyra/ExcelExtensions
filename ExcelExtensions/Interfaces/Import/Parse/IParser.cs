@@ -3,7 +3,7 @@
 using OfficeOpenXml;
 using System;
 
-namespace Extensions.Interfaces.Import.Parse
+namespace ExcelExtensions.Interfaces.Import.Parse
 {
     /// <summary>
     /// Provides methods for parsing excel data and returning as in memory data

@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using Extensions.Models;
+using ExcelExtensions.Models;
 using OfficeOpenXml;
 using System.Collections.Generic;
 
-namespace Extensions.Interfaces.Import.Parse
+namespace ExcelExtensions.Interfaces.Import.Parse
 {
     /// <summary>
     /// Provides methods to parse a table of data in excel.

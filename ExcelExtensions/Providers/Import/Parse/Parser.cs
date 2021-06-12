@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using Extensions.Globals;
-using Extensions.Interfaces.Import.Parse;
+using ExcelExtensions.Globals;
+using ExcelExtensions.Interfaces.Import.Parse;
 using OfficeOpenXml;
 using System;
 
-namespace Extensions.Providers.Import.Parse
+namespace ExcelExtensions.Providers.Import.Parse
 {
     /// <inheritdoc/>
     public class Parser : IParser

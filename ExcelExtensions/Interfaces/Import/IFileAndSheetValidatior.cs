@@ -1,9 +1,9 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using Extensions.Models;
+using ExcelExtensions.Models;
 using OfficeOpenXml;
 
-namespace Extensions.Interfaces.Import
+namespace ExcelExtensions.Interfaces.Import
 {
     /// <summary>
     /// Provides methods to get <see cref="ExcelWorksheet"/> and <see cref="ExcelPackage"/>.

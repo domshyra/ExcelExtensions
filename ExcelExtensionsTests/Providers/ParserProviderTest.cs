@@ -1,7 +1,7 @@
 // Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using Extensions.Globals;
-using Extensions.Providers.Import.Parse;
+using ExcelExtensions.Globals;
+using ExcelExtensions.Providers.Import.Parse;
 using OfficeOpenXml;
 using System;
 using Xunit;

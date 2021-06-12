@@ -1,10 +1,9 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using Extensions.Interfaces.Import;
-using Extensions.Interfaces.Import.Parse;
-using Extensions.Interfaces.Extension;
-using Extensions.Models;
-using Extensions.Providers.Import.Parse;
+using ExcelExtensions.Interfaces.Import;
+using ExcelExtensions.Interfaces.Import.Parse;
+using ExcelExtensions.Models;
+using ExcelExtensions.Providers.Import.Parse;
 using Microsoft.AspNetCore.Http;
 using OfficeOpenXml;
 using System;
@@ -12,7 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using WebApplication.Interfaces;
 using WebApplication.Models;
-using static Extensions.Enums.Enums;
+using static ExcelExtensions.Enums.Enums;
+using ExcelExtensions.Interfaces;
 
 namespace WebApplication.Providers
 {

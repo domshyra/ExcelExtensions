@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using Extensions.Models;
+using ExcelExtensions.Models;
 using System;
 using System.Collections.Generic;
 
-namespace Extensions.Interfaces.Extension
+namespace ExcelExtensions.Interfaces
 {
     /// <summary>
     /// Provides extensions methods for translating excel addresses, and export helpers.

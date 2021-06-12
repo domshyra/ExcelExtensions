@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using static Extensions.Enums.Enums;
+using static ExcelExtensions.Enums.Enums;
 
-namespace Extensions.Models
+namespace ExcelExtensions.Models
 {
     /// <summary>
     /// Represents an excel cell

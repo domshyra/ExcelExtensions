@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using Extensions.Interfaces.Extension;
+using ExcelExtensions.Interfaces;
 using System;
-using static Extensions.Enums.Enums;
+using static ExcelExtensions.Enums.Enums;
 
-namespace Extensions.Models
+namespace ExcelExtensions.Models
 {
     /// <summary>
     /// Represents an excel column

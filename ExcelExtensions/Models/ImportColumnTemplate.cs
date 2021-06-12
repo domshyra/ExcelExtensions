@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using Extensions.Interfaces.Extension;
+using ExcelExtensions.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Extensions.Models
+namespace ExcelExtensions.Models
 {
     public class ImportColumnTemplate
     {

@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using Extensions.Interfaces.Export;
-using Extensions.Interfaces.Extension;
-using Extensions.Models;
+using ExcelExtensions.Interfaces;
+using ExcelExtensions.Interfaces.Export;
+using ExcelExtensions.Models;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -10,9 +10,9 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using static Extensions.Enums.Enums;
+using static ExcelExtensions.Enums.Enums;
 
-namespace Extensions.Providers.Export
+namespace ExcelExtensions.Providers.Export
 {
     public class Exporter : IExporter
     {

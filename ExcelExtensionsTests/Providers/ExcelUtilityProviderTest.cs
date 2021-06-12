@@ -1,5 +1,6 @@
 // Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
+using ExcelExtensions.Providers;
 using OfficeOpenXml;
 using Xunit;
 
@@ -18,11 +19,11 @@ namespace ExcelExtensionsTests
             //mockRepository.VerifyAll();
         }
 
-        private static Extensions.Providers.Extension.Extensions CreateProvider()
+        private static Extensions CreateProvider()
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-            return new Extensions.Providers.Extension.Extensions();
+            return new ExcelExtensions.Providers.Extension.Extensions();
         }
 
         [Theory]
@@ -38,7 +39,7 @@ namespace ExcelExtensionsTests
         [InlineData("ALL", 1000)]
         public void GetColumnNumber(string colName, int colNumber)
         {
-            Extensions.Providers.Extension.Extensions provider = CreateProvider();
+            Extensions provider = CreateProvider();
 
 
             Assert.Equal(colNumber, provider.GetColumnNumber(colName));
@@ -57,7 +58,7 @@ namespace ExcelExtensionsTests
         [InlineData("ALL1000", 1000)]
         public void GetColumnNumberAsCell(string cell, int colNumber)
         {
-            Extensions.Providers.Extension.Extensions provider = CreateProvider();
+            Extensions provider = CreateProvider();
 
 
             Assert.Equal(colNumber, provider.GetColumnNumber(cell));
@@ -76,7 +77,7 @@ namespace ExcelExtensionsTests
         [InlineData("ALL", 1000)]
         public void GetColumnName(string colName, int colNumber)
         {
-            Extensions.Providers.Extension.Extensions provider = CreateProvider();
+            Extensions provider = CreateProvider();
 
 
             Assert.Equal(colName, provider.GetColumnLetter(colNumber));
@@ -95,7 +96,7 @@ namespace ExcelExtensionsTests
         [InlineData("ALL1000", 1000)]
         public void GetRowNumber(string cell, int rowNumber)
         {
-            Extensions.Providers.Extension.Extensions provider = CreateProvider();
+            Extensions provider = CreateProvider();
 
 
             Assert.Equal(rowNumber, provider.GetRowNumber(cell));
@@ -120,7 +121,7 @@ namespace ExcelExtensionsTests
         [InlineData("ALL1000", 1000)]
         public void GetCellAddress(string cell, int rowNumberAndColNumber)
         {
-            Extensions.Providers.Extension.Extensions provider = CreateProvider();
+            Extensions provider = CreateProvider();
 
             Assert.Equal(cell, provider.GetCellAddress(rowNumberAndColNumber, rowNumberAndColNumber));
         }
@@ -143,7 +144,7 @@ namespace ExcelExtensionsTests
         [InlineData("ALL1000", 1000)]
         public void GetCellAddressWithStringRow(string cell, int rowNumberAndColNumber)
         {
-            Extensions.Providers.Extension.Extensions provider = CreateProvider();
+            Extensions provider = CreateProvider();
 
             Assert.Equal(cell, provider.GetCellAddress(rowNumberAndColNumber, rowNumberAndColNumber.ToString()));
         }
@@ -165,7 +166,7 @@ namespace ExcelExtensionsTests
         [InlineData("ALL1000", 1000)]
         public void GetCellAddressTuple(string cell, int rowNumberAndColNumber)
         {
-            Extensions.Providers.Extension.Extensions provider = CreateProvider();
+            Extensions provider = CreateProvider();
 
             Assert.Equal((rowNumberAndColNumber, rowNumberAndColNumber), provider.GetCellAddress(cell));
         }
