@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using ExcelExtensions.Interfaces;
+using Extensions.Interfaces.Extension;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ExcelExtensions.Models
+namespace Extensions.Models
 {
     public class ImportColumnTemplate
     {
@@ -47,7 +47,7 @@ namespace ExcelExtensions.Models
 
         }
 
-        public ImportColumnWithCellAddress(IExcelExtensionsProvider excelExtensions, ImportColumnTemplate template) : base(template.Column, template.IsRequired, template.ColumnHeaderOptions)
+        public ImportColumnWithCellAddress(IExtensions excelExtensions, ImportColumnTemplate template) : base(template.Column, template.IsRequired, template.ColumnHeaderOptions)
         {
             ColumnNumber = template.Column.ColumnLetter == null ? 0 : excelExtensions.GetColumnNumber(template.Column.ColumnLetter);
         }

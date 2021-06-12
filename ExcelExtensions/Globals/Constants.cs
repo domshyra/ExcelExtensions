@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-namespace ExcelExtensions.Globals
+namespace Extensions.Globals
 {
     public class Constants
     {

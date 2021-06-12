@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using static ExcelExtensions.Enums.Enums;
+using static Extensions.Enums.Enums;
 
-namespace ExcelExtensions.Models
+namespace Extensions.Models
 {
     /// <summary>
     /// Represents an excel cell
@@ -20,7 +20,7 @@ namespace ExcelExtensions.Models
         /// <summary>
         /// Represents the format type for the excel object
         /// </summary>
-        public ExcelFormatType Format { get; set; }
+        public FormatType Format { get; set; }
         /// <summary>
         /// Represents the location of the label
         /// </summary>

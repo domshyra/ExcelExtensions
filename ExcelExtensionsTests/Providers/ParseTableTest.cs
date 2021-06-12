@@ -1,30 +1,30 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using ExcelExtensions.Interfaces;
-using ExcelExtensions.Models;
-using ExcelExtensions.Parsers;
-using ExcelExtensions.Providers;
+using Extensions.Interfaces.Import.Parse;
+using Extensions.Interfaces.Extension;
+using Extensions.Models;
+using Extensions.Providers.Import.Parse;
 using ExcelExtensionsTests.Models;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
-using static ExcelExtensions.Enums.Enums;
+using static Extensions.Enums.Enums;
 
 namespace ExcelExtensionsTests
 {
     public class ParseTableTest
     {
-        private readonly IExcelExtensionsProvider _excelExtensionsProvider;
-        private readonly IParserProvider _parserProvider;
+        private readonly IExtensions _excelExtensionsProvider;
+        private readonly IParser _parserProvider;
         private readonly TableParser<ParseTableTestBaseModel> _tableParser;
 
         public ParseTableTest()
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            _excelExtensionsProvider = new ExcelExtensionsProvider();
-            _parserProvider = new ParserProvider();
+            _excelExtensionsProvider = new Extensions.Providers.Extension.Extensions();
+            _parserProvider = new Parser();
             _tableParser = new TableParser<ParseTableTestBaseModel>(_excelExtensionsProvider, _parserProvider);
         }
 
@@ -72,10 +72,10 @@ namespace ExcelExtensionsTests
             Type type = typeof(ParseTableTestBaseModel);
             return new List<ImportColumnTemplate>()
             {
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.RequiredText),   ExcelFormatType.String),   true),
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Date),           ExcelFormatType.Date),     true),
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Decimal),        ExcelFormatType.Decimal),  true),
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.OptionalText),   ExcelFormatType.String),   false),
+                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.RequiredText),   FormatType.String),   true),
+                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Date),           FormatType.Date),     true),
+                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Decimal),        FormatType.Decimal),  true),
+                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.OptionalText),   FormatType.String),   false),
             };
         }
         /// <summary>
@@ -85,15 +85,15 @@ namespace ExcelExtensionsTests
         /// <returns></returns>
         private List<ImportColumnTemplate> GetKnownColumns(int colStart)
         {
-            
+
             int i = colStart;
             Type type = typeof(ParseTableTestBaseModel);
             return new List<ImportColumnTemplate>()
             {
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.RequiredText),   ExcelFormatType.String,     i++),   true),
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Date),           ExcelFormatType.Date,       i++),   true),
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Decimal),        ExcelFormatType.Decimal,    i++),   true),
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.OptionalText),   ExcelFormatType.String,     i++),   false),
+                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.RequiredText),   FormatType.String,     i++),   true),
+                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Date),           FormatType.Date,       i++),   true),
+                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Decimal),        FormatType.Decimal,    i++),   true),
+                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.OptionalText),   FormatType.String,     i++),   false),
             };
         }
 
@@ -298,7 +298,7 @@ namespace ExcelExtensionsTests
             int headerRow = 1;
             int startCol = 1;
             worksheet.Cells[$"{_excelExtensionsProvider.GetColumnLetter(col++)}{headerRow}"].Value = nameof(ParseTableTestBaseModel.RequiredText);
-            worksheet.Cells[$"{_excelExtensionsProvider.GetColumnLetter(col++)}{headerRow}"].Value =nameof(ParseTableTestBaseModel.Date);
+            worksheet.Cells[$"{_excelExtensionsProvider.GetColumnLetter(col++)}{headerRow}"].Value = nameof(ParseTableTestBaseModel.Date);
             worksheet.Cells[$"{_excelExtensionsProvider.GetColumnLetter(col++)}{headerRow}"].Value = nameof(ParseTableTestBaseModel.Decimal);
 
 

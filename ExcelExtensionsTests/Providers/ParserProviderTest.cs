@@ -1,7 +1,7 @@
 // Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using ExcelExtensions.Globals;
-using ExcelExtensions.Providers;
+using Extensions.Globals;
+using Extensions.Providers.Import.Parse;
 using OfficeOpenXml;
 using System;
 using Xunit;
@@ -21,11 +21,11 @@ namespace ExcelExtensionsTests
             //mockRepository.VerifyAll();
         }
 
-        private static ParserProvider CreateParserProvider()
+        private static Parser CreateParserProvider()
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-            return new ParserProvider();
+            return new Parser();
         }
         private static void SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet)
         {
@@ -44,7 +44,7 @@ namespace ExcelExtensionsTests
         public void ParsePercent_Pass(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -61,7 +61,7 @@ namespace ExcelExtensionsTests
         public void ParsePercent_EmptyAndNull_Fail(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -79,7 +79,7 @@ namespace ExcelExtensionsTests
         public void ParsePercent_BadData_Fail(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -102,7 +102,7 @@ namespace ExcelExtensionsTests
         public void ParseInt_Pass(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -120,7 +120,7 @@ namespace ExcelExtensionsTests
         public void ParseInt_EmptyAndNull_Fail(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -138,7 +138,7 @@ namespace ExcelExtensionsTests
         public void ParseInt_BadData_Fail(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -160,7 +160,7 @@ namespace ExcelExtensionsTests
         public void ParseDecimal_Pass(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -177,7 +177,7 @@ namespace ExcelExtensionsTests
         public void ParseDecimal_WithDecimalValues_Pass(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -194,7 +194,7 @@ namespace ExcelExtensionsTests
         public void ParseDecimal_EmptyAndNull_Fail(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -212,7 +212,7 @@ namespace ExcelExtensionsTests
         public void ParseDecimal_BadData_Fail(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -234,7 +234,7 @@ namespace ExcelExtensionsTests
         public void ParseDouble_Pass(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -251,7 +251,7 @@ namespace ExcelExtensionsTests
         public void ParseDouble_WithDecimalValues_Pass(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -268,7 +268,7 @@ namespace ExcelExtensionsTests
         public void ParseDouble_EmptyAndNull_Fail(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -286,7 +286,7 @@ namespace ExcelExtensionsTests
         public void ParseDouble_BadData_Fail(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -306,7 +306,7 @@ namespace ExcelExtensionsTests
         public void ParseDuration_Pass(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -328,7 +328,7 @@ namespace ExcelExtensionsTests
         public void ParseDuration_EmptyAndNull_Fail(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -346,7 +346,7 @@ namespace ExcelExtensionsTests
         public void ParseDuration_BadData_Fail(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -370,7 +370,7 @@ namespace ExcelExtensionsTests
         public void ParseDate_Pass(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -389,7 +389,7 @@ namespace ExcelExtensionsTests
         public void ParseDate_EmptyAndNull_Fail(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -407,7 +407,7 @@ namespace ExcelExtensionsTests
         public void ParseDate_BadData_Fail(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -438,7 +438,7 @@ namespace ExcelExtensionsTests
         public void ParseBool_Trues_Pass(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -466,7 +466,7 @@ namespace ExcelExtensionsTests
         public void ParseBool_Falses_Pass(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -483,7 +483,7 @@ namespace ExcelExtensionsTests
         public void ParseBool_EmptyAndNull_Fail(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -501,7 +501,7 @@ namespace ExcelExtensionsTests
         public void ParseBool_BadData_Fail(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -524,7 +524,7 @@ namespace ExcelExtensionsTests
         public void ParseCurrency_Pass(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -541,7 +541,7 @@ namespace ExcelExtensionsTests
         public void ParseCurrency_EmptyAndNull_Fail(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
@@ -559,7 +559,7 @@ namespace ExcelExtensionsTests
         public void ParseCurrency_BadData_Fail(object value)
         {
             //Arrange
-            ParserProvider provider = CreateParserProvider();
+            Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act

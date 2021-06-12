@@ -1,15 +1,15 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using ExcelExtensions.Interfaces;
-using ExcelExtensions.Models;
+using Extensions.Interfaces.Import;
+using Extensions.Models;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
-using static ExcelExtensions.Enums.Enums;
+using static Extensions.Enums.Enums;
 
-namespace ExcelExtensions.Providers
+namespace Extensions.Providers.Import
 {
     /// <inheritdoc/>
     public class FileAndSheetValidatior : IFileAndSheetValidatior

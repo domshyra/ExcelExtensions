@@ -1,8 +1,10 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using ExcelExtensions.Interfaces;
-using ExcelExtensions.Models;
-using ExcelExtensions.Parsers;
+using Extensions.Interfaces.Import;
+using Extensions.Interfaces.Import.Parse;
+using Extensions.Interfaces.Extension;
+using Extensions.Models;
+using Extensions.Providers.Import.Parse;
 using Microsoft.AspNetCore.Http;
 using OfficeOpenXml;
 using System;
@@ -10,18 +12,18 @@ using System.Collections.Generic;
 using System.Linq;
 using WebApplication.Interfaces;
 using WebApplication.Models;
-using static ExcelExtensions.Enums.Enums;
+using static Extensions.Enums.Enums;
 
 namespace WebApplication.Providers
 {
     public class SampleProvider : ISampleProvider
     {
-        private readonly IExcelExtensionsProvider _excelExtensions;
+        private readonly IExtensions _excelExtensions;
         private readonly IFileAndSheetValidatior _excelValidatior;
 
         private readonly TableParser<SampleTableModel> _tableParser;
 
-        public SampleProvider(IExcelExtensionsProvider excelUtilityProvider, IFileAndSheetValidatior validationProvider, IParserProvider parserProvider)
+        public SampleProvider(IExtensions excelUtilityProvider, IFileAndSheetValidatior validationProvider, IParser parserProvider)
         {
             _excelExtensions = excelUtilityProvider;
             _excelValidatior = validationProvider;
@@ -108,24 +110,24 @@ namespace WebApplication.Providers
             List<Column> excelColumnDefinitionArray = new()
             {
                 //                                            PropertyName                          format                      col           text
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.Text),                ExcelFormatType.String,     colNumber++), //A
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.Date),                ExcelFormatType.Date,       colNumber++), //B
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.DateAsText),          ExcelFormatType.Date,       colNumber++), //C
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.DateAsGeneral),       ExcelFormatType.Date,       colNumber++), //D
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.Percent),             ExcelFormatType.Percent,    colNumber++), //E
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.PercentAsText),       ExcelFormatType.Percent,    colNumber++), //F
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.PercentAsNumber),     ExcelFormatType.Percent,    colNumber++), //G
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.BoolAsYESNO),         ExcelFormatType.Bool,       colNumber++), //H
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.BoolAsTrueFalse),     ExcelFormatType.Bool,       colNumber++), //I
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.BoolAs10),            ExcelFormatType.Bool,       colNumber++), //J
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.Currency),            ExcelFormatType.Currency,   colNumber++), //K
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.CurrencyAsText),      ExcelFormatType.Currency,   colNumber++), //L
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.CurrencyAsGeneral),   ExcelFormatType.Currency,   colNumber++), //M
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.Decimal),             ExcelFormatType.Decimal,    colNumber++), //N
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.DecimalAsText),       ExcelFormatType.Decimal,    colNumber++), //O
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.Duration),            ExcelFormatType.Duration,   colNumber++), //P
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.RequiredText),        ExcelFormatType.String,     colNumber++), //Q
-                new Column(_excelExtensions, objType, nameof(SampleTableModel.OptionalText),        ExcelFormatType.String,     colNumber++), //R
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.Text),                FormatType.String,     colNumber++), //A
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.Date),                FormatType.Date,       colNumber++), //B
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.DateAsText),          FormatType.Date,       colNumber++), //C
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.DateAsGeneral),       FormatType.Date,       colNumber++), //D
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.Percent),             FormatType.Percent,    colNumber++), //E
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.PercentAsText),       FormatType.Percent,    colNumber++), //F
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.PercentAsNumber),     FormatType.Percent,    colNumber++), //G
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.BoolAsYESNO),         FormatType.Bool,       colNumber++), //H
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.BoolAsTrueFalse),     FormatType.Bool,       colNumber++), //I
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.BoolAs10),            FormatType.Bool,       colNumber++), //J
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.Currency),            FormatType.Currency,   colNumber++), //K
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.CurrencyAsText),      FormatType.Currency,   colNumber++), //L
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.CurrencyAsGeneral),   FormatType.Currency,   colNumber++), //M
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.Decimal),             FormatType.Decimal,    colNumber++), //N
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.DecimalAsText),       FormatType.Decimal,    colNumber++), //O
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.Duration),            FormatType.Duration,   colNumber++), //P
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.RequiredText),        FormatType.String,     colNumber++), //Q
+                new Column(_excelExtensions, objType, nameof(SampleTableModel.OptionalText),        FormatType.String,     colNumber++), //R
             };
 
             return excelColumnDefinitionArray;

@@ -1,14 +1,14 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using ExcelExtensions.Globals;
-using ExcelExtensions.Interfaces;
+using Extensions.Globals;
+using Extensions.Interfaces.Import.Parse;
 using OfficeOpenXml;
 using System;
 
-namespace ExcelExtensions.Providers
+namespace Extensions.Providers.Import.Parse
 {
     /// <inheritdoc/>
-    public class ParserProvider : IParserProvider
+    public class Parser : IParser
     {
         /// <inheritdoc/>
         public decimal? ParsePercent(ExcelRange cell)
@@ -292,7 +292,7 @@ namespace ExcelExtensions.Providers
         public decimal? ParseCurrency(ExcelRange cell)
         {
             string valueTypeInExcel = Constants.DecimalExceptionTypeString;
-            
+
             try
             {
                 CheckIfCellIsNullOrEmpty(cell, valueTypeInExcel);
@@ -324,7 +324,7 @@ namespace ExcelExtensions.Providers
 
         /// <inheritdoc/>
         //TODO: add unit test for this one
-        public string? ParseString(ExcelRange cell)
+        public string ParseString(ExcelRange cell)
         {
             string valueTypeInExcel = Constants.StringExceptionTypeString;
             try

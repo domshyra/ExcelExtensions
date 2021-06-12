@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using ExcelExtensions.Globals;
-using ExcelExtensions.Interfaces;
-using ExcelExtensions.Models;
+using Extensions.Globals;
+using Extensions.Interfaces.Extension;
+using Extensions.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,12 +10,12 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using static ExcelExtensions.Enums.Enums;
+using static Extensions.Enums.Enums;
 
-namespace ExcelExtensions.Providers
+namespace Extensions.Providers.Extension
 {
     /// <inheritdoc/>
-    public class ExcelExtensionsProvider : IExcelExtensionsProvider
+    public class Extensions : IExtensions
     {
         #region developer exemptions 
         public KeyValuePair<string, ParseException> LogDeveloperException(string worksheetName, ImportColumnTemplate importColumn, string cellAddress, string message, string modelPropertyName)
@@ -234,7 +234,7 @@ namespace ExcelExtensions.Providers
 
                 DisplayAttribute attribute = property.GetCustomAttribute<DisplayAttribute>();
 
-                string? displayName = property.GetCustomAttribute<DisplayAttribute>()?.Name;
+                string displayName = property.GetCustomAttribute<DisplayAttribute>()?.Name;
                 if (string.IsNullOrEmpty(displayName))
                 {
                     displayNameAsTitleString = usEnglishTextInfo.ToTitleCase(modelPropertyName);

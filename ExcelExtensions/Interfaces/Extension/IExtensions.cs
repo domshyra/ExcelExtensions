@@ -1,15 +1,15 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using ExcelExtensions.Models;
+using Extensions.Models;
 using System;
 using System.Collections.Generic;
 
-namespace ExcelExtensions.Interfaces
+namespace Extensions.Interfaces.Extension
 {
     /// <summary>
     /// Provides extensions methods for translating excel addresses, and export helpers.
     /// </summary>
-    public interface IExcelExtensionsProvider
+    public interface IExtensions
     {
         /// <summary>
         /// Provides a setter for decimal places for export.

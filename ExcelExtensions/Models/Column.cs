@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using ExcelExtensions.Interfaces;
+using Extensions.Interfaces.Extension;
 using System;
-using static ExcelExtensions.Enums.Enums;
+using static Extensions.Enums.Enums;
 
-namespace ExcelExtensions.Models
+namespace Extensions.Models
 {
     /// <summary>
     /// Represents an excel column
@@ -26,7 +26,7 @@ namespace ExcelExtensions.Models
         /// <summary>
         /// Represents the format type for the excel object
         /// </summary>
-        public ExcelFormatType Format { get; set; }
+        public FormatType Format { get; set; }
         /// <summary>
         /// Represents the number of decimal places in the output for export
         /// </summary>
@@ -36,7 +36,7 @@ namespace ExcelExtensions.Models
         {
 
         }
-        public Column(string modelPropertyName, string headerTitle, string columnLetter, ExcelFormatType format, int? decimalPrecision = null)
+        public Column(string modelPropertyName, string headerTitle, string columnLetter, FormatType format, int? decimalPrecision = null)
         {
             ColumnLetter = columnLetter;
             ModelProperty = modelPropertyName;
@@ -44,7 +44,7 @@ namespace ExcelExtensions.Models
             Format = format;
             DecimalPrecision = decimalPrecision;
         }
-        public Column(IExcelExtensionsProvider _excelExtensions, Type modelType, string modelPropertyName, ExcelFormatType format, string columnLetter = null, int? decimalPrecision = null)
+        public Column(IExtensions _excelExtensions, Type modelType, string modelPropertyName, FormatType format, string columnLetter = null, int? decimalPrecision = null)
         {
             _excelExtensions.GetExportModelPropertyNameAndDisplayName(modelType, modelPropertyName, out string textTitle);
             if (columnLetter != null)
@@ -56,7 +56,7 @@ namespace ExcelExtensions.Models
             Format = format;
             DecimalPrecision = decimalPrecision;
         }
-        public Column(IExcelExtensionsProvider _excelExtensions, Type modelType, string modelPropertyName, ExcelFormatType format, int columnLetterAsInt, int? decimalPrecision = null)
+        public Column(IExtensions _excelExtensions, Type modelType, string modelPropertyName, FormatType format, int columnLetterAsInt, int? decimalPrecision = null)
         {
             _excelExtensions.GetExportModelPropertyNameAndDisplayName(modelType, modelPropertyName, out string textTitle);
             ColumnLetter = _excelExtensions.GetColumnLetter(columnLetterAsInt);

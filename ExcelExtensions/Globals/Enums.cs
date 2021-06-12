@@ -1,13 +1,13 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-namespace ExcelExtensions.Enums
+namespace Extensions.Enums
 {
     public class Enums
     {
         /// <summary>
         /// Format of data to transcribe to and from excel data into c# objects.
         /// </summary>
-        public enum ExcelFormatType
+        public enum FormatType
         {
             /// <summary>
             /// String type

@@ -1,28 +1,29 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using ExcelExtensions.Interfaces;
-using ExcelExtensions.Models;
+using Extensions.Interfaces.Import.Parse;
+using Extensions.Interfaces.Extension;
+using Extensions.Models;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using static ExcelExtensions.Enums.Enums;
+using static Extensions.Enums.Enums;
 
-namespace ExcelExtensions.Parsers
+namespace Extensions.Providers.Import.Parse
 {
     public class TableParser<T> : ITableParser<T> where T : class
     {
         private T _model;
         private readonly List<KeyValuePair<int, ParseException>> _singleRowErrors;
-        private readonly IExcelExtensionsProvider _excelExtensions;
-        private readonly IParserProvider _parser;
+        private readonly IExtensions _excelExtensions;
+        private readonly IParser _parser;
         private readonly List<string> _requiredFieldsColumnLocations;
         private readonly ParsedTable<T> _parseResults;
         private readonly List<ParseException> _requiredFieldMissingMessages;
 
 
-        public TableParser(IExcelExtensionsProvider excelExtensions, IParserProvider parser)
+        public TableParser(IExtensions excelExtensions, IParser parser)
         {
             _excelExtensions = excelExtensions;
             _parser = parser;
@@ -36,7 +37,7 @@ namespace ExcelExtensions.Parsers
         {
             if (_excelExtensions is null)
             {
-                throw new ArgumentNullException(nameof(IExcelExtensionsProvider), $"Make sure when TableParser is constructed that {nameof(IExcelExtensionsProvider)} gets passed in.");
+                throw new ArgumentNullException(nameof(IExtensions), $"Make sure when TableParser is constructed that {nameof(IExtensions)} gets passed in.");
             }
             int rowScanCount = 0;
 
@@ -58,10 +59,10 @@ namespace ExcelExtensions.Parsers
         {
             if (_excelExtensions is null)
             {
-                throw new ArgumentNullException(nameof(IExcelExtensionsProvider), $"Make sure when TableParser is constructed that {nameof(IExcelExtensionsProvider)} gets passed in.");
+                throw new ArgumentNullException(nameof(IExtensions), $"Make sure when TableParser is constructed that {nameof(IExtensions)} gets passed in.");
             }
 
-            List<ImportColumnWithCellAddress> columnsWithCellAddresses =  CheckForMissingColumnNumbersInImportColumnTemplates(columns);
+            List<ImportColumnWithCellAddress> columnsWithCellAddresses = CheckForMissingColumnNumbersInImportColumnTemplates(columns);
 
             if (columnsWithCellAddresses.Any(x => x.IsRequired && x.ColumnNumber <= 0))
             {
@@ -305,7 +306,7 @@ namespace ExcelExtensions.Parsers
         {
             switch (coltemplate.Column.Format)
             {
-                case ExcelFormatType.Bool:
+                case FormatType.Bool:
                     {
                         try
                         {
@@ -324,7 +325,7 @@ namespace ExcelExtensions.Parsers
                         }
                         break;
                     }
-                case ExcelFormatType.Currency:
+                case FormatType.Currency:
                     {
                         try
                         {
@@ -342,13 +343,13 @@ namespace ExcelExtensions.Parsers
                         }
                         break;
                     }
-                case ExcelFormatType.Date:
+                case FormatType.Date:
                     {
                         try
                         {
                             DateTime? date = _parser.ParseDate(cell);
                             SetValue(workSheet, rowNumber, coltemplate, cell, date);
-                            
+
                         }
                         catch (NullReferenceException)
                         {
@@ -361,7 +362,7 @@ namespace ExcelExtensions.Parsers
                         break;
                     }
 
-                case ExcelFormatType.Duration:
+                case FormatType.Duration:
                     {
                         try
                         {
@@ -378,7 +379,7 @@ namespace ExcelExtensions.Parsers
                         }
                         break;
                     }
-                case ExcelFormatType.Percent:
+                case FormatType.Percent:
                     {
                         try
                         {
@@ -395,7 +396,7 @@ namespace ExcelExtensions.Parsers
                         }
                         break;
                     }
-                case ExcelFormatType.Double:
+                case FormatType.Double:
                     {
                         try
                         {
@@ -412,7 +413,7 @@ namespace ExcelExtensions.Parsers
                         }
                         break;
                     }
-                case ExcelFormatType.Decimal:
+                case FormatType.Decimal:
                     {
                         try
                         {
@@ -429,7 +430,7 @@ namespace ExcelExtensions.Parsers
                         }
                         break;
                     }
-                case ExcelFormatType.DecimalList:
+                case FormatType.DecimalList:
                     {
                         try
                         {
@@ -472,7 +473,7 @@ namespace ExcelExtensions.Parsers
                         }
                         break;
                     }
-                case ExcelFormatType.Int:
+                case FormatType.Int:
                     {
                         try
                         {
@@ -489,7 +490,7 @@ namespace ExcelExtensions.Parsers
                         }
                         break;
                     }
-                case ExcelFormatType.StringList:
+                case FormatType.StringList:
                     {
                         try
                         {
@@ -531,13 +532,13 @@ namespace ExcelExtensions.Parsers
                         }
                         break;
                     }
-                case ExcelFormatType.String:
-                    //uses default
+                case FormatType.String:
+                //uses default
                 default:
                     {
                         try
                         {
-                            string? value = _parser.ParseString(cell);
+                            string value = _parser.ParseString(cell);
                             SetValue(workSheet, rowNumber, coltemplate, cell, value);
                         }
                         catch (NullReferenceException)
@@ -561,7 +562,7 @@ namespace ExcelExtensions.Parsers
         /// <param name="coltemplate"></param>
         /// <param name="cell"></param>
         /// <param name="value"></param>
-        private void SetValue(ExcelWorksheet workSheet, int rowNumber, ImportColumnTemplate coltemplate, ExcelRange cell, object? value)
+        private void SetValue(ExcelWorksheet workSheet, int rowNumber, ImportColumnTemplate coltemplate, ExcelRange cell, object value)
         {
             try
             {

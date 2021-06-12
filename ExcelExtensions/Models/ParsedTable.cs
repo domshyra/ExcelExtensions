@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace ExcelExtensions.Models
+namespace Extensions.Models
 {
     /// <summary>
     /// Provides parsed results of a table import. 
