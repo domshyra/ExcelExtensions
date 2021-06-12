@@ -8,12 +8,16 @@ import '@fortawesome/react-fontawesome';
 import '@fortawesome/free-regular-svg-icons';
 import '../Styles/scss/main.scss';
 
-
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import UploadForm from './UploadForm';
+import ParseExceptionsModal from './ParseExceptionsModal';
 
 ReactDOM.render(
-    <h1>Hello, world!</h1>,
-    document.getElementById('hello-react')
+    <UploadForm title="Test" action="ScanForColumnsAndParseTable" sheetName="Sheet1" controller="Home" />,
+    document.getElementById('main')
+);
+ReactDOM.render(
+    <ParseExceptionsModal json={window.jsonParseExceptions} title="Import messages" />,
+    document.getElementById('modal')
 );

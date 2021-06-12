@@ -1,1 +1,65 @@
-﻿@import "variables";
+﻿// Required
+@import "../../node_modules/bootstrap/scss/functions";
+
+//custom bootstrap variables
+@import "variables";
+
+
+// Required
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/mixins";
+
+//Botstrap
+@import "../../node_modules/bootstrap/scss/root"; // Required
+@import "../../node_modules/bootstrap/scss/reboot"; // Required
+@import "../../node_modules/bootstrap/scss/type";
+@import "../../node_modules/bootstrap/scss/forms";
+@import "../../node_modules/bootstrap/scss/buttons";
+@import "../../node_modules/bootstrap/scss/transitions";
+@import "../../node_modules/bootstrap/scss/nav";
+@import "../../node_modules/bootstrap/scss/navbar"; // Requires nav
+@import "../../node_modules/bootstrap/scss/card";
+@import "../../node_modules/bootstrap/scss/list-group";
+@import "../../node_modules/bootstrap/scss/close";
+@import "../../node_modules/bootstrap/scss/modal"; // Requires transitions
+@import "../../node_modules/bootstrap/scss/tooltip";
+@import "../../node_modules/bootstrap/scss/spinners";
+@import "../../node_modules/bootstrap/scss/bootstrap-utilities";
+@import "../../node_modules/bootstrap/scss/bootstrap-grid";
+
+
+
+//main site
+
+.body-content {
+    padding: 70px 0 50px;
+}
+
+.output-content {
+    margin: 1rem -15px 0;
+    border: solid $light;
+    border-radius: 0.25rem !important;
+    padding: 1rem;
+    margin-right: 0;
+    margin-left: 0;
+    border-width: .2rem;
+}
+
+.json-output {
+    overflow-y: scroll;
+    overflow-x: auto;
+    overflow-wrap: break-word;
+    max-height: 25vh;
+    border-radius: 0.25rem !important;
+    background-color: $light;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    padding-top: 0.25rem !important;
+    margin-left: 0.25rem !important;
+    margin-right: 0.25rem !important;
+    border: 1px solid #dee2e6 !important;
+
+    @media (min-width: 1600px) {
+        max-height: 30vh;
+    }
+}

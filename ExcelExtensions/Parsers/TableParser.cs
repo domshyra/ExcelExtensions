@@ -124,12 +124,12 @@ namespace ExcelExtensions.Parsers
 
                     KeyValuePair<int, ParseException> missingRow = new(rowNumber, parseException);
 
-                    _parseResults.Errors.Add(missingRow);
+                    _parseResults.Exceptions.Add(missingRow);
                 }
                 else
                 {
                     //This row had both invalid and valid data.
-                    _parseResults.Errors.AddRange(_singleRowErrors);
+                    _parseResults.Exceptions.AddRange(_singleRowErrors);
                     _parseResults.Rows.Add(rowNumber, _model);
                 }
             }
@@ -166,13 +166,13 @@ namespace ExcelExtensions.Parsers
             do
             {
                 //Make sure the errors are clear first
-                _parseResults.Errors.Clear();
+                _parseResults.Exceptions.Clear();
                 _requiredFieldsColumnLocations.Clear();
                 //reset previous rows number 
 
                 FindColumnNamesAndCheckRequiredColumns(columns, ref workSheet, ref headerRowNumber);
 
-                List<ParseException> requiredErrors = _parseResults.Errors.Where(x => x.Value.ExceptionType != ParseExceptionType.OptionalFieldMissing).Select(x => x.Value).ToList();
+                List<ParseException> requiredErrors = _parseResults.Exceptions.Where(x => x.Value.ExceptionType != ParseExceptionType.OptionalFieldMissing).Select(x => x.Value).ToList();
 
                 if (_requiredFieldMissingMessages.Any() == false)
                 {
@@ -184,7 +184,7 @@ namespace ExcelExtensions.Parsers
                     _requiredFieldMissingMessages.AddRange(requiredErrors);
                 }
 
-                if (_parseResults.Errors.Where(x => x.Value.ExceptionType != ParseExceptionType.OptionalFieldMissing).Any() && rowScanCount != maxScanHeaderRowThreashold)
+                if (_parseResults.Exceptions.Where(x => x.Value.ExceptionType != ParseExceptionType.OptionalFieldMissing).Any() && rowScanCount != maxScanHeaderRowThreashold)
                 {
                     //We don't have any columns. Let's bump the header row by one, and try again 
                     headerRowNumber++;
@@ -193,7 +193,7 @@ namespace ExcelExtensions.Parsers
 
             }
             //While we have no missing required columns and while we are not at max scan
-            while (_parseResults.Errors.Where(x => x.Value.ExceptionType != ParseExceptionType.OptionalFieldMissing).Any() && rowScanCount != maxScanHeaderRowThreashold);
+            while (_parseResults.Exceptions.Where(x => x.Value.ExceptionType != ParseExceptionType.OptionalFieldMissing).Any() && rowScanCount != maxScanHeaderRowThreashold);
         }
 
         /// <summary>
@@ -209,31 +209,31 @@ namespace ExcelExtensions.Parsers
             if (rowScanCount >= maxScanHeaderRowThreashold && _requiredFieldMissingMessages.Count == columns.Where(x => x.IsRequired).Count())
             {
                 //searched all, but couldn't find one of more in same row
-                _parseResults.Errors.Clear();
+                _parseResults.Exceptions.Clear();
                 ParseException parseException = new()
                 {
                     ExceptionType = ParseExceptionType.Generic,
                     Severity = ParseExceptionSeverity.Error,
                     Message = "Could not find columns. Please check spelling of header columns and make sure all required columns are in the worksheet."
                 };
-                _parseResults.Errors.Add(new KeyValuePair<int, ParseException>(headerRowId, parseException));
+                _parseResults.Exceptions.Add(new KeyValuePair<int, ParseException>(headerRowId, parseException));
 
                 return true;
             }
 
             if (_requiredFieldMissingMessages.Count > 0)
             {
-                _parseResults.Errors.Clear();
+                _parseResults.Exceptions.Clear();
                 foreach (ParseException msg in _requiredFieldMissingMessages)
                 {
-                    _parseResults.Errors.Add(new KeyValuePair<int, ParseException>(0, msg));
+                    _parseResults.Exceptions.Add(new KeyValuePair<int, ParseException>(0, msg));
                 }
 
                 return true;
             }
 
             //The only errors here should be columns missing since no data has been parsed at this point, error if that is true
-            if (_parseResults.Errors.Any(x => x.Value.ExceptionType != ParseExceptionType.OptionalFieldMissing))
+            if (_parseResults.Exceptions.Any(x => x.Value.ExceptionType != ParseExceptionType.OptionalFieldMissing))
             {
                 return true;
             }
@@ -271,7 +271,7 @@ namespace ExcelExtensions.Parsers
                         Severity = ParseExceptionSeverity.Error,
 
                     };
-                    _parseResults.Errors.Add(new KeyValuePair<int, ParseException>(headerRowId, parseException));
+                    _parseResults.Exceptions.Add(new KeyValuePair<int, ParseException>(headerRowId, parseException));
                 }
                 else if (coltemplate.ColumnNumber == 0 && coltemplate.IsRequired == false)
                 {
@@ -281,7 +281,7 @@ namespace ExcelExtensions.Parsers
                         Severity = ParseExceptionSeverity.Warning,
                     };
 
-                    _parseResults.Errors.Add(new KeyValuePair<int, ParseException>(headerRowId, parseException));
+                    _parseResults.Exceptions.Add(new KeyValuePair<int, ParseException>(headerRowId, parseException));
 
                 }
 

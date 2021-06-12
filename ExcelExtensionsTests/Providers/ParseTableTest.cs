@@ -47,7 +47,7 @@ namespace ExcelExtensionsTests
         {
             int col = startCol;
             sheet.Cells[$"{_excelExtensionsProvider.GetColumnLetter(col++)}{headerRow}"].Value = nameof(ParseTableTestBaseModel.RequiredText);
-            sheet.Cells[$"{_excelExtensionsProvider.GetColumnLetter(col++)}{headerRow}"].Value =nameof(ParseTableTestBaseModel.Date);
+            sheet.Cells[$"{_excelExtensionsProvider.GetColumnLetter(col++)}{headerRow}"].Value = nameof(ParseTableTestBaseModel.Date);
             sheet.Cells[$"{_excelExtensionsProvider.GetColumnLetter(col++)}{headerRow}"].Value = nameof(ParseTableTestBaseModel.Decimal);
             sheet.Cells[$"{_excelExtensionsProvider.GetColumnLetter(col++)}{headerRow}"].Value = nameof(ParseTableTestBaseModel.OptionalText);
 
@@ -67,34 +67,15 @@ namespace ExcelExtensionsTests
 
         }
 
-        private static List<ImportColumnTemplate> GetScannedColumns()
+        private List<ImportColumnTemplate> GetScannedColumns()
         {
+            Type type = typeof(ParseTableTestBaseModel);
             return new List<ImportColumnTemplate>()
             {
-                new ImportColumnTemplate(new List<string>() { nameof(ParseTableTestBaseModel.RequiredText) },  true,
-                    new Column {
-                        Format = ExcelFormatType.String,
-                        ModelProperty = nameof(ParseTableTestBaseModel.RequiredText)
-                    }
-                ),
-                new ImportColumnTemplate(new List<string>() { nameof(ParseTableTestBaseModel.Date) },  true,
-                    new Column {
-                        Format = ExcelFormatType.Date,
-                        ModelProperty = nameof(ParseTableTestBaseModel.Date)
-                    }
-                ),
-                new ImportColumnTemplate(new List<string>() { nameof(ParseTableTestBaseModel.Decimal) },  true,
-                    new Column {
-                        Format = ExcelFormatType.Decimal,
-                        ModelProperty = nameof(ParseTableTestBaseModel.Decimal)
-                    }
-                ),
-                new ImportColumnTemplate(new List<string>() { nameof(ParseTableTestBaseModel.OptionalText) },  false,
-                    new Column {
-                        Format = ExcelFormatType.String,
-                        ModelProperty = nameof(ParseTableTestBaseModel.OptionalText)
-                    }
-                )
+                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.RequiredText),   ExcelFormatType.String),   true),
+                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Date),           ExcelFormatType.Date),     true),
+                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Decimal),        ExcelFormatType.Decimal),  true),
+                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.OptionalText),   ExcelFormatType.String),   false),
             };
         }
         /// <summary>
@@ -106,36 +87,13 @@ namespace ExcelExtensionsTests
         {
             
             int i = colStart;
+            Type type = typeof(ParseTableTestBaseModel);
             return new List<ImportColumnTemplate>()
             {
-                new ImportColumnTemplate(new List<string>() { nameof(ParseTableTestBaseModel.RequiredText) },  true, 
-                    new Column {
-                        ColumnLetter = _excelExtensionsProvider.GetColumnLetter(i++),
-                        Format = ExcelFormatType.String,
-                        ModelProperty = nameof(ParseTableTestBaseModel.RequiredText)
-                    }
-                ),
-                new ImportColumnTemplate(new List<string>() { nameof(ParseTableTestBaseModel.Date) },  true, 
-                    new Column {
-                        ColumnLetter = _excelExtensionsProvider.GetColumnLetter(i++),
-                        Format = ExcelFormatType.Date,
-                        ModelProperty = nameof(ParseTableTestBaseModel.Date)
-                    }
-                ),
-                new ImportColumnTemplate(new List<string>() { nameof(ParseTableTestBaseModel.Decimal) },  true, 
-                    new Column {
-                        ColumnLetter = _excelExtensionsProvider.GetColumnLetter(i++),
-                        Format = ExcelFormatType.Decimal,
-                        ModelProperty = nameof(ParseTableTestBaseModel.Decimal)
-                    }
-                ),
-                new ImportColumnTemplate(new List<string>() { nameof(ParseTableTestBaseModel.OptionalText) },  false, 
-                    new Column {
-                        ColumnLetter = _excelExtensionsProvider.GetColumnLetter(i++),
-                        Format = ExcelFormatType.String,
-                        ModelProperty = nameof(ParseTableTestBaseModel.OptionalText)
-                    }
-                )
+                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.RequiredText),   ExcelFormatType.String,     i++),   true),
+                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Date),           ExcelFormatType.Date,       i++),   true),
+                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Decimal),        ExcelFormatType.Decimal,    i++),   true),
+                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.OptionalText),   ExcelFormatType.String,     i++),   false),
             };
         }
 
@@ -361,9 +319,9 @@ namespace ExcelExtensionsTests
 
             //Assert
             Assert.Equal(rowsOfTestData.First(), result.Rows.First().Value);
-            Assert.Equal(errorMessage.Severity, result.Errors.First().Value.Severity);
-            Assert.Equal(errorMessage.ExceptionType, result.Errors.First().Value.ExceptionType);
-            Assert.Equal(errorMessage.ColumnHeader, result.Errors.First().Value.ColumnHeader);
+            Assert.Equal(errorMessage.Severity, result.Exceptions.First().Value.Severity);
+            Assert.Equal(errorMessage.ExceptionType, result.Exceptions.First().Value.ExceptionType);
+            Assert.Equal(errorMessage.ColumnHeader, result.Exceptions.First().Value.ColumnHeader);
         }
 
 
@@ -381,7 +339,7 @@ namespace ExcelExtensionsTests
             CreateTestFile(ref worksheet, rowsOfTestData, 101, 1);
 
             //Act
-            var result = _tableParser.ScanForColumnsAndParseTable(GetScannedColumns(), worksheet).Errors;
+            var result = _tableParser.ScanForColumnsAndParseTable(GetScannedColumns(), worksheet).Exceptions;
             string errorMsg = "Could not find columns. Please check spelling of header columns and make sure all required columns are in the worksheet.";
             //Assert
             Assert.Equal(errorMsg, result.First().Value.Message);
@@ -422,7 +380,7 @@ namespace ExcelExtensionsTests
             }
 
             //Act
-            ParseException result = _tableParser.ScanForColumnsAndParseTable(GetScannedColumns(), worksheet).Errors.First().Value;
+            ParseException result = _tableParser.ScanForColumnsAndParseTable(GetScannedColumns(), worksheet).Exceptions.First().Value;
 
             //Assert
             Assert.Equal(errorMessage.Severity, result.Severity);
@@ -457,7 +415,7 @@ namespace ExcelExtensionsTests
             //Assert
             Assert.Equal(rowsOfTestData.First(x => x.RequiredText == "First Valid Data"), result.Rows[2]);
 
-            var resultErrorMSG = result.Errors.First().Value;
+            var resultErrorMSG = result.Exceptions.First().Value;
 
             Assert.Equal(errorMessage.Severity, resultErrorMSG.Severity);
             Assert.Equal(errorMessage.ExceptionType, resultErrorMSG.ExceptionType);

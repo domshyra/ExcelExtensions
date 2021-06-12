@@ -1,8 +1,23 @@
-﻿@{
-    ViewData["Title"] = "Index";
+﻿@using Newtonsoft.Json
+@using WebApplication.Models
+
+@model ImportViewModel
+
+@{
+    ViewData["Title"] = "Excel extensions";
+    string exceptions = JsonConvert.SerializeObject(Model.Exceptions);
 }
 
+
+<script>
+    const jsonParseExceptions = JSON.parse('@Html.Raw(exceptions)');
+    window.jsonParseExceptions = jsonParseExceptions;
+
+</script>
 <h2 class="text-primary">@ViewData["Title"]</h2>
 
 
-<div id="hello-react"></div>
+<div id="main"></div>
+
+
+<div id="modal"></div>
