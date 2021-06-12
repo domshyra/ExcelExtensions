@@ -70,7 +70,7 @@ const JSONOutput = (props) => {
                     aria-controls={collapseId}
                     title={`${isExpanded ? 'Collapse' : 'Expand'}`}
                     onClick={handleCollapseClick}>
-                    <div className="cb-header-chevron" id={cheveronIconId}>
+                    <div className="header-chevron" id={cheveronIconId}>
                         {isExpanded ? (
                             <FontAwesomeIcon icon={faChevronDown} />
                         ) : (

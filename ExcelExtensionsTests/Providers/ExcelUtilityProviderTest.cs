@@ -75,7 +75,7 @@ namespace ExcelExtensionsTests
         [InlineData("SF", 500)]
         [InlineData("ZZ", 702)]
         [InlineData("ALL", 1000)]
-        public void GetColumnName(string colName, int colNumber)
+        public void GetColumnLetter(string colName, int colNumber)
         {
             Extensions provider = CreateProvider();
 
