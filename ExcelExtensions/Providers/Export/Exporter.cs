@@ -127,10 +127,8 @@ namespace ExcelExtensions.Providers.Export
             }
             else if (formatter == FormatType.Duration)
             {
-                if (TimeZoneInfo.Local != null)
-                {
-                    sheet.Column(_excelProvider.GetColumnNumber(column)).Style.Numberformat.Format = TimeZoneInfo.Local.StandardName;
-                }
+
+                sheet.Column(_excelProvider.GetColumnNumber(column)).Style.Numberformat.Format = "[h]:mm:ss";
                 sheet.Column(_excelProvider.GetColumnNumber(column)).Width = 15;
             }
             else if (formatter == FormatType.Decimal)
