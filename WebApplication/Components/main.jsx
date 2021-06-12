@@ -15,7 +15,7 @@ import ParseExceptionsModal from './ParseExceptionsModal';
 
 ReactDOM.render(
     <UploadForm
-        title="Scan Table"
+        title="Scan Table Parser"
         export="ExportTableSample"
         import="ScanForColumnsAndParseTable"
         sheetName="Sample Sheet"

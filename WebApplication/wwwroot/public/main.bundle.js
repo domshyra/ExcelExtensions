@@ -321,18 +321,26 @@ __webpack_require__.r(__webpack_exports__);
 
 var UploadForm = function UploadForm(props) {
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {//later
-  }, []); //function handleSubmit(event) {
-  //};
-
+  }, []);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", {
-    className: "text-primary"
+    className: "text-white"
   }, props.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "row mb-2"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "col-12"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "bg-light px-3 pt-2 pb-3 border rounded"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("form", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "col-8"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, "Export a sample table with the required columns and sheet name to test the ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("b", null, props.title), ".")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "col-4"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("a", {
+    role: "button",
+    className: "btn btn-sm btn-outline-success float-end",
+    href: "../".concat(props.controller, "/").concat(props["export"])
+  }, "Export example sheet"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("form", {
     action: "../".concat(props.controller, "/").concat(props["import"]),
     encType: "multipart/form-data",
     method: "post",
@@ -350,16 +358,10 @@ var UploadForm = function UploadForm(props) {
     name: "file"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("small", {
     className: "form-text text-muted"
-  }, "This requires an excel sheet a sheet named ", props.sheetName, ".")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    className: "form-footer"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-    className: "btn btn-outline-primary pr-2 mr-2",
+  }, "This requires an excel sheet a sheet named ", props.sheetName, ".")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
+    className: "btn btn-primary",
     type: "submit"
-  }, "Import"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("a", {
-    role: "button",
-    className: "btn btn-outline-success pl-2 ml-2",
-    href: "../".concat(props.controller, "/").concat(props["export"])
-  }, "Export")))))));
+  }, "Import"))))));
 };
 
 UploadForm.propTypes = {
@@ -401,7 +403,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 react_dom__WEBPACK_IMPORTED_MODULE_5__.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4__.createElement(_UploadForm__WEBPACK_IMPORTED_MODULE_6__.default, {
-  title: "Scan Table",
+  title: "Scan Table Parser",
   "export": "ExportTableSample",
   "import": "ScanForColumnsAndParseTable",
   sheetName: "Sample Sheet",

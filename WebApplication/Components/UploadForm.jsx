@@ -6,16 +6,27 @@ const UploadForm = (props) => {
         //later
     }, []);
 
-    //function handleSubmit(event) {
-
-    //};
-
     return (
         <>
-            <h2 className="text-primary">{props.title}</h2>
+            <h2 className="text-white">{props.title}</h2>
             <div className="row mb-2">
                 <div className="col-12">
                     <div className="bg-light px-3 pt-2 pb-3 border rounded">
+                        <div className="row">
+                            <div className="col-8">
+                                <p>Export a sample table with the required columns and sheet name to test the <b>{props.title}</b>.</p>
+                            </div>
+                            <div className="col-4">
+                                <a
+                                    role="button"
+                                    className="btn btn-sm btn-outline-success float-end"
+                                    href={`../${props.controller}/${props.export}`}>
+                                    Export example sheet
+                        </a>
+                            </div>
+                        
+                        </div>
+
                         <form
                             action={`../${props.controller}/${props.import}`}
                             encType="multipart/form-data"
@@ -31,17 +42,10 @@ const UploadForm = (props) => {
                                     This requires an excel sheet a sheet named {props.sheetName}.
                                 </small>
                             </div>
-                            <div className="form-footer">
-                                <button className="btn btn-outline-primary pr-2 mr-2" type="submit">
-                                    Import
-                                </button>
-                                <a
-                                    role="button"
-                                    className="btn btn-outline-success pl-2 ml-2"
-                                    href={`../${props.controller}/${props.export}`}>
-                                    Export
-                                </a>
-                            </div>
+                            <button className="btn btn-primary" type="submit">
+                                Import
+                            </button>
+                                
                         </form>
                         {/*TODO: add back react component*/}
                     </div>
