@@ -195,7 +195,7 @@ namespace ExcelExtensions.Providers.Export
         {
             int maxColumn = _excelProvider.FindMaxColumn(columns);
             int row = startrow ?? 1;
-            //Format Header Row
+
             sheet.Cells[row, 1, row, maxColumn].Style.Font.Bold = style.Bold;
             sheet.Cells[row, 1, row, maxColumn].Style.Fill.PatternType = style.PatternType;
             sheet.Cells[row, 1, row, maxColumn].Style.Fill.BackgroundColor.SetColor(style.BackgroundColor);
