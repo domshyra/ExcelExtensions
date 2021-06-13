@@ -29,6 +29,16 @@
 
 
 
+//Syntax highlighting
+$syntax-colors: () !default;
+$syntax-colors: map-merge( ( "boolean": $boolean-color, "enum": $enum-color, "null": $null-color, "string": $string-color, "class": $class-color, "number": $number-color, "key": $key-color, "primitive": $primitive-color ), $syntax-colors );
+
+@each $syntax-color, $value in $syntax-colors {
+    .#{$syntax-color} {
+        color: $value !important;
+    }
+}
+
 //main site
 
 .form-footer {
@@ -42,10 +52,9 @@
 }
 
 .output-content {
-    margin: 1rem -15px 0;
     border: solid $light;
     border-radius: 0.25rem !important;
-    padding: 1rem;
+    padding: .5rem;
     margin-right: 0;
     margin-left: 0;
     border-width: .2rem;

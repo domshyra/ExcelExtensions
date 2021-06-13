@@ -1,5 +1,6 @@
 ﻿import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import JSONOutput from './JSONOutput';
 
 const UploadForm = (props) => {
     useEffect(() => {
@@ -14,7 +15,10 @@ const UploadForm = (props) => {
                     <div className="bg-light px-3 pt-2 pb-3 border rounded">
                         <div className="row">
                             <div className="col-8">
-                                <p>Export a sample table with the required columns and sheet name to test the <b>{props.title}</b>.</p>
+                                <p>
+                                    Export a sample table with the required columns and sheet name to test the{' '}
+                                    <b>{props.title}</b>.
+                                </p>
                             </div>
                             <div className="col-4">
                                 <a
@@ -22,9 +26,8 @@ const UploadForm = (props) => {
                                     className="btn btn-sm btn-outline-success float-end"
                                     href={`../${props.controller}/${props.export}`}>
                                     Export example sheet
-                        </a>
+                                </a>
                             </div>
-                        
                         </div>
 
                         <form
@@ -45,9 +48,9 @@ const UploadForm = (props) => {
                             <button className="btn btn-primary" type="submit">
                                 Import
                             </button>
-                                
                         </form>
-                        {/*TODO: add back react component*/}
+                        {/*TOOD use ref for this componet*/}
+                        <JSONOutput id="sample" value={props.jsonParseValue} />
                     </div>
                 </div>
             </div>
@@ -56,6 +59,7 @@ const UploadForm = (props) => {
 };
 UploadForm.propTypes = {
     title: PropTypes.string,
+    jsonParseValue: PropTypes.object,
     import: PropTypes.string,
     export: PropTypes.string,
     controller: PropTypes.string,

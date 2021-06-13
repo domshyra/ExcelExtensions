@@ -13,6 +13,9 @@ import ReactDOM from 'react-dom';
 import UploadForm from './UploadForm';
 import ParseExceptionsModal from './ParseExceptionsModal';
 
+/*global model*/
+/*eslint no-undef: "error"*/
+
 ReactDOM.render(
     <UploadForm
         title="Scan Table Parser"
@@ -20,10 +23,11 @@ ReactDOM.render(
         import="ScanForColumnsAndParseTable"
         sheetName="Sample Sheet"
         controller="Home"
+        jsonParseValue={model.ScanForColumnsAndParseTable}
     />,
     document.getElementById('main')
 );
 ReactDOM.render(
-    <ParseExceptionsModal json={window.jsonParseExceptions} title="Import messages" />,
+    <ParseExceptionsModal exceptions={model.Exceptions} title="Import messages" />,
     document.getElementById('modal')
 );

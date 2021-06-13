@@ -1,17 +1,14 @@
 ﻿@using Newtonsoft.Json
 @using WebApplication.Models
 
-@model ImportViewModel
+@model string
 
 @{
     ViewData["Title"] = "Excel extensions";
-    string exceptions = JsonConvert.SerializeObject(Model.Exceptions);
 }
 
-
 <script>
-    const jsonParseExceptions = JSON.parse('@Html.Raw(exceptions)');
-    window.jsonParseExceptions = jsonParseExceptions;
+    const model = JSON.parse('@Html.Raw(Model)');
 
 </script>
 <div id="main"></div>
