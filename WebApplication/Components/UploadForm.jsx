@@ -50,7 +50,7 @@ const UploadForm = (props) => {
                             </button>
                         </form>
                         {/*TOOD use ref for this componet*/}
-                        <JSONOutput id="sample" value={props.parseResults} />
+                        <JSONOutput id="sample" value={props.jsonParseValue} />
                     </div>
                 </div>
             </div>
@@ -59,7 +59,7 @@ const UploadForm = (props) => {
 };
 UploadForm.propTypes = {
     title: PropTypes.string,
-    parseResults: PropTypes.object,
+    jsonParseValue: PropTypes.object,
     import: PropTypes.string,
     export: PropTypes.string,
     controller: PropTypes.string,
