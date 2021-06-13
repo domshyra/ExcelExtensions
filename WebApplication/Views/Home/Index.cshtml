@@ -1,0 +1,15 @@
+﻿@using Newtonsoft.Json
+@using WebApplication.Models
+
+@model string
+
+@{
+    ViewData["Title"] = "Excel extensions";
+}
+
+<script>
+    const model = JSON.parse('@Html.Raw(Model)');
+
+</script>
+<div id="main"></div>
+<div id="modal"></div>

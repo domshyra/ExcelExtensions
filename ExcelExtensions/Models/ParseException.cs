@@ -14,7 +14,7 @@ namespace ExcelExtensions.Models
         /// Represents the sheet that the exception occurred
         /// </summary>
         public string Sheet { get; set; }
-        public ExcelFormatType? FormatType { get; set; }
+        public FormatType? FormatType { get; set; }
         /// <summary>
         /// Represents the column that the exception occurred
         /// </summary>
@@ -44,17 +44,17 @@ namespace ExcelExtensions.Models
         /// </summary>
         public string ExpectedDateType => FormatType switch
         {
-            (ExcelFormatType.Bool) => Constants.BoolTypeExpectedString,
-            (ExcelFormatType.Currency) => Constants.CurrencyTypeExpectedString,
-            (ExcelFormatType.Date) => Constants.DateTimeTypeExpectedString,
-            (ExcelFormatType.Decimal) => Constants.DecimalTypeExpectedString,
-            (ExcelFormatType.DecimalList) => Constants.DecimalListTypeExpectedString,
-            (ExcelFormatType.Double) => Constants.DoubleTypeExpectedString,
-            (ExcelFormatType.Duration) => Constants.TimeSpanTypeExpectedString,
-            (ExcelFormatType.Int) => Constants.IntTypeExpectedString,
-            (ExcelFormatType.Percent) => Constants.PercentTypeExpectedString,
-            (ExcelFormatType.String) => Constants.StringTypeExpectedString,
-            (ExcelFormatType.StringList) => Constants.StringListTypeExpectedString,
+            (Enums.Enums.FormatType.Bool) => Constants.BoolTypeExpectedString,
+            (Enums.Enums.FormatType.Currency) => Constants.CurrencyTypeExpectedString,
+            (Enums.Enums.FormatType.Date) => Constants.DateTimeTypeExpectedString,
+            (Enums.Enums.FormatType.Decimal) => Constants.DecimalTypeExpectedString,
+            (Enums.Enums.FormatType.DecimalList) => Constants.DecimalListTypeExpectedString,
+            (Enums.Enums.FormatType.Double) => Constants.DoubleTypeExpectedString,
+            (Enums.Enums.FormatType.Duration) => Constants.TimeSpanTypeExpectedString,
+            (Enums.Enums.FormatType.Int) => Constants.IntTypeExpectedString,
+            (Enums.Enums.FormatType.Percent) => Constants.PercentTypeExpectedString,
+            (Enums.Enums.FormatType.String) => Constants.StringTypeExpectedString,
+            (Enums.Enums.FormatType.StringList) => Constants.StringListTypeExpectedString,
             _ => "",
         };
 

@@ -21,9 +21,16 @@ namespace ExcelExtensions.Models
         {
 
         }
-        public ImportColumnTemplate(List<string> columnOptions, bool required, Column column)
+        /// <summary>
+        /// Adds the header name/title from the column 
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="required"></param>
+        /// <param name="columnOptions">Optional names to search for</param>
+        public ImportColumnTemplate(Column column, bool required, List<string> columnOptions = null)
         {
-            ColumnHeaderOptions = columnOptions;
+            ColumnHeaderOptions = columnOptions ?? new List<string>();
+            ColumnHeaderOptions.Add(column.HeaderTitle);
             IsRequired = required;
             Column = column;
         }
@@ -40,7 +47,7 @@ namespace ExcelExtensions.Models
 
         }
 
-        public ImportColumnWithCellAddress(IExcelExtensionsProvider excelExtensions, ImportColumnTemplate template) : base(template.ColumnHeaderOptions, template.IsRequired, template.Column)
+        public ImportColumnWithCellAddress(IExtensions excelExtensions, ImportColumnTemplate template) : base(template.Column, template.IsRequired, template.ColumnHeaderOptions)
         {
             ColumnNumber = template.Column.ColumnLetter == null ? 0 : excelExtensions.GetColumnNumber(template.Column.ColumnLetter);
         }

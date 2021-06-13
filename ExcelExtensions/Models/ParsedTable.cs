@@ -13,7 +13,7 @@ namespace ExcelExtensions.Models
         /// <summary>
         /// List of errors and messages found with the key being the excel row number.
         /// </summary>
-        public List<KeyValuePair<int, ParseException>> Errors { get; set; }
+        public List<KeyValuePair<int, ParseException>> Exceptions { get; set; }
         /// <summary>
         /// Where key is the excel row number.
         /// </summary>
@@ -24,7 +24,7 @@ namespace ExcelExtensions.Models
         /// </summary>
         public ParsedTable()
         {
-            Errors = new List<KeyValuePair<int, ParseException>>();
+            Exceptions = new List<KeyValuePair<int, ParseException>>();
             Rows = new Dictionary<int, T>();
         }
     }
