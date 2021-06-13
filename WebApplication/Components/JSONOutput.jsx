@@ -37,7 +37,7 @@ const JSONOutput = (props) => {
     const [output, setOutput] = useState('[]');
     //TODO USE REF
     const jsonElement = useRef(null);
-    const collapseId = "wtf";
+    const collapseId = 'wtf';
     let show = isExpanded ? 'show' : '';
 
     //Handle collapse click
@@ -61,26 +61,30 @@ const JSONOutput = (props) => {
 
     return (
         <div className="output-content">
-            <h5 className="mb-0">
-                JSON output
-                <a
-                    id={props.id}
-                    className="font-weight-bold pull-right"
-                    data-toggle="collapse"
-                    href={`#${collapseId}`}
-                    aria-expanded={isExpanded}
-                    aria-controls={collapseId}
-                    title={`${isExpanded ? 'Collapse' : 'Expand'}`}
-                    onClick={handleCollapseClick}>
-                    <div className="header-chevron">
-                        {isExpanded ? (
-                            <FontAwesomeIcon icon={faChevronDown} />
-                        ) : (
-                            <FontAwesomeIcon icon={faChevronRight} />
-                        )}
-                    </div>
-                </a>
-            </h5>
+            <div className="row">
+                <div className="col-1">
+                    <a
+                        id={props.id}
+                        className="text-light fs-5 font-weight-bold float-start ml-n2 pl-n2"
+                        data-toggle="collapse"
+                        href={`#${collapseId}`}
+                        aria-expanded={isExpanded}
+                        aria-controls={collapseId}
+                        title={`${isExpanded ? 'Collapse' : 'Expand'}`}
+                        onClick={handleCollapseClick}>
+                        <div className="header-chevron">
+                            {isExpanded ? (
+                                <FontAwesomeIcon icon={faChevronDown} />
+                            ) : (
+                                <FontAwesomeIcon icon={faChevronRight} />
+                            )}
+                        </div>
+                    </a>
+                </div>
+                <div className="col-11">
+                    <h5 className="mb-0 pl-n2 ml-n2">Output</h5>
+                </div>
+            </div>
             <div className={`row mb-2 pt-2 collapse ${show}`} id={collapseId}>
                 <div className="col-12 px-0">
                     <div className="json-output" ref={jsonElement}>

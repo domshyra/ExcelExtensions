@@ -52,10 +52,9 @@ $syntax-colors: map-merge( ( "boolean": $boolean-color, "enum": $enum-color, "nu
 }
 
 .output-content {
-    margin: 1rem -15px 0;
     border: solid $light;
     border-radius: 0.25rem !important;
-    padding: 1rem;
+    padding: .5rem;
     margin-right: 0;
     margin-left: 0;
     border-width: .2rem;
