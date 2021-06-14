@@ -86,8 +86,8 @@ namespace ExcelExtensions.Enums
             MissingData = 6,
             NoFileFound = 7,
             NoValidDataToSave = 8,
-            OptionalFieldMissing = 9,
-            RequiredFieldMissing = 10,
+            OptionalColumnMissing = 9,
+            RequiredColumnMissing = 10,
             SheetMissingError = 11,
             WrongFilePassword = 12
         }

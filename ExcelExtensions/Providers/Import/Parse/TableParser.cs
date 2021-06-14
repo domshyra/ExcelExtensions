@@ -120,7 +120,7 @@ namespace ExcelExtensions.Providers.Import.Parse
                     {
                         ExceptionType = ParseExceptionType.MissingData,
                         Severity = ParseExceptionSeverity.Warning,
-                        Message = $"Missing all required data for row {rowNumber}. Skipping row import."
+                        Message = $"Missing all required data for row {rowNumber}. Skipping row."
                     };
 
                     KeyValuePair<int, ParseException> missingRow = new(rowNumber, parseException);
@@ -173,7 +173,7 @@ namespace ExcelExtensions.Providers.Import.Parse
 
                 FindColumnNamesAndCheckRequiredColumns(columns, ref workSheet, ref headerRowNumber);
 
-                List<ParseException> requiredErrors = _parseResults.Exceptions.Where(x => x.Value.ExceptionType != ParseExceptionType.OptionalFieldMissing).Select(x => x.Value).ToList();
+                List<ParseException> requiredErrors = _parseResults.Exceptions.Where(x => x.Value.ExceptionType != ParseExceptionType.OptionalColumnMissing).Select(x => x.Value).ToList();
 
                 if (_requiredFieldMissingMessages.Any() == false)
                 {
@@ -185,7 +185,7 @@ namespace ExcelExtensions.Providers.Import.Parse
                     _requiredFieldMissingMessages.AddRange(requiredErrors);
                 }
 
-                if (_parseResults.Exceptions.Where(x => x.Value.ExceptionType != ParseExceptionType.OptionalFieldMissing).Any() && rowScanCount != maxScanHeaderRowThreashold)
+                if (_parseResults.Exceptions.Where(x => x.Value.ExceptionType != ParseExceptionType.OptionalColumnMissing).Any() && rowScanCount != maxScanHeaderRowThreashold)
                 {
                     //We don't have any columns. Let's bump the header row by one, and try again 
                     headerRowNumber++;
@@ -194,7 +194,7 @@ namespace ExcelExtensions.Providers.Import.Parse
 
             }
             //While we have no missing required columns and while we are not at max scan
-            while (_parseResults.Exceptions.Where(x => x.Value.ExceptionType != ParseExceptionType.OptionalFieldMissing).Any() && rowScanCount != maxScanHeaderRowThreashold);
+            while (_parseResults.Exceptions.Where(x => x.Value.ExceptionType != ParseExceptionType.OptionalColumnMissing).Any() && rowScanCount != maxScanHeaderRowThreashold);
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace ExcelExtensions.Providers.Import.Parse
             }
 
             //The only errors here should be columns missing since no data has been parsed at this point, error if that is true
-            if (_parseResults.Exceptions.Any(x => x.Value.ExceptionType != ParseExceptionType.OptionalFieldMissing))
+            if (_parseResults.Exceptions.Any(x => x.Value.ExceptionType != ParseExceptionType.OptionalColumnMissing))
             {
                 return true;
             }
@@ -268,7 +268,7 @@ namespace ExcelExtensions.Providers.Import.Parse
 
                     ParseException parseException = new(workSheet.Name, coltemplate.Column)
                     {
-                        ExceptionType = ParseExceptionType.RequiredFieldMissing,
+                        ExceptionType = ParseExceptionType.RequiredColumnMissing,
                         Severity = ParseExceptionSeverity.Error,
 
                     };
@@ -278,7 +278,7 @@ namespace ExcelExtensions.Providers.Import.Parse
                 {
                     ParseException parseException = new(workSheet.Name, coltemplate.Column)
                     {
-                        ExceptionType = ParseExceptionType.OptionalFieldMissing,
+                        ExceptionType = ParseExceptionType.OptionalColumnMissing,
                         Severity = ParseExceptionSeverity.Warning,
                     };
 
