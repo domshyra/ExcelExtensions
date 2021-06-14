@@ -291,7 +291,7 @@ namespace ExcelExtensionsTests
             {
                 ColumnHeader = nameof(ParseTableTestBaseModel.OptionalText),
                 Severity = ParseExceptionSeverity.Warning,
-                ExceptionType = ParseExceptionType.OptionalFieldMissing
+                ExceptionType = ParseExceptionType.OptionalColumnMissing
             };
 
             int col = 1;
@@ -356,7 +356,7 @@ namespace ExcelExtensionsTests
             {
                 ColumnHeader = nameof(ParseTableTestBaseModel.RequiredText),
                 Severity = ParseExceptionSeverity.Error,
-                ExceptionType = ParseExceptionType.RequiredFieldMissing
+                ExceptionType = ParseExceptionType.RequiredColumnMissing
             };
 
             int col = 1;
@@ -405,7 +405,7 @@ namespace ExcelExtensionsTests
             {
                 Severity = ParseExceptionSeverity.Warning,
                 ExceptionType = ParseExceptionType.MissingData,
-                Message = $"Missing all required data for row 3. Skipping row import."
+                Message = $"Missing all required data for row 3. Skipping row."
             };
             CreateTestFile(ref worksheet, rowsOfTestData, 1, 1);
 

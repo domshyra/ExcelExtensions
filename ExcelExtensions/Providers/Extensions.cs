@@ -17,7 +17,7 @@ namespace ExcelExtensions.Providers
     /// <inheritdoc/>
     public class Extensions : IExtensions
     {
-        #region developer exemptions 
+        #region developer exceptions 
         public KeyValuePair<string, ParseException> LogDeveloperException(string worksheetName, ImportColumnTemplate importColumn, string cellAddress, string message, string modelPropertyName)
         {
             ParseException parseException = LogDeveloperExceptionParseException(worksheetName, importColumn, cellAddress, message);
@@ -61,7 +61,6 @@ namespace ExcelExtensions.Providers
 
         private ParseException LogNullReferenceExceptionParseException(string worksheetName, ImportColumnTemplate column, string cellAddress)
         {
-            //ErrorLocation errorLocation = new ErrorLocation(worksheetName, displayName, cellAddress, null, "Missing data");
             ParseException parseException = new(worksheetName, column)
             {
                 ColumnLetter = GetColumnLetter(cellAddress),
@@ -228,6 +227,7 @@ namespace ExcelExtensions.Providers
         {
             try
             {
+                //TODO make custome attribute and read info from here
                 MemberInfo property = objType.GetProperty(modelPropertyName);
 
                 TextInfo usEnglishTextInfo = new CultureInfo("en-US", false).TextInfo;
