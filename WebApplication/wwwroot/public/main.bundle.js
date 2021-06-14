@@ -75,7 +75,7 @@ var JSONOutput = function JSONOutput(props) {
 
 
   var jsonElement = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  var collapseId = "wtf";
+  var collapseId = 'wtf';
   var show = isExpanded ? 'show' : ''; //Handle collapse click
 
   function handleCollapseClick() {
@@ -271,12 +271,12 @@ var Exception = /*#__PURE__*/function () {
 
       if (this.exceptionType === 8) {
         exceptionTypeMessage = 'No valid data found';
-      } //OptionalFieldMissing = 9
+      } //OptionalColumnMissing = 9
 
 
       if (this.exceptionType === 9) {
         exceptionTypeMessage = 'Optional field not found';
-      } //RequiredFieldMissing = 10
+      } //RequiredColumnMissing = 10
 
 
       if (this.exceptionType === 10) {

@@ -89,11 +89,11 @@ class Exception {
         if (this.exceptionType === 8) {
             exceptionTypeMessage = 'No valid data found';
         }
-        //OptionalFieldMissing = 9
+        //OptionalColumnMissing = 9
         if (this.exceptionType === 9) {
             exceptionTypeMessage = 'Optional field not found';
         }
-        //RequiredFieldMissing = 10
+        //RequiredColumnMissing = 10
         if (this.exceptionType === 10) {
             exceptionTypeMessage = 'Required field not found';
         }
