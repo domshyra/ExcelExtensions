@@ -223,37 +223,31 @@ namespace ExcelExtensions.Providers.Import.Parse
 
             try
             {
-                TimeSpan interval = TimeSpan.ParseExact(cell.Value?.ToString(), "c", null);
+                //excel seems to use this as its base for durations "[h]:mm:ss" is the format
+                DateTime startTime = new(1899, 12, 30);
 
-                return interval;
+
+                bool result = DateTime.TryParse(cell.Value?.ToString(), out DateTime resultDateTime);
+
+                if (result)
+                {
+                    //We have a datetime as a string
+                    return GetTimeSpanFromTwoDateTimes(startTime, resultDateTime);
+                }
+
+                throw new FormatException("Cannot convert duration into a readable value");
             }
             catch (FormatException)
             {
-                Console.WriteLine("{0}: Bad Format", cell.Value);
-                //Throw the exception to the calling method
-            }
-            catch (OverflowException)
-            {
-                Console.WriteLine("{0}: Out of Range", cell.Value);
-            }
-
-            try
-            {
-                TimeSpan interval = TimeSpan.ParseExact(cell.Text?.ToString(), "c", null);
-
-                return interval;
-            }
-            catch (FormatException)
-            {
-                Console.WriteLine("{0}: Bad Format", cell.Text);
                 //Throw the exception to the calling method
                 throw new FormatException($"{Constants.DefaultCannotString} \"{cell.Text}\" to {valueTypeInExcel}.");
             }
-            catch (OverflowException)
+
+            static TimeSpan GetTimeSpanFromTwoDateTimes(DateTime startTime, DateTime resultDateTime)
             {
-                Console.WriteLine("{0}: Out of Range", cell.Text);
-                throw new FormatException($"{Constants.DefaultCannotString} \"{cell.Text}\" to {valueTypeInExcel}.");
+                return new TimeSpan((resultDateTime - startTime).Ticks);
             }
+
         }
 
         /// <inheritdoc/>

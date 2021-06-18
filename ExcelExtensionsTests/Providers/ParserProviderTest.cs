@@ -300,24 +300,27 @@ namespace ExcelExtensionsTests
 
         #region ParseDuration
 
+        //Excel starts all time spans from 1899, 12, 30
         [Theory]
-        [InlineData("12:30")]
-        [InlineData(" 12:30 ")]
-        public void ParseDuration_Pass(object value)
+        [InlineData("12/30/1899 12:30:00 AM", 0, 30, 0)]
+        [InlineData("12/30/1899 1:00:00 AM", 1, 0, 0)]
+        [InlineData("12/30/1899 12:00:30 AM", 0, 0, 30)]
+        [InlineData("12/30/1899 12:12:12 PM", 12, 12, 12)]
+        public void ParseDuration_Pass(object excelValue, int hours, int min, int sec)
         {
             //Arrange
             Parser provider = CreateParserProvider();
             SetUpBasicExcelTest(out ExcelPackage excel, out ExcelWorksheet worksheet);
 
             //Act
-            worksheet.Cells["A1"].Value = value;
+            worksheet.Cells["A1"].Value = excelValue;
             TimeSpan? result = provider.ParseTimeSpan(worksheet.Cells["A1"]);
 
             //Assert
-            Assert.Equal(30, result.Value.TotalSeconds);
-            Assert.Equal(12, result.Value.TotalMinutes);
-            Assert.Equal(0, result.Value.TotalHours);
-            Assert.Equal(0, result.Value.TotalMilliseconds);
+            Assert.Equal(sec, result.Value.Seconds);
+            Assert.Equal(min, result.Value.Minutes);
+            Assert.Equal(hours, result.Value.Hours);
+            Assert.Equal(0, result.Value.Milliseconds);
         }
 
 
