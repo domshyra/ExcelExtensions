@@ -1,5 +1,4 @@
 [![.NET](https://github.com/domshyra/ExcelExtensions/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/domshyra/ExcelExtensions/actions/workflows/dotnet.yml)
-
 # ExcelExtensions
 Excel extensions for C#
 
