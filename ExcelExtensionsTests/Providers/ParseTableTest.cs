@@ -67,15 +67,15 @@ namespace ExcelExtensionsTests
 
         }
 
-        private List<ImportColumnTemplate> GetScannedColumns()
+        private List<ImportColumn> GetScannedColumns()
         {
             Type type = typeof(ParseTableTestBaseModel);
-            return new List<ImportColumnTemplate>()
+            return new List<ImportColumn>()
             {
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.RequiredText),   FormatType.String),   true),
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Date),           FormatType.Date),     true),
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Decimal),        FormatType.Decimal),  true),
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.OptionalText),   FormatType.String),   false),
+                new ImportColumn(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.RequiredText),   FormatType.String),   true),
+                new ImportColumn(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Date),           FormatType.Date),     true),
+                new ImportColumn(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Decimal),        FormatType.Decimal),  true),
+                new ImportColumn(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.OptionalText),   FormatType.String),   false),
             };
         }
         /// <summary>
@@ -83,17 +83,17 @@ namespace ExcelExtensionsTests
         /// </summary>
         /// <param name="colStart"></param>
         /// <returns></returns>
-        private List<ImportColumnTemplate> GetKnownColumns(int colStart)
+        private List<ImportColumn> GetKnownColumns(int colStart)
         {
 
             int i = colStart;
             Type type = typeof(ParseTableTestBaseModel);
-            return new List<ImportColumnTemplate>()
+            return new List<ImportColumn>()
             {
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.RequiredText),   FormatType.String,     i++),   true),
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Date),           FormatType.Date,       i++),   true),
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Decimal),        FormatType.Decimal,    i++),   true),
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.OptionalText),   FormatType.String,     i++),   false),
+                new ImportColumn(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.RequiredText),   FormatType.String,     i++),   true),
+                new ImportColumn(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Date),           FormatType.Date,       i++),   true),
+                new ImportColumn(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Decimal),        FormatType.Decimal,    i++),   true),
+                new ImportColumn(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.OptionalText),   FormatType.String,     i++),   false),
             };
         }
 

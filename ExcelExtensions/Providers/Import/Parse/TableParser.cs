@@ -33,7 +33,7 @@ namespace ExcelExtensions.Providers.Import.Parse
             _parseResults = new ParsedTable<T>();
             _requiredFieldMissingMessages = new List<ParseException>();
         }
-        public ParsedTable<T> ScanForColumnsAndParseTable(List<ImportColumnTemplate> columns, ExcelWorksheet workSheet, int headerRowNumber = 1, int maxScanHeaderRowThreashold = 100)
+        public ParsedTable<T> ScanForColumnsAndParseTable(List<ImportColumn> columns, ExcelWorksheet workSheet, int headerRowNumber = 1, int maxScanHeaderRowThreashold = 100)
         {
             if (_excelExtensions is null)
             {
@@ -55,7 +55,7 @@ namespace ExcelExtensions.Providers.Import.Parse
             return ParseRows(columnsWithCellAddresses, workSheet, headerRowNumber);
         }
 
-        public ParsedTable<T> ParseTable(List<ImportColumnTemplate> columns, ExcelWorksheet workSheet, int headerRowNumber = 1)
+        public ParsedTable<T> ParseTable(List<ImportColumn> columns, ExcelWorksheet workSheet, int headerRowNumber = 1)
         {
             if (_excelExtensions is null)
             {
@@ -64,14 +64,14 @@ namespace ExcelExtensions.Providers.Import.Parse
 
             List<ImportColumnWithCellAddress> columnsWithCellAddresses = CheckForMissingColumnNumbersInImportColumnTemplates(columns);
 
-            if (columnsWithCellAddresses.Any(x => x.IsRequired && x.ColumnNumber <= 0))
+            if (columnsWithCellAddresses.Any(x => x.IsRequired && x.ImportColumnNumber <= 0))
             {
                 throw new ArgumentOutOfRangeException(nameof(columns), "All ColumnTemplate's must have a ColumnNumber. If the ColumnNumber is unknown use the ScanForColumnsAndParseTable method.");
             }
             //Assign required columns
             foreach (ImportColumnWithCellAddress col in columnsWithCellAddresses.Where(x => x.IsRequired))
             {
-                _requiredFieldsColumnLocations.Add(col.Column.ColumnLetter);
+                _requiredFieldsColumnLocations.Add(col.Column.ExportColumnLetter);
             }
 
             //Parse each row
@@ -95,12 +95,13 @@ namespace ExcelExtensions.Providers.Import.Parse
 
                 foreach (ImportColumnWithCellAddress coltemplate in columnsWithCellAddresses)
                 {
-                    if (coltemplate.ColumnNumber < 1 || coltemplate.ColumnNumber > workSheet.Dimension.End.Column)
+                    //If its at defualt(0) or we have reached the end of the sheet bail out
+                    if (coltemplate.ImportColumnNumber < 1 || coltemplate.ImportColumnNumber > workSheet.Dimension.End.Column)
                     {
                         continue;
                     }
 
-                    ExcelRange cell = workSheet.Cells[rowNumber, coltemplate.ColumnNumber];
+                    ExcelRange cell = workSheet.Cells[rowNumber, coltemplate.ImportColumnNumber];
 
                     ParseCell(workSheet, rowNumber, coltemplate, cell);
                 }
@@ -142,10 +143,10 @@ namespace ExcelExtensions.Providers.Import.Parse
         /// Get the cell address using the extension from the data the user provided in the import map 
         /// </summary>
         /// <param name="columns"></param>
-        private List<ImportColumnWithCellAddress> CheckForMissingColumnNumbersInImportColumnTemplates(List<ImportColumnTemplate> columns)
+        private List<ImportColumnWithCellAddress> CheckForMissingColumnNumbersInImportColumnTemplates(List<ImportColumn> columns)
         {
             List<ImportColumnWithCellAddress> columnsWithCellAddresses = new();
-            foreach (ImportColumnTemplate item in columns)
+            foreach (ImportColumn item in columns)
             {
                 columnsWithCellAddresses.Add(new ImportColumnWithCellAddress(_excelExtensions, item));
             }
@@ -204,7 +205,7 @@ namespace ExcelExtensions.Providers.Import.Parse
         /// <param name="maxScanHeaderRowThreashold"></param>
         /// <param name="rowScanCount"></param>
         /// <returns></returns>
-        private bool CheckMissingScannedColumns(int headerRowId, int maxScanHeaderRowThreashold, int rowScanCount, List<ImportColumnTemplate> columns)
+        private bool CheckMissingScannedColumns(int headerRowId, int maxScanHeaderRowThreashold, int rowScanCount, List<ImportColumn> columns)
         {
 
             if (rowScanCount >= maxScanHeaderRowThreashold && _requiredFieldMissingMessages.Count == columns.Where(x => x.IsRequired).Count())
@@ -258,12 +259,12 @@ namespace ExcelExtensions.Providers.Import.Parse
                 {
                     if (coltemplate.ColumnHeaderOptions.Any(x => x.Equals(firstRowCell.Text, StringComparison.OrdinalIgnoreCase)))
                     {
-                        coltemplate.ColumnNumber = firstRowCell.Start.Column;
+                        coltemplate.ImportColumnNumber = firstRowCell.Start.Column;
                         continue;
                     }
                 }
 
-                if (coltemplate.IsRequired && coltemplate.ColumnNumber == 0)
+                if (coltemplate.IsRequired && coltemplate.ImportColumnNumber == 0)
                 {
 
                     ParseException parseException = new(workSheet.Name, coltemplate.Column)
@@ -274,7 +275,7 @@ namespace ExcelExtensions.Providers.Import.Parse
                     };
                     _parseResults.Exceptions.Add(new KeyValuePair<int, ParseException>(headerRowId, parseException));
                 }
-                else if (coltemplate.ColumnNumber == 0 && coltemplate.IsRequired == false)
+                else if (coltemplate.ImportColumnNumber == 0 && coltemplate.IsRequired == false)
                 {
                     ParseException parseException = new(workSheet.Name, coltemplate.Column)
                     {
@@ -288,7 +289,7 @@ namespace ExcelExtensions.Providers.Import.Parse
 
                 if (coltemplate.IsRequired == true)
                 {
-                    _requiredFieldsColumnLocations.Add(_excelExtensions.GetColumnLetter(coltemplate.ColumnNumber));
+                    _requiredFieldsColumnLocations.Add(_excelExtensions.GetColumnLetter(coltemplate.ImportColumnNumber));
                 }
 
             }
@@ -302,7 +303,7 @@ namespace ExcelExtensions.Providers.Import.Parse
         /// <param name="coltemplate"></param>
         /// <param name="cell"></param>
         /// <remarks>Will throw <see cref="NullReferenceException"/> errors. disable them when debugging through this dll file. </remarks>
-        private void ParseCell(ExcelWorksheet workSheet, int rowNumber, ImportColumnTemplate coltemplate, ExcelRange cell)
+        private void ParseCell(ExcelWorksheet workSheet, int rowNumber, ImportColumn coltemplate, ExcelRange cell)
         {
             switch (coltemplate.Column.Format)
             {
@@ -562,7 +563,7 @@ namespace ExcelExtensions.Providers.Import.Parse
         /// <param name="coltemplate"></param>
         /// <param name="cell"></param>
         /// <param name="value"></param>
-        private void SetValue(ExcelWorksheet workSheet, int rowNumber, ImportColumnTemplate coltemplate, ExcelRange cell, object value)
+        private void SetValue(ExcelWorksheet workSheet, int rowNumber, ImportColumn coltemplate, ExcelRange cell, object value)
         {
             try
             {

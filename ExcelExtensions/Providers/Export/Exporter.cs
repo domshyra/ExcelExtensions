@@ -49,7 +49,7 @@ namespace ExcelExtensions.Providers.Export
                         try
                         {
                             object value = propertyInfo.GetValue(row);
-                            sheet.Cells[rowNumber++, _excelProvider.GetColumnNumber(column.ColumnLetter)].Value = value;
+                            sheet.Cells[rowNumber++, _excelProvider.GetColumnNumber(column.ExportColumnLetter)].Value = value;
                         }
                         catch (NullReferenceException e)
                         {
@@ -80,11 +80,11 @@ namespace ExcelExtensions.Providers.Export
         {
             if (string.IsNullOrEmpty(displayNameAdditionalText))
             {
-                sheet.Cells[row++, _excelProvider.GetColumnNumber(column.ColumnLetter)].Value = column.HeaderTitle;
+                sheet.Cells[row++, _excelProvider.GetColumnNumber(column.ExportColumnLetter)].Value = column.TableHeaderTitle;
             }
             else
             {
-                sheet.Cells[row++, _excelProvider.GetColumnNumber(column.ColumnLetter)].Value = $"{column.HeaderTitle} {displayNameAdditionalText}"; ;
+                sheet.Cells[row++, _excelProvider.GetColumnNumber(column.ExportColumnLetter)].Value = $"{column.TableHeaderTitle} {displayNameAdditionalText}"; ;
             }
 
             return row;
@@ -93,7 +93,7 @@ namespace ExcelExtensions.Providers.Export
         /// <inheritdoc/>
         public void FormatColumn(Column column, ref ExcelWorksheet sheet)
         {
-            FormatColumn(ref sheet, column.ColumnLetter, column.Format, column.DecimalPrecision);
+            FormatColumn(ref sheet, column.ExportColumnLetter, column.Format, column.DecimalPrecision);
         }
         /// <inheritdoc/>
         public void FormatColumn(ref ExcelWorksheet sheet, string column, FormatType formatter, int? decimalPrecision = null)
