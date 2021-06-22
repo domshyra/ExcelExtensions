@@ -4,7 +4,7 @@ using ExcelExtensions.Interfaces;
 using System;
 using static ExcelExtensions.Enums.Enums;
 
-namespace ExcelExtensions.Models
+namespace ExcelExtensions.Models.Columns
 {
     /// <summary>
     /// Represents an excel column

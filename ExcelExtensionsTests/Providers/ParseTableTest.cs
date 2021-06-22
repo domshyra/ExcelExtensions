@@ -11,6 +11,7 @@ using System.Linq;
 using Xunit;
 using static ExcelExtensions.Enums.Enums;
 using ExcelExtensions.Interfaces;
+using ExcelExtensions.Models.Columns.Import;
 
 namespace ExcelExtensionsTests
 {

@@ -17,6 +17,8 @@ using ExcelExtensions.Interfaces.Export;
 using System.Drawing;
 using ExcelExtensions.Models.Import;
 using ExcelExtensions.Models.Export;
+using ExcelExtensions.Models.Columns.Import;
+using ExcelExtensions.Models.Columns;
 
 namespace WebApplication.Providers
 {

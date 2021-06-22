@@ -2,7 +2,8 @@
 
 using ExcelExtensions.Interfaces;
 using ExcelExtensions.Interfaces.Export;
-using ExcelExtensions.Models;
+using ExcelExtensions.Models.Columns;
+using ExcelExtensions.Models.Columns.Export;
 using ExcelExtensions.Models.Export;
 using OfficeOpenXml;
 using System;

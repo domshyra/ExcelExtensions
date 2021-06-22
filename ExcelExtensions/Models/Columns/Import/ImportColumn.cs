@@ -9,20 +9,26 @@ using static ExcelExtensions.Enums.Enums;
 
 namespace ExcelExtensions.Models.Columns.Import
 {
-    public class ImportColumn : ColumnWithSeverity
+    public class ImportColumn : Column
     {
         public bool IsRequired { get; set; }
+        /// <summary>
+        /// Represent severity if this column is not found while parsing 
+        /// </summary>
+        public ParseExceptionSeverity MissingSeverity { get; set; }
 
         public ImportColumn() : base()
         {
-            IsRequired = MissingSeverity == ParseExceptionSeverity.Error;
-        }
-        public ImportColumn(Column column, bool required) : base(column, required ? ParseExceptionSeverity.Error : ParseExceptionSeverity.Warning)
-        {
-
+            IsRequired = true;
+            MissingSeverity = ParseExceptionSeverity.Error;
         }
         public ImportColumn(string modelPropertyName, string displayName, FormatType format, bool required = true, int? decimalPrecision = null) :
-            base(modelPropertyName, displayName, format, required ? ParseExceptionSeverity.Error : ParseExceptionSeverity.Warning, decimalPrecision)
+            base(modelPropertyName, displayName, format, decimalPrecision)
+        {
+            IsRequired = required;
+            MissingSeverity = required ? ParseExceptionSeverity.Error : ParseExceptionSeverity.Warning;
+        }
+        public ImportColumn(Column column, bool required) : this(column.ModelProperty, column.DisplayName, column.Format, required, column.DecimalPrecision)
         {
 
         }

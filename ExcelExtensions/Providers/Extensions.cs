@@ -3,6 +3,7 @@
 using ExcelExtensions.Globals;
 using ExcelExtensions.Interfaces;
 using ExcelExtensions.Models;
+using ExcelExtensions.Models.Columns;
 using ExcelExtensions.Models.Columns.Import;
 using System;
 using System.Collections.Generic;

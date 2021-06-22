@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using ExcelExtensions.Models;
+using ExcelExtensions.Models.Columns;
 using ExcelExtensions.Models.Export;
 using OfficeOpenXml;
 using System.Collections.Generic;

@@ -9,7 +9,6 @@ using System.Linq;
 using System.Reflection;
 using static ExcelExtensions.Enums.Enums;
 using ExcelExtensions.Interfaces;
-using ExcelExtensions.Models.Columns;
 using ExcelExtensions.Models.Columns.Import;
 
 namespace ExcelExtensions.Providers.Import.Parse

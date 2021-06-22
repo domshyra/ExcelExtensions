@@ -1,8 +1,11 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
 using ExcelExtensions.Interfaces;
+using ExcelExtensions.Interfaces.Import;
 using ExcelExtensions.Models;
 using ExcelExtensions.Models.Columns;
+using ExcelExtensions.Models.Columns.Export;
+using ExcelExtensions.Models.Columns.Import;
 using System;
 using System.Collections.Generic;
 using System.Reflection;

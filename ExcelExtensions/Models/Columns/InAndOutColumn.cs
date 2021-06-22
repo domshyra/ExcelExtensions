@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
+using ExcelExtensions.Models.Columns.Import;
 using System.Collections.Generic;
 using static ExcelExtensions.Enums.Enums;
 

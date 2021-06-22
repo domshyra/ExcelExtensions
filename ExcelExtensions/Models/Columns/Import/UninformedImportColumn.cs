@@ -1,15 +1,14 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
 using ExcelExtensions.Interfaces;
-using ExcelExtensions.Models.Columns.Import;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using static ExcelExtensions.Enums.Enums;
 
-namespace ExcelExtensions.Models
+namespace ExcelExtensions.Models.Columns.Import
 {
-    
+
     /// <summary>
     /// SCAN AND PARSE
     /// </summary>

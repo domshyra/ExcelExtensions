@@ -3,7 +3,7 @@
 using ExcelExtensions.Interfaces;
 using static ExcelExtensions.Enums.Enums;
 
-namespace ExcelExtensions.Models
+namespace ExcelExtensions.Models.Columns.Export
 {
     /// <summary>
     /// Represents an excel column
@@ -14,7 +14,7 @@ namespace ExcelExtensions.Models
         /// Represents the location/letter of the excel column. Ex "C"
         /// <para>Used for exports and import where we know where to look and are not parsing for new col locations</para>
         /// </summary>
-        public string? ExportColumnLetter { get; }
+        public string ExportColumnLetter { get; }
 
         public ExportColumn(int columnNumber) : base()
         {
