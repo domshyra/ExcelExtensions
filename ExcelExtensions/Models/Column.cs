@@ -1,5 +1,7 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
+using ExcelExtensions.Interfaces;
+using System;
 using static ExcelExtensions.Enums.Enums;
 
 namespace ExcelExtensions.Models
@@ -9,6 +11,12 @@ namespace ExcelExtensions.Models
     /// </summary>
     public class Column
     {
+        private IExtensions excelExtensions;
+        private Type objType;
+        private string v1;
+        private FormatType @string;
+        private int v2;
+
         public string ModelProperty { get; set; }
         /// <summary>
         /// Represents the human readable column header name/title
@@ -33,6 +41,15 @@ namespace ExcelExtensions.Models
             DisplayName = displayName;
             Format = format;
             DecimalPrecision = decimalPrecision;
+        }
+
+        public Column(IExtensions excelExtensions, Type objType, string v1, FormatType @string, int v2)
+        {
+            this.excelExtensions = excelExtensions;
+            this.objType = objType;
+            this.v1 = v1;
+            this.@string = @string;
+            this.v2 = v2;
         }
     }
 }

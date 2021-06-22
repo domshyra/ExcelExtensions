@@ -8,8 +8,14 @@ using System.Threading.Tasks;
 
 namespace ExcelExtensions.Models
 {
-    public class LazyColumn : Column
+    /// <summary>
+    /// Eazy button class 
+    /// </summary>
+    public class LazyColumn : UninformedImportColumn
     {
+        /// <summary>
+        /// same as in as out
+        /// </summary>
         public int ColumnLocation { get; set; }
 
         public LazyColumn()

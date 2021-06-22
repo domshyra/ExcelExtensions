@@ -66,15 +66,12 @@ namespace ExcelExtensions.Models
         {
             Sheet = sheetName;
         }
-        public ParseException(string sheetName, Column column) : this (sheetName)
+        public ParseException(string sheetName, ImportColumn column) : this (sheetName)
         {
             ColumnHeader = column.ModelProperty;
             //ColumnHeader = column.ColumnHeader; //todo
             FormatType = column.Format;
-        }
-        public ParseException(string sheetName, UninformedImportColumn column) : this (sheetName, column.Column)
-        {
-            Severity = (column.IsRequired) ? ParseExceptionSeverity.Error : ParseExceptionSeverity.Warning;
+            Severity = column.MissingSeverity;
         }
     }
 }

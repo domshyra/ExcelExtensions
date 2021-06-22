@@ -73,7 +73,9 @@ namespace ExcelExtensions.Models
 
         }
 
-
+        public InformedImportColumn(UninformedImportColumn column1, int column2)
+        {
+        }
     }
 
 

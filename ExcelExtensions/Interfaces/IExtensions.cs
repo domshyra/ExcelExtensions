@@ -37,7 +37,7 @@ namespace ExcelExtensions.Interfaces
         /// </summary>
         /// <param name="columns">list of ExcelColumnDefinitions</param>
         /// <returns>The max column in the list cells, represented as an <see cref="int"/></returns>
-        int FindMaxColumn(List<Column> columns);
+        int FindMaxColumn(List<ExportColumn> columns);
         /// <summary>
         /// Provides the max row used in a cell sheet based upon Cells.
         /// </summary>
@@ -104,12 +104,12 @@ namespace ExcelExtensions.Interfaces
 
         ///
 
-        KeyValuePair<string, ParseException> LogDeveloperException(string worksheetName, UninformedImportColumn displayName, string cellAddress, string message, string modelPropertyName);
-        KeyValuePair<int, ParseException> LogDeveloperException(string worksheetName, UninformedImportColumn displayName, string cellAddress, int rowNumber, string message);
-        KeyValuePair<string, ParseException> LogNullReferenceException(string worksheetName, UninformedImportColumn displayName, string cellAddress, string modelPropertyName);
-        KeyValuePair<int, ParseException> LogNullReferenceException(string worksheetName, UninformedImportColumn displayName, string cellAddress, int rowNumber);
-        KeyValuePair<int, ParseException> LogCellException(string worksheetName, UninformedImportColumn displayName, string cellAddress, int rowNumber);
-        KeyValuePair<string, ParseException> LogCellException(string worksheetName, UninformedImportColumn displayName, string cellAddress, string modelPropertyName);
+        KeyValuePair<string, ParseException> LogDeveloperException(string worksheetName, ImportColumn column, string cellAddress, string message, string modelPropertyName);
+        KeyValuePair<int, ParseException> LogDeveloperException(string worksheetName, ImportColumn column, string cellAddress, int rowNumber, string message);
+        KeyValuePair<string, ParseException> LogNullReferenceException(string worksheetName, ImportColumn column, string cellAddress, string modelPropertyName);
+        KeyValuePair<int, ParseException> LogNullReferenceException(string worksheetName, ImportColumn column, string cellAddress, int rowNumber);
+        KeyValuePair<int, ParseException> LogCellException(string worksheetName, ImportColumn column, string cellAddress, int rowNumber);
+        KeyValuePair<string, ParseException> LogCellException(string worksheetName, ImportColumn column, string cellAddress, string modelPropertyName);
 
     }
 }
