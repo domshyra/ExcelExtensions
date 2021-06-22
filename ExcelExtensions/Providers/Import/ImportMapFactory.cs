@@ -158,6 +158,10 @@ namespace ExcelExtensions.Providers.Import
             //read the display name attirube
             modelPropertyName = _excelExtensions.GetExportModelPropertyNameAndDisplayName(modelType, item.Name, out displayName);
             attribute = item.GetCustomAttribute<ExcelExtensionsColumnAttribute>();
+
+
+            //TODO: throw eroros is tuff is null 
+
             //Give the default format if not avail be
             format = attribute?.Format ?? formatType;
             required = attribute?.IsRequired ?? true;
