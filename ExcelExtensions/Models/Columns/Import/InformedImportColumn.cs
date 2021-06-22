@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
 using ExcelExtensions.Models.Columns.Import;
+using static ExcelExtensions.Enums.Enums;
 
 namespace ExcelExtensions.Models.Columns
 {
@@ -21,6 +22,12 @@ namespace ExcelExtensions.Models.Columns
         }
 
         public InformedImportColumn(UninformedImportColumn column, int columnNumber) : base(column, column.IsRequired)
+        {
+            ColumnNumber = columnNumber;
+        }
+
+        public InformedImportColumn(string modelPropertyName, string displayName, int columnNumber, FormatType format, bool required = true, int? decimalPrecision = null) :
+            base (modelPropertyName, displayName, format, required, decimalPrecision)
         {
             ColumnNumber = columnNumber;
         }
