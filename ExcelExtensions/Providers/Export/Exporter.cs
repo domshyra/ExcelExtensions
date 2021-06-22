@@ -25,7 +25,7 @@ namespace ExcelExtensions.Providers.Export
         }
 
         /// <inheritdoc/>
-        public void ExportTable<T>(ref ExcelWorksheet sheet, List<T> rows, List<ExportColumn> columnDefinitions, Style style, int headerRow = 1)
+        public void ExportTable<T>(ref ExcelWorksheet sheet, List<T> rows, List<Column> columnDefinitions, Style style, int headerRow = 1)
         {
             ExportColumns(ref sheet, rows, columnDefinitions, headerRow);
 
@@ -33,7 +33,7 @@ namespace ExcelExtensions.Providers.Export
         }
 
         /// <inheritdoc/>
-        public void ExportColumns<T>(ref ExcelWorksheet sheet, List<T> rows, List<ExportColumn> columns, int headerRow = 1, string displayNameAdditionalText = null)
+        public void ExportColumns<T>(ref ExcelWorksheet sheet, List<T> rows, List<Column> columns, int headerRow = 1, string displayNameAdditionalText = null)
         {
             Type exportModelType = rows.GetType().GetGenericArguments().Single();
 
@@ -47,10 +47,11 @@ namespace ExcelExtensions.Providers.Export
                     try
                     {
                         PropertyInfo propertyInfo = exportModelType.GetProperty(column.ModelProperty);
+                        CheckForNullColumnNumber(column);
                         try
                         {
                             object value = propertyInfo.GetValue(row);
-                            sheet.Cells[rowNumber++, column.ColumnNumber].Value = value;
+                            sheet.Cells[rowNumber++, (int)column.ColumnNumber].Value = value;
                         }
                         catch (NullReferenceException e)
                         {
@@ -77,24 +78,34 @@ namespace ExcelExtensions.Providers.Export
         /// <param name="column"></param>
         /// <param name="row"></param>
         /// <returns></returns>
-        private int SetTableHeaderRowNumber(ExcelWorksheet sheet, string displayNameAdditionalText, ExportColumn column, int row)
+        private int SetTableHeaderRowNumber(ExcelWorksheet sheet, string displayNameAdditionalText, Column column, int row)
         {
+            CheckForNullColumnNumber(column);
             if (string.IsNullOrEmpty(displayNameAdditionalText))
             {
-                sheet.Cells[row++, column.ColumnNumber].Value = column.DisplayName;
+                sheet.Cells[row++, (int)column.ColumnNumber].Value = column.DisplayName;
             }
             else
             {
-                sheet.Cells[row++, column.ColumnNumber].Value = $"{column.DisplayName} {displayNameAdditionalText}"; ;
+                sheet.Cells[row++, (int)column.ColumnNumber].Value = $"{column.DisplayName} {displayNameAdditionalText}"; ;
             }
 
             return row;
         }
 
-        /// <inheritdoc/>
-        public void FormatColumn(ExportColumn column, ref ExcelWorksheet sheet)
+        private static void CheckForNullColumnNumber(Column column)
         {
-            FormatColumn(ref sheet, column.ColumnNumber, column.Format, column.DecimalPrecision);
+            if (column.ColumnNumber is null)
+            {
+                throw new NullReferenceException($"Col number cannot be null for property {column.ModelProperty}");
+            }
+        }
+
+        /// <inheritdoc/>
+        public void FormatColumn(Column column, ref ExcelWorksheet sheet)
+        {
+            CheckForNullColumnNumber(column);
+            FormatColumn(ref sheet, (int)column.ColumnNumber, column.Format, column.DecimalPrecision);
         }
 
         public void FormatColumn(ref ExcelWorksheet sheet, string columnLetter, FormatType formatter, int? decimalPrecision = null)
@@ -207,7 +218,7 @@ namespace ExcelExtensions.Providers.Export
         }
 
         /// <inheritdoc/>
-        public void StyleTableHeaderRow(List<ExportColumn> columns, ref ExcelWorksheet sheet, Style style, int? startrow = null)
+        public void StyleTableHeaderRow(List<Column> columns, ref ExcelWorksheet sheet, Style style, int? startrow = null)
         {
             int maxColumn = _excelProvider.FindMaxColumn(columns);
             int row = startrow ?? 1;

@@ -13,7 +13,7 @@ namespace ExcelExtensions.Models.Columns
         /// used as a pointer for where we are importing and saved if we are looking for a column that doesn't have a letter
         /// <para>This will override the letter and use the number for data</para>
         /// </summary>
-        public int ColumnNumber { get; set; }
+        public new int ColumnNumber { get; set; }
 
         public InformedImportColumn() : base()
         {

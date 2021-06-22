@@ -9,7 +9,6 @@ namespace ExcelExtensions.Models
     /// </summary>
     public class ExportColumn : Column
     {
-        public int ColumnNumber { get; set; }
         /// <summary>
         /// Represents the location/letter of the excel column. Ex "C"
         /// <para>Used for exports and import where we know where to look and are not parsing for new col locations</para>

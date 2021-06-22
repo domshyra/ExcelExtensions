@@ -25,7 +25,7 @@ namespace ExcelExtensions.Models
         /// </summary>
         public int? DecimalPrecision { get; set; }
 
-        //public int? ColumnNumber { get; set; }
+        public int? ColumnNumber { get; set; }
 
         public Column()
         {

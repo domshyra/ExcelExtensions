@@ -24,7 +24,7 @@ namespace ExcelExtensions.Interfaces.Export
         /// <param name="columnDefinitions"></param>
         /// <param name="style"></param>
         /// <param name="headerRow"></param>
-        void ExportTable<T>(ref ExcelWorksheet sheet, List<T> rows, List<ExportColumn> columnDefinitions, Style style, int headerRow = 1);
+        void ExportTable<T>(ref ExcelWorksheet sheet, List<T> rows, List<Column> columnDefinitions, Style style, int headerRow = 1);
         /// <summary>
         /// Export list of columns to an <see cref="ExcelWorksheet"/>
         /// </summary>
@@ -34,13 +34,13 @@ namespace ExcelExtensions.Interfaces.Export
         /// <param name="columns"></param>
         /// <param name="headerRow"></param>
         /// <param name="displayNameAdditionalText"></param>
-        void ExportColumns<T>(ref ExcelWorksheet sheet, List<T> rows, List<ExportColumn> columns, int headerRow = 1, string displayNameAdditionalText = null);
+        void ExportColumns<T>(ref ExcelWorksheet sheet, List<T> rows, List<Column> columns, int headerRow = 1, string displayNameAdditionalText = null);
         /// <summary>
         /// Format the column of an <see cref="ExcelWorksheet"/>
         /// </summary>
         /// <param name="column"></param>
         /// <param name="sheet"></param>
-        void FormatColumn(ExportColumn column, ref ExcelWorksheet sheet);
+        void FormatColumn(Column column, ref ExcelWorksheet sheet);
         /// <summary>
         /// Format the column of an <see cref="ExcelWorksheet"/>
         /// </summary>
@@ -67,6 +67,6 @@ namespace ExcelExtensions.Interfaces.Export
         /// <param name="sheet"></param>
         /// <param name="style"></param>
         /// <param name="startrow"></param>
-        void StyleTableHeaderRow(List<ExportColumn> columns, ref ExcelWorksheet sheet, Style style, int? startrow = null);
+        void StyleTableHeaderRow(List<Column> columns, ref ExcelWorksheet sheet, Style style, int? startrow = null);
     }
 }

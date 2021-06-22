@@ -2,6 +2,7 @@
 
 using ExcelExtensions.Models;
 using ExcelExtensions.Models.Columns;
+using ExcelExtensions.Models.Columns.Import;
 using OfficeOpenXml;
 using System.Collections.Generic;
 

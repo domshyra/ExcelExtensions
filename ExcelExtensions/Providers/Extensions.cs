@@ -197,7 +197,7 @@ namespace ExcelExtensions.Providers
 
 
         /// <inheritdoc/>
-        public int FindMaxColumn(List<ExportColumn> columns)
+        public int FindMaxColumn(List<Column> columns)
             //TODO
             => columns.Select(column => column.ColumnNumber).Max();
 

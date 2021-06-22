@@ -297,7 +297,7 @@ namespace ExcelExtensions.Providers.Import.Parse
         /// <param name="column"></param>
         /// <param name="cell"></param>
         /// <remarks>Will throw <see cref="NullReferenceException"/> errors. disable them when debugging through this dll file. </remarks>
-        private void ParseCell(ExcelWorksheet workSheet, int rowNumber, ImportColumn column, ExcelRange cell)
+        private void ParseCell(ExcelWorksheet workSheet, int rowNumber, InformedImportColumn column, ExcelRange cell)
         {
             switch (column.Format)
             {
@@ -559,7 +559,7 @@ namespace ExcelExtensions.Providers.Import.Parse
         /// <param name="coltemplate"></param>
         /// <param name="cell"></param>
         /// <param name="value"></param>
-        private void SetValue(ExcelWorksheet workSheet, int rowNumber, ImportColumn coltemplate, ExcelRange cell, object value)
+        private void SetValue(ExcelWorksheet workSheet, int rowNumber, InformedImportColumn coltemplate, ExcelRange cell, object value)
         {
             try
             {
