@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
 using ExcelExtensions.Models;
+using ExcelExtensions.Models.Columns.Import;
 using System;
 using System.Collections.Generic;
 

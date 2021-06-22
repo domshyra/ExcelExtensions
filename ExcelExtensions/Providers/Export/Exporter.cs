@@ -3,6 +3,7 @@
 using ExcelExtensions.Interfaces;
 using ExcelExtensions.Interfaces.Export;
 using ExcelExtensions.Models;
+using ExcelExtensions.Models.Export;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace ExcelExtensions.Providers.Export
         }
 
         /// <inheritdoc/>
-        public void ExportTable<T>(ref ExcelWorksheet sheet, List<T> rows, List<Column> columnDefinitions, Style style, int headerRow = 1)
+        public void ExportTable<T>(ref ExcelWorksheet sheet, List<T> rows, List<ExportColumn> columnDefinitions, Style style, int headerRow = 1)
         {
             ExportColumns(ref sheet, rows, columnDefinitions, headerRow);
 
@@ -32,11 +33,11 @@ namespace ExcelExtensions.Providers.Export
         }
 
         /// <inheritdoc/>
-        public void ExportColumns<T>(ref ExcelWorksheet sheet, List<T> rows, List<Column> columns, int headerRow = 1, string displayNameAdditionalText = null)
+        public void ExportColumns<T>(ref ExcelWorksheet sheet, List<T> rows, List<ExportColumn> columns, int headerRow = 1, string displayNameAdditionalText = null)
         {
             Type exportModelType = rows.GetType().GetGenericArguments().Single();
 
-            foreach (Column column in columns)
+            foreach (ExportColumn column in columns)
             {
                 int rowNumber = headerRow;
                 rowNumber = SetTableHeaderRowNumber(sheet, displayNameAdditionalText, column, rowNumber);
@@ -49,7 +50,7 @@ namespace ExcelExtensions.Providers.Export
                         try
                         {
                             object value = propertyInfo.GetValue(row);
-                            sheet.Cells[rowNumber++, column.ExportColumnNumber].Value = value;
+                            sheet.Cells[rowNumber++, column.ColumnNumber].Value = value;
                         }
                         catch (NullReferenceException e)
                         {
@@ -76,24 +77,24 @@ namespace ExcelExtensions.Providers.Export
         /// <param name="column"></param>
         /// <param name="row"></param>
         /// <returns></returns>
-        private int SetTableHeaderRowNumber(ExcelWorksheet sheet, string displayNameAdditionalText, Column column, int row)
+        private int SetTableHeaderRowNumber(ExcelWorksheet sheet, string displayNameAdditionalText, ExportColumn column, int row)
         {
             if (string.IsNullOrEmpty(displayNameAdditionalText))
             {
-                sheet.Cells[row++, column.ExportColumnNumber].Value = column.DisplayName;
+                sheet.Cells[row++, column.ColumnNumber].Value = column.DisplayName;
             }
             else
             {
-                sheet.Cells[row++, column.ExportColumnNumber].Value = $"{column.DisplayName} {displayNameAdditionalText}"; ;
+                sheet.Cells[row++, column.ColumnNumber].Value = $"{column.DisplayName} {displayNameAdditionalText}"; ;
             }
 
             return row;
         }
 
         /// <inheritdoc/>
-        public void FormatColumn(Column column, ref ExcelWorksheet sheet)
+        public void FormatColumn(ExportColumn column, ref ExcelWorksheet sheet)
         {
-            FormatColumn(ref sheet, column.ExportColumnNumber, column.Format, column.DecimalPrecision);
+            FormatColumn(ref sheet, column.ColumnNumber, column.Format, column.DecimalPrecision);
         }
 
         public void FormatColumn(ref ExcelWorksheet sheet, string columnLetter, FormatType formatter, int? decimalPrecision = null)
@@ -206,7 +207,7 @@ namespace ExcelExtensions.Providers.Export
         }
 
         /// <inheritdoc/>
-        public void StyleTableHeaderRow(List<Column> columns, ref ExcelWorksheet sheet, Style style, int? startrow = null)
+        public void StyleTableHeaderRow(List<ExportColumn> columns, ref ExcelWorksheet sheet, Style style, int? startrow = null)
         {
             int maxColumn = _excelProvider.FindMaxColumn(columns);
             int row = startrow ?? 1;

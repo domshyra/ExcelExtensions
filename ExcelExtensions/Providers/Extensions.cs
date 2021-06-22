@@ -3,6 +3,7 @@
 using ExcelExtensions.Globals;
 using ExcelExtensions.Interfaces;
 using ExcelExtensions.Models;
+using ExcelExtensions.Models.Columns.Import;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -198,7 +199,7 @@ namespace ExcelExtensions.Providers
         /// <inheritdoc/>
         public int FindMaxColumn(List<ExportColumn> columns)
             //TODO
-            => columns.Select(column => column.ExportColumnNumber).Max();
+            => columns.Select(column => column.ColumnNumber).Max();
 
         /// <inheritdoc/>
         public string AddDecimalPlacesToFormat(Column column, string noDecimals)

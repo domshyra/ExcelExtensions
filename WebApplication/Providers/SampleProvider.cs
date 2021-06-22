@@ -15,6 +15,8 @@ using static ExcelExtensions.Enums.Enums;
 using ExcelExtensions.Interfaces;
 using ExcelExtensions.Interfaces.Export;
 using System.Drawing;
+using ExcelExtensions.Models.Import;
+using ExcelExtensions.Models.Export;
 
 namespace WebApplication.Providers
 {

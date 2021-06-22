@@ -57,10 +57,10 @@ namespace ExcelExtensions.Providers.Import
                 bool required = attribute?.IsRequired ?? true; //<see cref="ParseExceptionSeverity.Error"/>
                 List<string> importKeys = attribute?.ImportColumnTitleOptions ?? new List<string>() { modelPropertyName, textTitle };
 
-                excelColumnDefinitionArray.Add(new InformedImportColumn()
+                excelColumnDefinitionArray.Add(new InformedColumn()
                 {
                     //If already know our column letter lets use that. 
-                    ImportColumnNumber = attribute?.ExportColumnLetter == null ? 0 : _excelExtensions.GetColumnNumber(attribute.ExportColumnLetter),
+                    ColumnNumber = attribute?.ExportColumnLetter == null ? 0 : _excelExtensions.GetColumnNumber(attribute.ExportColumnLetter),
                     Column = new Column(modelPropertyName,
                                         textTitle,
                                         letter,
