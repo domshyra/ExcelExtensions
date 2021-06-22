@@ -10,7 +10,7 @@ using static ExcelExtensions.Enums.Enums;
 namespace ExcelExtensions.Models
 {
     [AttributeUsage(AttributeTargets.Property, Inherited = false)]
-    public class ExcelExtensionsColumnAttribute : Attribute
+    public class ColumnAttribute : Attribute
     {
         /// <summary>
         /// Represent the list of options for the header name
@@ -40,7 +40,10 @@ namespace ExcelExtensions.Models
 
         public int? ImportColumnNumber { get; set; }
 
-        //TODO THROW ERRORS IF BOTH EXPORTS OR BOTH IMPORTS ARE DEFINED
+        public ColumnAttribute()
+        {
+            IsRequired = true;
+        }
 
     }
 }

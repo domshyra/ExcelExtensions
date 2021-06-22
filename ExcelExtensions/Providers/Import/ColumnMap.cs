@@ -14,7 +14,7 @@ using static ExcelExtensions.Enums.Enums;
 namespace ExcelExtensions.Providers.Import
 {
     /// <summary>
-    /// Provides list of columns from a <see cref="Type"/> with or without <see cref="ExcelExtensionsColumnAttribute"/>s
+    /// Provides list of columns from a <see cref="Type"/> with or without <see cref="ColumnAttribute"/>s
     /// </summary>
     public class ColumnMap : IColumnMap
     {
@@ -30,7 +30,7 @@ namespace ExcelExtensions.Providers.Import
         //todo: unit test
         //2nd set up just for exports (would have to know the letters or numbers)
         /// <summary>
-        /// <para>If no <see cref="FormatType"/> is provided for a property in the <see cref="ExcelExtensionsColumnAttribute"/>s then the <paramref name="formatType"/> will be used.</para>
+        /// <para>If no <see cref="FormatType"/> is provided for a property in the <see cref="ColumnAttribute"/>s then the <paramref name="formatType"/> will be used.</para>
         /// </summary>
         /// <param name="modelType"></param>
         /// <param name="formatType"></param>
@@ -44,16 +44,16 @@ namespace ExcelExtensions.Providers.Import
 
             foreach (PropertyInfo item in modelType.GetProperties())
             {
-                GetColumnAttributes(modelType, item, formatType, out string modelPropertyName, out string displayName, out ExcelExtensionsColumnAttribute attribute, out FormatType format, out _);
+                GetColumnAttributes(modelType, item, formatType, out string modelPropertyName, out string displayName, out ColumnAttribute attribute, out FormatType format, out _);
 
-                int columnNumber = GetAttributeColumnNumber(currentColumnNumber, columnsUsed, modelPropertyName, attribute);
+                int columnNumber = GetAttributeColumnNumber(false, //export
+                    currentColumnNumber, columnsUsed, modelPropertyName, attribute);
 
-                excelColumnDefinitionArray.Add(
-                    new ExportColumn(modelPropertyName,
-                                        displayName,
-                                        columnNumber,
-                                        format,
-                                        attribute?.DecimalPrecision));
+                excelColumnDefinitionArray.Add(new ExportColumn(modelPropertyName,
+                                     displayName,
+                                     columnNumber,
+                                     format,
+                                     attribute?.DecimalPrecision));
 
                 //next column
                 currentColumnNumber++;
@@ -69,7 +69,7 @@ namespace ExcelExtensions.Providers.Import
 
         /// <summary>
         /// Numbers or Letters are known here and defined in atteributes. Or will import for column order based on propereties
-        /// <para>If no <see cref="FormatType"/> is provided for a property in the <see cref="ExcelExtensionsColumnAttribute"/>s then the <paramref name="formatType"/> will be used.</para>
+        /// <para>If no <see cref="FormatType"/> is provided for a property in the <see cref="ColumnAttribute"/>s then the <paramref name="formatType"/> will be used.</para>
         /// </summary>
         /// <param name="modelType"></param>
         /// <param name="formatType"></param>
@@ -83,15 +83,16 @@ namespace ExcelExtensions.Providers.Import
 
             foreach (PropertyInfo item in modelType.GetProperties())
             {
-                GetColumnAttributes(modelType, item, formatType, out string modelPropertyName, out string displayName, out ExcelExtensionsColumnAttribute attribute, out FormatType format, out bool required);
+                GetColumnAttributes(modelType, item, formatType, out string modelPropertyName, out string displayName, out ColumnAttribute attribute, out FormatType format, out bool required);
 
                 //TODO: theses all below need to be re though with a new idea of separating the column types out 
-                int columnNumber = GetAttributeColumnNumber(currentColumnNumber, columnsUsed, modelPropertyName, attribute);
+                int columnNumber = GetAttributeColumnNumber(true, //import
+                    currentColumnNumber, columnsUsed, modelPropertyName, attribute);
 
                 excelColumnDefinitionArray.Add(
                     new InformedImportColumn(modelPropertyName,
-                                        displayName,
-                                        columnNumber,
+                                        displayName, //title
+                                        columnNumber, //excel column location number 
                                         format,
                                         required,
                                         attribute?.DecimalPrecision));
@@ -105,40 +106,44 @@ namespace ExcelExtensions.Providers.Import
 
         //todo: unit test
         /// <summary>
-        /// 
+        /// Gets column number from the <see cref="ColumnAttribute."/>
         /// </summary>
+        /// <param name="import"></param>
         /// <param name="currentColumnNumber"></param>
         /// <param name="columnsUsed"></param>
         /// <param name="modelPropertyName"></param>
         /// <param name="attribute"></param>
         /// <returns></returns>
-        public int GetAttributeColumnNumber(int currentColumnNumber, Dictionary<int, string> columnsUsed, string modelPropertyName, ExcelExtensionsColumnAttribute attribute)
+        public int GetAttributeColumnNumber(bool import, int currentColumnNumber, Dictionary<int, string> columnsUsed, string modelPropertyName, ColumnAttribute attribute)
         {
-            bool letterValid = string.IsNullOrEmpty(attribute?.ImportColumnLetter) == false;
-            bool numberValid = attribute?.ImportColumnNumber != null;
+            bool letterValid = import ? string.IsNullOrEmpty(attribute?.ImportColumnLetter) == false : string.IsNullOrEmpty(attribute?.ExportColumnLetter) == false;
+            bool numberValid = import ? attribute?.ImportColumnNumber != null : attribute?.ExportColumnNumber != null;
 
             int columnNumber;
             if (letterValid && numberValid)
             {
-                if (attribute.ImportColumnNumber != _excelExtensions.GetColumnNumber(attribute.ImportColumnLetter))
+                int columnLetterValue = getColumnNumberFromLetter(import, attribute);
+                int colNum = getColumnNumber(import, attribute);
+                
+                if (colNum != columnLetterValue)
                 {
-                    throw new Exception($"Two difference values found for import location both {attribute.ImportColumnNumber} as a number, and {attribute.ImportColumnLetter} as a letter.");
+                    throw new Exception($"Two difference values found for import {ErrorLocation(columnLetterValue)} as letter and {ErrorLocation(colNum)} as number.");
                 }
-                columnNumber = _excelExtensions.GetColumnNumber(attribute.ImportColumnLetter);
+                columnNumber = columnLetterValue;
             }
             else if (letterValid)
             {
-                columnNumber = _excelExtensions.GetColumnNumber(attribute.ImportColumnLetter);
+                columnNumber = getColumnNumberFromLetter(import, attribute); ;
             }
             else if (numberValid)
             {
-                columnNumber = (int)attribute.ImportColumnNumber;
+                columnNumber = getColumnNumber(import, attribute);
             }
             else
             {
                 if (columnsUsed.ContainsKey(currentColumnNumber))
                 {
-                    throw new Exception($"{columnsUsed[currentColumnNumber]} already uses col number:{currentColumnNumber}(letter:{_excelExtensions.GetColumnLetter(currentColumnNumber)}). Tried to add {currentColumnNumber} since nothing was assigned to {modelPropertyName}");
+                    throw new Exception($"{columnsUsed[currentColumnNumber]} already uses column {ErrorLocation(currentColumnNumber)}. Tried to add {currentColumnNumber} since nothing was assigned to {modelPropertyName}");
                 }
                 else
                 {
@@ -148,13 +153,25 @@ namespace ExcelExtensions.Providers.Import
             }
 
             return columnNumber;
+
+            int getColumnNumberFromLetter(bool import, ColumnAttribute attribute)
+            {
+                return import ? _excelExtensions.GetColumnNumber(attribute.ImportColumnLetter) : _excelExtensions.GetColumnNumber(attribute.ExportColumnLetter);
+            }
+
+            static int getColumnNumber(bool import, ColumnAttribute attribute)
+            {
+                return import ? (int)attribute.ImportColumnNumber : (int)attribute.ExportColumnNumber;
+            }
         }
+
+        private string ErrorLocation(int currentColumnNumber) => $"(number:{currentColumnNumber})(letter:{_excelExtensions.GetColumnLetter(currentColumnNumber)}";
 
         //todo: unit test
         //1st sets up just for imports in case you need to make tweaks (would have to know the letters or numbers)
         /// <summary>
         /// 
-        /// <para>If no <see cref="FormatType"/> is provided for a property in the <see cref="ExcelExtensionsColumnAttribute"/>s then the <paramref name="formatType"/> will be used.</para>
+        /// <para>If no <see cref="FormatType"/> is provided for a property in the <see cref="ColumnAttribute"/>s then the <paramref name="formatType"/> will be used.</para>
         /// </summary>
         /// <param name="modelType"></param>
         /// <param name="formatType"></param>
@@ -162,32 +179,38 @@ namespace ExcelExtensions.Providers.Import
         /// <returns></returns>
         public List<UninformedImportColumn> GetUninformedImportColumns(Type modelType, FormatType formatType = FormatType.String, int startColumnNumber = 1)
         {
-            List<UninformedImportColumn> excelColumnDefinitionArray = new();
+            List<UninformedImportColumn> uninformedImportColumns = new();
 
             foreach (PropertyInfo item in modelType.GetProperties())
             {
-                GetColumnAttributes(modelType, item, formatType, out string modelPropertyName, out string displayName, out ExcelExtensionsColumnAttribute attribute, out FormatType format, out bool required);
+                GetColumnAttributes(modelType, item, formatType, out string modelPropertyName, out string displayName, out ColumnAttribute attribute, out FormatType format, out bool required);
 
-                //lets make some title options for default if we don't have any
-                List<string> titleOptions = attribute?.ImportColumnTitleOptions ?? new List<string>() { modelPropertyName, displayName };
+                List<string> defualtTitles = new() { modelPropertyName, displayName };
+                //if null use default tiles
+                List<string> titleOptions = attribute?.ImportColumnTitleOptions ?? defualtTitles;
 
-                excelColumnDefinitionArray.Add(
-                    new UninformedImportColumn(modelPropertyName,
-                                        displayName,
-                                        format,
-                                        required,
-                                        titleOptions,
-                                        attribute?.DecimalPrecision));
+                //if not null but empty still use the default tiles
+                if (titleOptions.Count > 0)
+                {
+                    titleOptions.AddRange(defualtTitles);
+                }
+
+                uninformedImportColumns.Add(new UninformedImportColumn(modelPropertyName,
+                                                                       displayName,//title
+                                                                       format, 
+                                                                       required, 
+                                                                       titleOptions, //used to search for in parse table header
+                                                                       attribute?.DecimalPrecision));
             }
 
-            return excelColumnDefinitionArray;
+            return uninformedImportColumns;
         }
         //todo: unit test
 
         //3rd, option where you really don't care where you export data because it is in order how you set up your model
         /// <summary>
         /// 
-        /// <para>If no <see cref="FormatType"/> is provided for a property in the <see cref="ExcelExtensionsColumnAttribute"/>s then the <paramref name="formatType"/> will be used.</para>
+        /// <para>If no <see cref="FormatType"/> is provided for a property in the <see cref="ColumnAttribute"/>s then the <paramref name="formatType"/> will be used.</para>
         /// </summary>
         /// <param name="modelType"></param>
         /// <param name="formatType"></param>
@@ -195,34 +218,33 @@ namespace ExcelExtensions.Providers.Import
         /// <returns></returns>
         public List<InAndOutColumn> GetInAndOutColumns(Type modelType, FormatType formatType = FormatType.String, int startColumnNumber = 1)
         {
-            List<InAndOutColumn> excelColumnDefinitionArray = new();
+            List<InAndOutColumn> inAndOutColumns = new();
             int currentColumnNumber = startColumnNumber;
 
             foreach (PropertyInfo item in modelType.GetProperties())
             {
-                GetColumnAttributes(modelType, item, formatType, out string modelPropertyName, out string displayName, out ExcelExtensionsColumnAttribute attribute, out FormatType format, out bool required);
+                GetColumnAttributes(modelType, item, formatType, out string modelPropertyName, out string displayName, out ColumnAttribute attribute, out FormatType format, out bool required);
 
                 List<string> importKeys = attribute?.ImportColumnTitleOptions ?? new List<string>() { modelPropertyName, displayName };
 
-                excelColumnDefinitionArray.Add(
-                    new InAndOutColumn(modelPropertyName,
-                                       displayName, //
-                                       currentColumnNumber++, //export location
+                inAndOutColumns.Add(new InAndOutColumn(modelPropertyName,
+                                       displayName, //title
+                                       currentColumnNumber++, //import/export location
                                        format,
                                        required,
                                        importKeys,
                                        attribute?.DecimalPrecision));
 
             }
-            return excelColumnDefinitionArray;
+            return inAndOutColumns;
         }
 
         //todo: unit test
-        public void GetColumnAttributes(Type modelType, PropertyInfo item, FormatType formatType, out string modelPropertyName, out string displayName, out ExcelExtensionsColumnAttribute attribute, out FormatType format, out bool required)
+        public void GetColumnAttributes(Type modelType, PropertyInfo item, FormatType formatType, out string modelPropertyName, out string displayName, out ColumnAttribute attribute, out FormatType format, out bool required)
         {
             //read the display name attirube
             modelPropertyName = _excelExtensions.GetExportModelPropertyNameAndDisplayName(modelType, item.Name, out displayName);
-            attribute = item.GetCustomAttribute<ExcelExtensionsColumnAttribute>();
+            attribute = item.GetCustomAttribute<ColumnAttribute>();
 
 
             //TODO: throw eroros is tuff is null 

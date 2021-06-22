@@ -79,7 +79,7 @@ namespace ExcelExtensions.Providers.Export
         /// <param name="column"></param>
         /// <param name="row"></param>
         /// <returns></returns>
-        private int SetTableHeaderRowNumber(ExcelWorksheet sheet, string displayNameAdditionalText, Column column, int row)
+        private static int SetTableHeaderRowNumber(ExcelWorksheet sheet, string displayNameAdditionalText, Column column, int row)
         {
             CheckForNullColumnNumber(column);
             if (string.IsNullOrEmpty(displayNameAdditionalText))

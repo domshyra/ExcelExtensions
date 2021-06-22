@@ -198,9 +198,7 @@ namespace ExcelExtensions.Providers
 
 
         /// <inheritdoc/>
-        public int FindMaxColumn(List<Column> columns)
-            //TODO
-            => columns.Select(column => column.ColumnNumber).Max();
+        public int FindMaxColumn(List<Column> columns) => columns.Select(column => (int)column.ColumnNumber).Max();
 
         /// <inheritdoc/>
         public string AddDecimalPlacesToFormat(Column column, string noDecimals)
