@@ -10,6 +10,7 @@ using System.Reflection;
 using static ExcelExtensions.Enums.Enums;
 using ExcelExtensions.Interfaces;
 using ExcelExtensions.Models.Columns;
+using ExcelExtensions.Models.Columns.Import;
 
 namespace ExcelExtensions.Providers.Import.Parse
 {
@@ -43,7 +44,7 @@ namespace ExcelExtensions.Providers.Import.Parse
             int rowScanCount = 0;
 
             //Check for each of the expected columns in 
-            List<InformedColumn> columnsWithCellAddresses = ScanForHeaderRow(columns, ref workSheet, ref headerRowNumber, maxScanHeaderRowThreashold, ref rowScanCount);
+            List<InformedImportColumn> columnsWithCellAddresses = ScanForHeaderRow(columns, ref workSheet, ref headerRowNumber, maxScanHeaderRowThreashold, ref rowScanCount);
 
             if (CheckMissingScannedColumns(headerRowNumber, maxScanHeaderRowThreashold, rowScanCount, columns))
             {
@@ -54,7 +55,7 @@ namespace ExcelExtensions.Providers.Import.Parse
             return ParseRows(columnsWithCellAddresses, workSheet, headerRowNumber);
         }
 
-        public ParsedTable<T> InformedParseTable(List<InformedColumn> columns, ExcelWorksheet workSheet, int headerRowNumber = 1)
+        public ParsedTable<T> InformedParseTable(List<InformedImportColumn> columns, ExcelWorksheet workSheet, int headerRowNumber = 1)
         {
             if (_excelExtensions is null)
             {
@@ -66,9 +67,8 @@ namespace ExcelExtensions.Providers.Import.Parse
                 throw new ArgumentOutOfRangeException(nameof(columns), "All ColumnTemplate's must have a ColumnNumber. If the ColumnNumber is unknown use the ScanForColumnsAndParseTable method.");
             }
             //Assign required columns
-            foreach (InformedColumn col in columns.Where(x => x.IsRequired))
-            {
-                //TODO this might need changed... 
+            foreach (InformedImportColumn col in columns.Where(x => x.IsRequired))
+            { 
                 _requiredFieldsColumnLocations.Add(_excelExtensions.GetColumnLetter(col.ColumnNumber));
             }
 
@@ -83,7 +83,7 @@ namespace ExcelExtensions.Providers.Import.Parse
         /// <param name="workSheet"></param>
         /// <param name="headerRowId"></param>
         /// <returns></returns>
-        private ParsedTable<T> ParseRows(List<InformedColumn> columnsWithCellAddresses, ExcelWorksheet workSheet, int headerRowId)
+        private ParsedTable<T> ParseRows(List<InformedImportColumn> columnsWithCellAddresses, ExcelWorksheet workSheet, int headerRowId)
         {
             for (int rowNumber = headerRowId + 1; rowNumber <= workSheet.Dimension.End.Row; rowNumber++)
             {
@@ -91,7 +91,7 @@ namespace ExcelExtensions.Providers.Import.Parse
                 _singleRowErrors.Clear();
                 _model = Activator.CreateInstance<T>();
 
-                foreach (InformedColumn coltemplate in columnsWithCellAddresses)
+                foreach (InformedImportColumn coltemplate in columnsWithCellAddresses)
                 {
                     //If its at defualt(0) or we have reached the end of the sheet bail out
                     if (coltemplate.ColumnNumber < 1 || coltemplate.ColumnNumber > workSheet.Dimension.End.Column)
@@ -147,9 +147,9 @@ namespace ExcelExtensions.Providers.Import.Parse
         /// <param name="maxScanHeaderRowThreashold"></param>
         /// <param name="rowScanCount"></param>
         /// <remarks>There must be at least one required field.</remarks>
-        private List<InformedColumn> ScanForHeaderRow(List<UninformedImportColumn> columns, ref ExcelWorksheet workSheet, ref int headerRowNumber, int maxScanHeaderRowThreashold, ref int rowScanCount)
+        private List<InformedImportColumn> ScanForHeaderRow(List<UninformedImportColumn> columns, ref ExcelWorksheet workSheet, ref int headerRowNumber, int maxScanHeaderRowThreashold, ref int rowScanCount)
         {
-            List<InformedColumn> informedColumns = new();
+            List<InformedImportColumn> informedColumns = new();
             do
             {
                 //Make sure the errors are clear first
@@ -238,19 +238,19 @@ namespace ExcelExtensions.Providers.Import.Parse
         /// <param name="headerRowId"></param>
         /// <param name="RequiredFields"></param>
         /// <param name="parseResults"></param>
-        private List<InformedColumn> FindColumnNamesAndCheckRequiredColumns(List<UninformedImportColumn> columns, ref ExcelWorksheet workSheet, ref int headerRowId)
+        private List<InformedImportColumn> FindColumnNamesAndCheckRequiredColumns(List<UninformedImportColumn> columns, ref ExcelWorksheet workSheet, ref int headerRowId)
         {
-            List<InformedColumn> informedColumns = new();
+            List<InformedImportColumn> informedColumns = new();
 
             foreach (UninformedImportColumn column in columns)
             {
-                InformedColumn informedImportColumn = null;
+                InformedImportColumn informedImportColumn = null;
 
                 foreach (ExcelRangeBase firstRowCell in workSheet.Cells[headerRowId, workSheet.Dimension.Start.Column, headerRowId, workSheet.Dimension.End.Column])
                 {
                     if (column.DisplayNameOptions.Any(x => x.Equals(firstRowCell.Text, StringComparison.OrdinalIgnoreCase)))
                     {
-                        informedImportColumn = new InformedColumn(column, firstRowCell.Start.Column);
+                        informedImportColumn = new InformedImportColumn(column, firstRowCell.Start.Column);
                         informedColumns.Add(informedImportColumn);
                         continue;
                     }

@@ -1,18 +1,13 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
 using ExcelExtensions.Models.Columns.Import;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExcelExtensions.Models.Columns
 {
     /// <summary>
-    /// JUST PARSE
+    /// Works for parse and export
     /// </summary>
-    public class InformedColumn : ColumnWithSeverity
+    public class InformedImportColumn : ImportColumn
     {
         /// <summary>
         /// used as a pointer for where we are importing and saved if we are looking for a column that doesn't have a letter
@@ -20,13 +15,14 @@ namespace ExcelExtensions.Models.Columns
         /// </summary>
         public int ColumnNumber { get; set; }
 
-        public InformedColumn() : base()
+        public InformedImportColumn() : base()
         {
 
         }
 
-        public InformedColumn(UninformedImportColumn column1, int column2)
+        public InformedImportColumn(UninformedImportColumn column, int columnNumber) : base(column, column.IsRequired)
         {
+            ColumnNumber = columnNumber;
         }
     }
 }

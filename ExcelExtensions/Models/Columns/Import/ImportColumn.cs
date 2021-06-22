@@ -17,7 +17,6 @@ namespace ExcelExtensions.Models.Columns.Import
         {
             IsRequired = MissingSeverity == ParseExceptionSeverity.Error;
         }
-
         public ImportColumn(Column column, bool required) : base(column, required ? ParseExceptionSeverity.Error : ParseExceptionSeverity.Warning)
         {
 

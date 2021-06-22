@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
 using ExcelExtensions.Globals;
+using ExcelExtensions.Models.Columns.Import;
 using static ExcelExtensions.Enums.Enums;
 
 namespace ExcelExtensions.Models
@@ -69,7 +70,6 @@ namespace ExcelExtensions.Models
         public ParseException(string sheetName, ImportColumn column) : this (sheetName)
         {
             ColumnHeader = column.ModelProperty;
-            //ColumnHeader = column.ColumnHeader; //todo
             FormatType = column.Format;
             Severity = column.MissingSeverity;
         }

@@ -2,6 +2,7 @@
 
 using ExcelExtensions.Interfaces;
 using ExcelExtensions.Models;
+using ExcelExtensions.Models.Columns;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,25 +23,28 @@ namespace ExcelExtensions.Providers.Import
 
         }
 
+        //If you give me an int you know where it is, or if you give me a letter you know where it is
 
-        public List<UninformedImportColumn> MapObjectToImportColumns(Type modelType, FormatType formatType = FormatType.String, int startColumnNumber = 1)
+        //make methods
+
+        //1st sets up just for imports in case you need to make tweaks (would have to know the letters or numbers)
+
+
+        //2nd set up just for exports (would have to know the letters or numbers)
+
+        //3rd, option where you really don't care where you export data because it is in order how you set up your model
+
+
+        //Could possible make Column and protected class and make ImportColumn and ExportColum  then a class that encapsulates both for a LazyColumn
+
+        public List<ExportColumn> GetExportColumns(Type modelType, FormatType formatType = FormatType.String, int startColumnNumber = 1)
         {
-            //If you give me an int you know where it is, or if you give me a letter you know where it is
 
-            //make methods
-
-            //1st sets up just for imports in case you need to make tweaks (would have to know the letters or numbers)
-
-
-            //2nd set up just for exports (would have to know the letters or numbers)
-
-            //3rd, option where you really don't care where you export data because it is in order how you set up your model
-
-
-            //Could possible make Column and protected class and make ImportColumn and ExportColum  then a class that encapsulates both for a LazyColumn
-
+        }
+        public List<InformedImportColumn> GetInformedImportColumns(Type modelType, FormatType formatType = FormatType.String, int startColumnNumber = 1)
+        {
             int currentColumnNumber = startColumnNumber;
-            List<UninformedImportColumn> excelColumnDefinitionArray = new();
+            List<InformedImportColumn> excelColumnDefinitionArray = new();
 
             foreach (PropertyInfo item in modelType.GetProperties())
             {
@@ -57,7 +61,7 @@ namespace ExcelExtensions.Providers.Import
                 bool required = attribute?.IsRequired ?? true; //<see cref="ParseExceptionSeverity.Error"/>
                 List<string> importKeys = attribute?.ImportColumnTitleOptions ?? new List<string>() { modelPropertyName, textTitle };
 
-                excelColumnDefinitionArray.Add(new InformedColumn()
+                excelColumnDefinitionArray.Add(new InformedImportColumn()
                 {
                     //If already know our column letter lets use that. 
                     ColumnNumber = attribute?.ExportColumnLetter == null ? 0 : _excelExtensions.GetColumnNumber(attribute.ExportColumnLetter),
@@ -69,6 +73,41 @@ namespace ExcelExtensions.Providers.Import
                     DisplayNameOptions = importKeys,
                     IsRequired = required
                 });
+                //next column
+                currentColumnNumber++;
+            }
+
+            return excelColumnDefinitionArray;
+        }
+        public List<UninformedImportColumn> GetUninformedImportColumns(Type modelType, FormatType formatType = FormatType.String, int startColumnNumber = 1)
+        {
+            int currentColumnNumber = startColumnNumber;
+            List<UninformedImportColumn> excelColumnDefinitionArray = new();
+
+            foreach (PropertyInfo item in modelType.GetProperties())
+            {
+                //read the display name attirube
+                string modelPropertyName = _excelExtensions.GetExportModelPropertyNameAndDisplayName(modelType, item.Name, out string textTitle);
+
+                ExcelExtensionsColumnAttribute attribute = item.GetCustomAttribute<ExcelExtensionsColumnAttribute>();
+
+                //Give the default format if not avail be
+                FormatType format = attribute?.Format ?? formatType;
+
+                //TODO: theses all below need to be re though with a new idea of separating the column types out 
+                string letter = attribute?.ExportColumnLetter ?? _excelExtensions.GetColumnLetter(currentColumnNumber);
+
+                bool required = attribute?.IsRequired ?? true; //<see cref="ParseExceptionSeverity.Error"/>
+                List<string> importKeys = attribute?.ImportColumnTitleOptions ?? new List<string>() { modelPropertyName, textTitle };
+
+                excelColumnDefinitionArray.Add(new UninformedImportColumn(modelPropertyName,
+                                        textTitle,
+                                        format,
+                                        required,
+                                        importKeys,
+                                        attribute?.DecimalPrecision)
+                                        );
+
                 //next column
                 currentColumnNumber++;
             }
