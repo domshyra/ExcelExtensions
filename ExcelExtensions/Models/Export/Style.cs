@@ -3,7 +3,7 @@
 using OfficeOpenXml.Style;
 using System.Drawing;
 
-namespace ExcelExtensions.Models
+namespace ExcelExtensions.Models.Export
 {
     public class Style
     {

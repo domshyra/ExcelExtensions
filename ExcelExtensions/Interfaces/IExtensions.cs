@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
 using ExcelExtensions.Models;
+using ExcelExtensions.Models.Columns;
+using ExcelExtensions.Models.Columns.Import;
 using System;
 using System.Collections.Generic;
 
@@ -104,12 +106,12 @@ namespace ExcelExtensions.Interfaces
 
         ///
 
-        KeyValuePair<string, ParseException> LogDeveloperException(string worksheetName, ImportColumnTemplate displayName, string cellAddress, string message, string modelPropertyName);
-        KeyValuePair<int, ParseException> LogDeveloperException(string worksheetName, ImportColumnTemplate displayName, string cellAddress, int rowNumber, string message);
-        KeyValuePair<string, ParseException> LogNullReferenceException(string worksheetName, ImportColumnTemplate displayName, string cellAddress, string modelPropertyName);
-        KeyValuePair<int, ParseException> LogNullReferenceException(string worksheetName, ImportColumnTemplate displayName, string cellAddress, int rowNumber);
-        KeyValuePair<int, ParseException> LogCellException(string worksheetName, ImportColumnTemplate displayName, string cellAddress, int rowNumber);
-        KeyValuePair<string, ParseException> LogCellException(string worksheetName, ImportColumnTemplate displayName, string cellAddress, string modelPropertyName);
+        KeyValuePair<string, ParseException> LogDeveloperException(string worksheetName, ImportColumn column, string cellAddress, string message, string modelPropertyName);
+        KeyValuePair<int, ParseException> LogDeveloperException(string worksheetName, ImportColumn column, string cellAddress, int rowNumber, string message);
+        KeyValuePair<string, ParseException> LogNullReferenceException(string worksheetName, ImportColumn column, string cellAddress, string modelPropertyName);
+        KeyValuePair<int, ParseException> LogNullReferenceException(string worksheetName,ImportColumn column, string cellAddress, int rowNumber);
+        KeyValuePair<int, ParseException> LogCellException(string worksheetName, ImportColumn column, string cellAddress, int rowNumber);
+        KeyValuePair<string, ParseException> LogCellException(string worksheetName, ImportColumn column, string cellAddress, string modelPropertyName);
 
     }
 }

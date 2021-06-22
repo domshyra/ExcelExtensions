@@ -15,6 +15,10 @@ using static ExcelExtensions.Enums.Enums;
 using ExcelExtensions.Interfaces;
 using ExcelExtensions.Interfaces.Export;
 using System.Drawing;
+using ExcelExtensions.Models.Import;
+using ExcelExtensions.Models.Export;
+using ExcelExtensions.Models.Columns.Import;
+using ExcelExtensions.Models.Columns;
 
 namespace WebApplication.Providers
 {
@@ -57,7 +61,7 @@ namespace WebApplication.Providers
                     throw new ImportException(exception);
                 }
 
-                ParsedTable<SampleTableModel> parsedTable = _tableParser.ScanForColumnsAndParseTable(GetTableColumnTemplates(), sheet);
+                ParsedTable<SampleTableModel> parsedTable = _tableParser.UninformedParseTable(GetTableColumnTemplates(), sheet);
 
                 if (parsedTable.Exceptions.Any(x => x.Value.Severity == ParseExceptionSeverity.Error))
                 {
@@ -79,32 +83,32 @@ namespace WebApplication.Providers
         /// Sets the requiredments for import and our model property.  
         /// </summary>
         /// <returns></returns>
-        private List<ImportColumnTemplate> GetTableColumnTemplates()
+        private List<UninformedImportColumn> GetTableColumnTemplates()
         {
             //TODO USE REFLECTION https://github.com/domshyra/ExcelExtensions/issues/15
             List<Column> cols = SampleTableColumns();
 
-            return new List<ImportColumnTemplate>()
+            return new List<UninformedImportColumn>()
             {
               //                       Col                                                             Req?   
-              new ImportColumnTemplate(GetColumn(cols, nameof(SampleTableModel.Text)),                 true),
-              new ImportColumnTemplate(GetColumn(cols, nameof(SampleTableModel.Date)),                 true),
-              new ImportColumnTemplate(GetColumn(cols, nameof(SampleTableModel.DateAsText)),           true),
-              new ImportColumnTemplate(GetColumn(cols, nameof(SampleTableModel.DateAsGeneral)),        false),
-              new ImportColumnTemplate(GetColumn(cols, nameof(SampleTableModel.Duration)),             false),
-              new ImportColumnTemplate(GetColumn(cols, nameof(SampleTableModel.Percent)),              true),
-              new ImportColumnTemplate(GetColumn(cols, nameof(SampleTableModel.PercentAsText)),        false),
-              new ImportColumnTemplate(GetColumn(cols, nameof(SampleTableModel.PercentAsNumber)),      false),
-              new ImportColumnTemplate(GetColumn(cols, nameof(SampleTableModel.BoolAsYESNO)),          false),
-              new ImportColumnTemplate(GetColumn(cols, nameof(SampleTableModel.BoolAsTrueFalse)),      false),
-              new ImportColumnTemplate(GetColumn(cols, nameof(SampleTableModel.BoolAs10)),             false),
-              new ImportColumnTemplate(GetColumn(cols, nameof(SampleTableModel.Currency)),             false),
-              new ImportColumnTemplate(GetColumn(cols, nameof(SampleTableModel.CurrencyAsText)),       false),
-              new ImportColumnTemplate(GetColumn(cols, nameof(SampleTableModel.CurrencyAsGeneral)),    false),
-              new ImportColumnTemplate(GetColumn(cols, nameof(SampleTableModel.Decimal)),              false),
-              new ImportColumnTemplate(GetColumn(cols, nameof(SampleTableModel.DecimalAsText)),        false),
-              new ImportColumnTemplate(GetColumn(cols, nameof(SampleTableModel.RequiredText)),         true),
-              new ImportColumnTemplate(GetColumn(cols, nameof(SampleTableModel.OptionalText)),         false),
+              new UninformedImportColumn(GetColumn(cols, nameof(SampleTableModel.Text)),                 true),
+              new UninformedImportColumn(GetColumn(cols, nameof(SampleTableModel.Date)),                 true),
+              new UninformedImportColumn(GetColumn(cols, nameof(SampleTableModel.DateAsText)),           true),
+              new UninformedImportColumn(GetColumn(cols, nameof(SampleTableModel.DateAsGeneral)),        false),
+              new UninformedImportColumn(GetColumn(cols, nameof(SampleTableModel.Duration)),             false),
+              new UninformedImportColumn(GetColumn(cols, nameof(SampleTableModel.Percent)),              true),
+              new UninformedImportColumn(GetColumn(cols, nameof(SampleTableModel.PercentAsText)),        false),
+              new UninformedImportColumn(GetColumn(cols, nameof(SampleTableModel.PercentAsNumber)),      false),
+              new UninformedImportColumn(GetColumn(cols, nameof(SampleTableModel.BoolAsYESNO)),          false),
+              new UninformedImportColumn(GetColumn(cols, nameof(SampleTableModel.BoolAsTrueFalse)),      false),
+              new UninformedImportColumn(GetColumn(cols, nameof(SampleTableModel.BoolAs10)),             false),
+              new UninformedImportColumn(GetColumn(cols, nameof(SampleTableModel.Currency)),             false),
+              new UninformedImportColumn(GetColumn(cols, nameof(SampleTableModel.CurrencyAsText)),       false),
+              new UninformedImportColumn(GetColumn(cols, nameof(SampleTableModel.CurrencyAsGeneral)),    false),
+              new UninformedImportColumn(GetColumn(cols, nameof(SampleTableModel.Decimal)),              false),
+              new UninformedImportColumn(GetColumn(cols, nameof(SampleTableModel.DecimalAsText)),        false),
+              new UninformedImportColumn(GetColumn(cols, nameof(SampleTableModel.RequiredText)),         true),
+              new UninformedImportColumn(GetColumn(cols, nameof(SampleTableModel.OptionalText)),         false),
               //new ImportColumnTemplate(GetColumn(cols, nameof(SampleTableModel.ListOfStrings)),        false),
               //new ImportColumnTemplate(GetColumn(cols, nameof(SampleTableModel.ListOfStrings)),        false),
               //new ImportColumnTemplate(GetColumn(cols, nameof(SampleTableModel.ListOfStrings)),        false),

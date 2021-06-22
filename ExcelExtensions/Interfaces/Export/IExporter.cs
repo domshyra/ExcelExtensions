@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using ExcelExtensions.Models;
+using ExcelExtensions.Models.Columns;
+using ExcelExtensions.Models.Export;
 using OfficeOpenXml;
 using System.Collections.Generic;
 using static ExcelExtensions.Enums.Enums;
@@ -12,6 +13,8 @@ namespace ExcelExtensions.Interfaces.Export
     /// </summary>
     public interface IExporter
     {
+        //TODO: fix for LazyColumn
+
         /// <summary>
         /// Export a table to an <see cref="ExcelWorksheet"/>
         /// </summary>
@@ -42,10 +45,11 @@ namespace ExcelExtensions.Interfaces.Export
         /// Format the column of an <see cref="ExcelWorksheet"/>
         /// </summary>
         /// <param name="sheet"></param>
-        /// <param name="column"></param>
+        /// <param name="columnNumber"></param>
         /// <param name="formatter"></param>
         /// <param name="decimalPrecision"></param>
-        void FormatColumn(ref ExcelWorksheet sheet, string column, FormatType formatter, int? decimalPrecision = null);
+        void FormatColumn(ref ExcelWorksheet sheet, int columnNumber, FormatType formatter, int? decimalPrecision = null);
+        void FormatColumn(ref ExcelWorksheet sheet, string columnLetter, FormatType formatter, int? decimalPrecision = null);
         /// <summary>
         /// Format the column range of an <see cref="ExcelWorksheet"/>
         /// </summary>
@@ -55,6 +59,7 @@ namespace ExcelExtensions.Interfaces.Export
         /// <param name="format"></param>
         /// <param name="decimalPrecision"></param>
         void FormatColumnRange(ExcelWorksheet itemcodeSheet, string startColumn, string endColumn, FormatType format, int? decimalPrecision = null);
+        void FormatColumnRange(ExcelWorksheet itemcodeSheet, int startColumn, int endColumn, FormatType format, int? decimalPrecision = null);
         /// <summary>
         /// Style the table header row by the max column in columns of an <see cref="ExcelWorksheet"/>
         /// </summary>

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
 using ExcelExtensions.Globals;
+using ExcelExtensions.Models.Columns.Import;
 using static ExcelExtensions.Enums.Enums;
 
 namespace ExcelExtensions.Models
@@ -66,15 +67,11 @@ namespace ExcelExtensions.Models
         {
             Sheet = sheetName;
         }
-        public ParseException(string sheetName, Column column) : this (sheetName)
+        public ParseException(string sheetName, ImportColumn column) : this (sheetName)
         {
             ColumnHeader = column.ModelProperty;
-            //ColumnHeader = column.ColumnHeader; //todo
             FormatType = column.Format;
-        }
-        public ParseException(string sheetName, ImportColumnTemplate column) : this (sheetName, column.Column)
-        {
-            Severity = (column.IsRequired) ? ParseExceptionSeverity.Error : ParseExceptionSeverity.Warning;
+            Severity = column.MissingSeverity;
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using static ExcelExtensions.Enums.Enums;
 using ExcelExtensions.Interfaces;
+using ExcelExtensions.Models.Columns.Import;
 
 namespace ExcelExtensions.Providers.Import.Parse
 {
@@ -33,7 +34,7 @@ namespace ExcelExtensions.Providers.Import.Parse
             _parseResults = new ParsedTable<T>();
             _requiredFieldMissingMessages = new List<ParseException>();
         }
-        public ParsedTable<T> ScanForColumnsAndParseTable(List<ImportColumnTemplate> columns, ExcelWorksheet workSheet, int headerRowNumber = 1, int maxScanHeaderRowThreashold = 100)
+        public ParsedTable<T> UninformedParseTable(List<UninformedImportColumn> columns, ExcelWorksheet workSheet, int headerRowNumber = 1, int maxScanHeaderRowThreashold = 100)
         {
             if (_excelExtensions is null)
             {
@@ -41,10 +42,8 @@ namespace ExcelExtensions.Providers.Import.Parse
             }
             int rowScanCount = 0;
 
-            List<ImportColumnWithCellAddress> columnsWithCellAddresses = CheckForMissingColumnNumbersInImportColumnTemplates(columns);
-
             //Check for each of the expected columns in 
-            ScanForHeaderRow(columnsWithCellAddresses, ref workSheet, ref headerRowNumber, maxScanHeaderRowThreashold, ref rowScanCount);
+            List<InformedImportColumn> columnsWithCellAddresses = ScanForHeaderRow(columns, ref workSheet, ref headerRowNumber, maxScanHeaderRowThreashold, ref rowScanCount);
 
             if (CheckMissingScannedColumns(headerRowNumber, maxScanHeaderRowThreashold, rowScanCount, columns))
             {
@@ -55,27 +54,25 @@ namespace ExcelExtensions.Providers.Import.Parse
             return ParseRows(columnsWithCellAddresses, workSheet, headerRowNumber);
         }
 
-        public ParsedTable<T> ParseTable(List<ImportColumnTemplate> columns, ExcelWorksheet workSheet, int headerRowNumber = 1)
+        public ParsedTable<T> InformedParseTable(List<InformedImportColumn> columns, ExcelWorksheet workSheet, int headerRowNumber = 1)
         {
             if (_excelExtensions is null)
             {
                 throw new ArgumentNullException(nameof(IExtensions), $"Make sure when TableParser is constructed that {nameof(IExtensions)} gets passed in.");
             }
 
-            List<ImportColumnWithCellAddress> columnsWithCellAddresses = CheckForMissingColumnNumbersInImportColumnTemplates(columns);
-
-            if (columnsWithCellAddresses.Any(x => x.IsRequired && x.ColumnNumber <= 0))
+            if (columns.Any(x => x.IsRequired && x.ColumnNumber <= 0))
             {
                 throw new ArgumentOutOfRangeException(nameof(columns), "All ColumnTemplate's must have a ColumnNumber. If the ColumnNumber is unknown use the ScanForColumnsAndParseTable method.");
             }
             //Assign required columns
-            foreach (ImportColumnWithCellAddress col in columnsWithCellAddresses.Where(x => x.IsRequired))
-            {
-                _requiredFieldsColumnLocations.Add(col.Column.ColumnLetter);
+            foreach (InformedImportColumn col in columns.Where(x => x.IsRequired))
+            { 
+                _requiredFieldsColumnLocations.Add(_excelExtensions.GetColumnLetter(col.ColumnNumber));
             }
 
             //Parse each row
-            return ParseRows(columnsWithCellAddresses, workSheet, headerRowNumber);
+            return ParseRows(columns, workSheet, headerRowNumber);
         }
 
         /// <summary>
@@ -85,7 +82,7 @@ namespace ExcelExtensions.Providers.Import.Parse
         /// <param name="workSheet"></param>
         /// <param name="headerRowId"></param>
         /// <returns></returns>
-        private ParsedTable<T> ParseRows(List<ImportColumnWithCellAddress> columnsWithCellAddresses, ExcelWorksheet workSheet, int headerRowId)
+        private ParsedTable<T> ParseRows(List<InformedImportColumn> columnsWithCellAddresses, ExcelWorksheet workSheet, int headerRowId)
         {
             for (int rowNumber = headerRowId + 1; rowNumber <= workSheet.Dimension.End.Row; rowNumber++)
             {
@@ -93,8 +90,9 @@ namespace ExcelExtensions.Providers.Import.Parse
                 _singleRowErrors.Clear();
                 _model = Activator.CreateInstance<T>();
 
-                foreach (ImportColumnWithCellAddress coltemplate in columnsWithCellAddresses)
+                foreach (InformedImportColumn coltemplate in columnsWithCellAddresses)
                 {
+                    //If its at defualt(0) or we have reached the end of the sheet bail out
                     if (coltemplate.ColumnNumber < 1 || coltemplate.ColumnNumber > workSheet.Dimension.End.Column)
                     {
                         continue;
@@ -138,20 +136,6 @@ namespace ExcelExtensions.Providers.Import.Parse
             return _parseResults;
         }
 
-        /// <summary>
-        /// Get the cell address using the extension from the data the user provided in the import map 
-        /// </summary>
-        /// <param name="columns"></param>
-        private List<ImportColumnWithCellAddress> CheckForMissingColumnNumbersInImportColumnTemplates(List<ImportColumnTemplate> columns)
-        {
-            List<ImportColumnWithCellAddress> columnsWithCellAddresses = new();
-            foreach (ImportColumnTemplate item in columns)
-            {
-                columnsWithCellAddresses.Add(new ImportColumnWithCellAddress(_excelExtensions, item));
-            }
-            return columnsWithCellAddresses;
-        }
-
 
         /// <summary>
         /// Try to find the header row of the imported data. If the fields are not found, keep scanning the next row until the row max threshold is reached. 
@@ -162,8 +146,9 @@ namespace ExcelExtensions.Providers.Import.Parse
         /// <param name="maxScanHeaderRowThreashold"></param>
         /// <param name="rowScanCount"></param>
         /// <remarks>There must be at least one required field.</remarks>
-        private void ScanForHeaderRow(List<ImportColumnWithCellAddress> columns, ref ExcelWorksheet workSheet, ref int headerRowNumber, int maxScanHeaderRowThreashold, ref int rowScanCount)
+        private List<InformedImportColumn> ScanForHeaderRow(List<UninformedImportColumn> columns, ref ExcelWorksheet workSheet, ref int headerRowNumber, int maxScanHeaderRowThreashold, ref int rowScanCount)
         {
+            List<InformedImportColumn> informedColumns = new();
             do
             {
                 //Make sure the errors are clear first
@@ -171,7 +156,7 @@ namespace ExcelExtensions.Providers.Import.Parse
                 _requiredFieldsColumnLocations.Clear();
                 //reset previous rows number 
 
-                FindColumnNamesAndCheckRequiredColumns(columns, ref workSheet, ref headerRowNumber);
+                informedColumns = FindColumnNamesAndCheckRequiredColumns(columns, ref workSheet, ref headerRowNumber);
 
                 List<ParseException> requiredErrors = _parseResults.Exceptions.Where(x => x.Value.ExceptionType != ParseExceptionType.OptionalColumnMissing).Select(x => x.Value).ToList();
 
@@ -195,6 +180,8 @@ namespace ExcelExtensions.Providers.Import.Parse
             }
             //While we have no missing required columns and while we are not at max scan
             while (_parseResults.Exceptions.Where(x => x.Value.ExceptionType != ParseExceptionType.OptionalColumnMissing).Any() && rowScanCount != maxScanHeaderRowThreashold);
+
+            return informedColumns;
         }
 
         /// <summary>
@@ -204,7 +191,7 @@ namespace ExcelExtensions.Providers.Import.Parse
         /// <param name="maxScanHeaderRowThreashold"></param>
         /// <param name="rowScanCount"></param>
         /// <returns></returns>
-        private bool CheckMissingScannedColumns(int headerRowId, int maxScanHeaderRowThreashold, int rowScanCount, List<ImportColumnTemplate> columns)
+        private bool CheckMissingScannedColumns(int headerRowId, int maxScanHeaderRowThreashold, int rowScanCount, List<UninformedImportColumn> columns)
         {
 
             if (rowScanCount >= maxScanHeaderRowThreashold && _requiredFieldMissingMessages.Count == columns.Where(x => x.IsRequired).Count())
@@ -250,23 +237,28 @@ namespace ExcelExtensions.Providers.Import.Parse
         /// <param name="headerRowId"></param>
         /// <param name="RequiredFields"></param>
         /// <param name="parseResults"></param>
-        private void FindColumnNamesAndCheckRequiredColumns(List<ImportColumnWithCellAddress> columns, ref ExcelWorksheet workSheet, ref int headerRowId)
+        private List<InformedImportColumn> FindColumnNamesAndCheckRequiredColumns(List<UninformedImportColumn> columns, ref ExcelWorksheet workSheet, ref int headerRowId)
         {
-            foreach (ImportColumnWithCellAddress coltemplate in columns)
+            List<InformedImportColumn> informedColumns = new();
+
+            foreach (UninformedImportColumn column in columns)
             {
+                InformedImportColumn informedImportColumn = null;
+
                 foreach (ExcelRangeBase firstRowCell in workSheet.Cells[headerRowId, workSheet.Dimension.Start.Column, headerRowId, workSheet.Dimension.End.Column])
                 {
-                    if (coltemplate.ColumnHeaderOptions.Any(x => x.Equals(firstRowCell.Text, StringComparison.OrdinalIgnoreCase)))
+                    if (column.DisplayNameOptions.Any(x => x.Equals(firstRowCell.Text, StringComparison.OrdinalIgnoreCase)))
                     {
-                        coltemplate.ColumnNumber = firstRowCell.Start.Column;
+                        informedImportColumn = new InformedImportColumn(column, firstRowCell.Start.Column);
+                        informedColumns.Add(informedImportColumn);
                         continue;
                     }
                 }
 
-                if (coltemplate.IsRequired && coltemplate.ColumnNumber == 0)
+                if (column.IsRequired && informedImportColumn == null)
                 {
 
-                    ParseException parseException = new(workSheet.Name, coltemplate.Column)
+                    ParseException parseException = new(workSheet.Name, column)
                     {
                         ExceptionType = ParseExceptionType.RequiredColumnMissing,
                         Severity = ParseExceptionSeverity.Error,
@@ -274,9 +266,9 @@ namespace ExcelExtensions.Providers.Import.Parse
                     };
                     _parseResults.Exceptions.Add(new KeyValuePair<int, ParseException>(headerRowId, parseException));
                 }
-                else if (coltemplate.ColumnNumber == 0 && coltemplate.IsRequired == false)
+                else if (informedImportColumn == null && column.IsRequired == false)
                 {
-                    ParseException parseException = new(workSheet.Name, coltemplate.Column)
+                    ParseException parseException = new(workSheet.Name, column)
                     {
                         ExceptionType = ParseExceptionType.OptionalColumnMissing,
                         Severity = ParseExceptionSeverity.Warning,
@@ -286,12 +278,14 @@ namespace ExcelExtensions.Providers.Import.Parse
 
                 }
 
-                if (coltemplate.IsRequired == true)
+                if (column.IsRequired == true)
                 {
-                    _requiredFieldsColumnLocations.Add(_excelExtensions.GetColumnLetter(coltemplate.ColumnNumber));
+                    _requiredFieldsColumnLocations.Add(_excelExtensions.GetColumnLetter(informedImportColumn.ColumnNumber));
                 }
 
             }
+
+            return informedColumns;
         }
 
         /// <summary>
@@ -299,12 +293,12 @@ namespace ExcelExtensions.Providers.Import.Parse
         /// </summary>
         /// <param name="workSheet"></param>
         /// <param name="rowNumber"></param>
-        /// <param name="coltemplate"></param>
+        /// <param name="column"></param>
         /// <param name="cell"></param>
         /// <remarks>Will throw <see cref="NullReferenceException"/> errors. disable them when debugging through this dll file. </remarks>
-        private void ParseCell(ExcelWorksheet workSheet, int rowNumber, ImportColumnTemplate coltemplate, ExcelRange cell)
+        private void ParseCell(ExcelWorksheet workSheet, int rowNumber, InformedImportColumn column, ExcelRange cell)
         {
-            switch (coltemplate.Column.Format)
+            switch (column.Format)
             {
                 case FormatType.Bool:
                     {
@@ -313,15 +307,15 @@ namespace ExcelExtensions.Providers.Import.Parse
                             //try to parse
                             bool value = _parser.ParseBool(cell);
 
-                            SetValue(workSheet, rowNumber, coltemplate, cell, value);
+                            SetValue(workSheet, rowNumber, column, cell, value);
                         }
                         catch (NullReferenceException)
                         {
-                            _singleRowErrors.Add(_excelExtensions.LogNullReferenceException(workSheet.Name, coltemplate, cell.Address, rowNumber));
+                            _singleRowErrors.Add(_excelExtensions.LogNullReferenceException(workSheet.Name, column, cell.Address, rowNumber));
                         }
                         catch (Exception)
                         {
-                            _singleRowErrors.Add(_excelExtensions.LogCellException(workSheet.Name, coltemplate, cell.Address, rowNumber));
+                            _singleRowErrors.Add(_excelExtensions.LogCellException(workSheet.Name, column, cell.Address, rowNumber));
                         }
                         break;
                     }
@@ -331,15 +325,15 @@ namespace ExcelExtensions.Providers.Import.Parse
                         {
                             decimal? value = _parser.ParseCurrency(cell);
 
-                            SetValue(workSheet, rowNumber, coltemplate, cell, value);
+                            SetValue(workSheet, rowNumber, column, cell, value);
                         }
                         catch (NullReferenceException)
                         {
-                            _singleRowErrors.Add(_excelExtensions.LogNullReferenceException(workSheet.Name, coltemplate, cell.Address, rowNumber));
+                            _singleRowErrors.Add(_excelExtensions.LogNullReferenceException(workSheet.Name, column, cell.Address, rowNumber));
                         }
                         catch (Exception)
                         {
-                            _singleRowErrors.Add(_excelExtensions.LogCellException(workSheet.Name, coltemplate, cell.Address, rowNumber));
+                            _singleRowErrors.Add(_excelExtensions.LogCellException(workSheet.Name, column, cell.Address, rowNumber));
                         }
                         break;
                     }
@@ -348,16 +342,16 @@ namespace ExcelExtensions.Providers.Import.Parse
                         try
                         {
                             DateTime? date = _parser.ParseDate(cell);
-                            SetValue(workSheet, rowNumber, coltemplate, cell, date);
+                            SetValue(workSheet, rowNumber, column, cell, date);
 
                         }
                         catch (NullReferenceException)
                         {
-                            _singleRowErrors.Add(_excelExtensions.LogNullReferenceException(workSheet.Name, coltemplate, cell.Address, rowNumber));
+                            _singleRowErrors.Add(_excelExtensions.LogNullReferenceException(workSheet.Name, column, cell.Address, rowNumber));
                         }
                         catch (Exception)
                         {
-                            _singleRowErrors.Add(_excelExtensions.LogCellException(workSheet.Name, coltemplate, cell.Address, rowNumber));
+                            _singleRowErrors.Add(_excelExtensions.LogCellException(workSheet.Name, column, cell.Address, rowNumber));
                         }
                         break;
                     }
@@ -367,15 +361,15 @@ namespace ExcelExtensions.Providers.Import.Parse
                         try
                         {
                             TimeSpan? duration = _parser.ParseTimeSpan(cell);
-                            SetValue(workSheet, rowNumber, coltemplate, cell, duration);
+                            SetValue(workSheet, rowNumber, column, cell, duration);
                         }
                         catch (NullReferenceException)
                         {
-                            _singleRowErrors.Add(_excelExtensions.LogNullReferenceException(workSheet.Name, coltemplate, cell.Address, rowNumber));
+                            _singleRowErrors.Add(_excelExtensions.LogNullReferenceException(workSheet.Name, column, cell.Address, rowNumber));
                         }
                         catch (Exception)
                         {
-                            _singleRowErrors.Add(_excelExtensions.LogCellException(workSheet.Name, coltemplate, cell.Address, rowNumber));
+                            _singleRowErrors.Add(_excelExtensions.LogCellException(workSheet.Name, column, cell.Address, rowNumber));
                         }
                         break;
                     }
@@ -384,15 +378,15 @@ namespace ExcelExtensions.Providers.Import.Parse
                         try
                         {
                             decimal? value = _parser.ParsePercent(cell);
-                            SetValue(workSheet, rowNumber, coltemplate, cell, value);
+                            SetValue(workSheet, rowNumber, column, cell, value);
                         }
                         catch (NullReferenceException)
                         {
-                            _singleRowErrors.Add(_excelExtensions.LogNullReferenceException(workSheet.Name, coltemplate, cell.Address, rowNumber));
+                            _singleRowErrors.Add(_excelExtensions.LogNullReferenceException(workSheet.Name, column, cell.Address, rowNumber));
                         }
                         catch (Exception)
                         {
-                            _singleRowErrors.Add(_excelExtensions.LogCellException(workSheet.Name, coltemplate, cell.Address, rowNumber));
+                            _singleRowErrors.Add(_excelExtensions.LogCellException(workSheet.Name, column, cell.Address, rowNumber));
                         }
                         break;
                     }
@@ -401,15 +395,15 @@ namespace ExcelExtensions.Providers.Import.Parse
                         try
                         {
                             double? value = _parser.ParseDouble(cell);
-                            SetValue(workSheet, rowNumber, coltemplate, cell, value);
+                            SetValue(workSheet, rowNumber, column, cell, value);
                         }
                         catch (NullReferenceException)
                         {
-                            _singleRowErrors.Add(_excelExtensions.LogNullReferenceException(workSheet.Name, coltemplate, cell.Address, rowNumber));
+                            _singleRowErrors.Add(_excelExtensions.LogNullReferenceException(workSheet.Name, column, cell.Address, rowNumber));
                         }
                         catch (Exception)
                         {
-                            _singleRowErrors.Add(_excelExtensions.LogCellException(workSheet.Name, coltemplate, cell.Address, rowNumber));
+                            _singleRowErrors.Add(_excelExtensions.LogCellException(workSheet.Name, column, cell.Address, rowNumber));
                         }
                         break;
                     }
@@ -418,120 +412,122 @@ namespace ExcelExtensions.Providers.Import.Parse
                         try
                         {
                             decimal? value = _parser.ParseDecimal(cell);
-                            SetValue(workSheet, rowNumber, coltemplate, cell, value);
+                            SetValue(workSheet, rowNumber, column, cell, value);
                         }
                         catch (NullReferenceException)
                         {
-                            _singleRowErrors.Add(_excelExtensions.LogNullReferenceException(workSheet.Name, coltemplate, cell.Address, rowNumber));
+                            _singleRowErrors.Add(_excelExtensions.LogNullReferenceException(workSheet.Name, column, cell.Address, rowNumber));
                         }
                         catch (Exception)
                         {
-                            _singleRowErrors.Add(_excelExtensions.LogCellException(workSheet.Name, coltemplate, cell.Address, rowNumber));
+                            _singleRowErrors.Add(_excelExtensions.LogCellException(workSheet.Name, column, cell.Address, rowNumber));
                         }
                         break;
                     }
-                case FormatType.DecimalList:
-                    {
-                        try
-                        {
-                            decimal? val = null;
-                            try
-                            {
-                                val = _parser.ParseDecimal(cell);
-                            }
-                            catch (NullReferenceException)
-                            {
-                                //Fine if this is null. Lets keep going
-                            }
+                    //TODO
+                //case FormatType.DecimalList:
+                //    {
+                //        try
+                //        {
+                //            decimal? val = null;
+                //            try
+                //            {
+                //                val = _parser.ParseDecimal(cell);
+                //            }
+                //            catch (NullReferenceException)
+                //            {
+                //                //Fine if this is null. Lets keep going
+                //            }
 
 
-                            // get info about property
-                            PropertyInfo modelPropertyInfo = _model.GetType().GetProperty(coltemplate.Column.ModelProperty);
+                //            // get info about property
+                //            PropertyInfo modelPropertyInfo = _model.GetType().GetProperty(column.ModelProperty);
 
-                            var list = modelPropertyInfo.GetValue(_model);
-                            Dictionary<string, decimal?> decimalList;
-                            if (list == null)  //this is the first item in the list so we need to init the list. 
-                            {
-                                decimalList = new Dictionary<string, decimal?>();
-                            }
-                            else
-                            {
-                                decimalList = (Dictionary<string, decimal?>)list;
-                            }
+                //            var list = modelPropertyInfo.GetValue(_model);
+                //            Dictionary<string, decimal?> decimalList;
+                //            if (list == null)  //this is the first item in the list so we need to init the list. 
+                //            {
+                //                decimalList = new Dictionary<string, decimal?>();
+                //            }
+                //            else
+                //            {
+                //                decimalList = (Dictionary<string, decimal?>)list;
+                //            }
 
-                            decimalList.Add(coltemplate.ColumnHeaderOptions[0], val);
+                //            decimalList.Add(column.DisplayNameOptions[0], val);
 
-                            modelPropertyInfo.SetValue(_model, decimalList, null);
-                        }
-                        catch (NullReferenceException)
-                        {
-                            _singleRowErrors.Add(_excelExtensions.LogNullReferenceException(workSheet.Name, coltemplate, cell.Address, rowNumber));
-                        }
-                        catch (Exception)
-                        {
-                            _singleRowErrors.Add(_excelExtensions.LogCellException(workSheet.Name, coltemplate, cell.Address, rowNumber));
-                        }
-                        break;
-                    }
+                //            modelPropertyInfo.SetValue(_model, decimalList, null);
+                //        }
+                //        catch (NullReferenceException)
+                //        {
+                //            _singleRowErrors.Add(_excelExtensions.LogNullReferenceException(workSheet.Name, column, cell.Address, rowNumber));
+                //        }
+                //        catch (Exception)
+                //        {
+                //            _singleRowErrors.Add(_excelExtensions.LogCellException(workSheet.Name, column, cell.Address, rowNumber));
+                //        }
+                //        break;
+                //    }
                 case FormatType.Int:
                     {
                         try
                         {
                             int? value = _parser.ParseInt(cell);
-                            SetValue(workSheet, rowNumber, coltemplate, cell, value);
+                            SetValue(workSheet, rowNumber, column, cell, value);
                         }
                         catch (NullReferenceException)
                         {
-                            _singleRowErrors.Add(_excelExtensions.LogNullReferenceException(workSheet.Name, coltemplate, cell.Address, rowNumber));
+                            _singleRowErrors.Add(_excelExtensions.LogNullReferenceException(workSheet.Name, column, cell.Address, rowNumber));
                         }
                         catch (Exception)
                         {
-                            _singleRowErrors.Add(_excelExtensions.LogCellException(workSheet.Name, coltemplate, cell.Address, rowNumber));
+                            _singleRowErrors.Add(_excelExtensions.LogCellException(workSheet.Name, column, cell.Address, rowNumber));
                         }
                         break;
                     }
-                case FormatType.StringList:
-                    {
-                        try
-                        {
-                            _parser.CheckIfCellIsNullOrEmpty(cell, "a string list");
+                    //TODO
+                //case FormatType.StringList:
+                //    {
+                //        try
+                //        {
+                //            _parser.CheckIfCellIsNullOrEmpty(cell, "a string list");
 
-                            string cellVal = cell.Value.ToString().Trim();
+                //            string cellVal = cell.Value.ToString().Trim();
 
-                            if (string.IsNullOrEmpty(cellVal) && !string.IsNullOrEmpty(cell.Formula))
-                            {
-                                //We have a formula which is setting the field to blank instead of null
-                                throw new NullReferenceException();
-                            }
+                //            if (string.IsNullOrEmpty(cellVal) && !string.IsNullOrEmpty(cell.Formula))
+                //            {
+                //                //We have a formula which is setting the field to blank instead of null
+                //                throw new NullReferenceException();
+                //            }
 
-                            // get info about property
-                            PropertyInfo modelPropertyInfo = _model.GetType().GetProperty(coltemplate.Column.ModelProperty);
+                //            // get info about property
+                //            PropertyInfo modelPropertyInfo = _model.GetType().GetProperty(column.ModelProperty);
 
-                            object list = modelPropertyInfo.GetValue(_model);
-                            Dictionary<string, string> stringlist;
-                            if (list == null)  //this is the first item in the list so we need to init the list. 
-                            {
-                                stringlist = new Dictionary<string, string>();
-                            }
-                            else
-                            {
-                                stringlist = (Dictionary<string, string>)list;
-                            }
+                //            object list = modelPropertyInfo.GetValue(_model);
+                //            Dictionary<string, string> stringlist;
+                //            if (list == null)  //this is the first item in the list so we need to init the list. 
+                //            {
+                //                stringlist = new Dictionary<string, string>();
+                //            }
+                //            else
+                //            {
+                //                stringlist = (Dictionary<string, string>)list;
+                //            }
 
-                            stringlist.Add(coltemplate.ColumnHeaderOptions[0], cellVal);
+                //            stringlist.Add(column.DisplayNameOptions[0], cellVal);
 
-                            modelPropertyInfo.SetValue(_model, stringlist, null);
-                        }
-                        catch (NullReferenceException)
-                        {
-                            _singleRowErrors.Add(_excelExtensions.LogNullReferenceException(workSheet.Name, coltemplate, cell.Address, rowNumber));
-                        }
-                        catch (Exception)
-                        {
-                            _singleRowErrors.Add(_excelExtensions.LogCellException(workSheet.Name, coltemplate, cell.Address, rowNumber));
-                        }
-                        break;
-                    }
+                //            modelPropertyInfo.SetValue(_model, stringlist, null);
+                //        }
+                //        catch (NullReferenceException)
+                //        {
+                //            _singleRowErrors.Add(_excelExtensions.LogNullReferenceException(workSheet.Name, column, cell.Address, rowNumber));
+                //        }
+                //        catch (Exception)
+                //        {
+                //            _singleRowErrors.Add(_excelExtensions.LogCellException(workSheet.Name, column, cell.Address, rowNumber));
+                //        }
+                //        break;
+                //    }
                 case FormatType.String:
                 //uses default
                 default:
@@ -539,15 +535,15 @@ namespace ExcelExtensions.Providers.Import.Parse
                         try
                         {
                             string value = _parser.ParseString(cell);
-                            SetValue(workSheet, rowNumber, coltemplate, cell, value);
+                            SetValue(workSheet, rowNumber, column, cell, value);
                         }
                         catch (NullReferenceException)
                         {
-                            _singleRowErrors.Add(_excelExtensions.LogNullReferenceException(workSheet.Name, coltemplate, cell.Address, rowNumber));
+                            _singleRowErrors.Add(_excelExtensions.LogNullReferenceException(workSheet.Name, column, cell.Address, rowNumber));
                         }
                         catch (Exception)
                         {
-                            _singleRowErrors.Add(_excelExtensions.LogCellException(workSheet.Name, coltemplate, cell.Address, rowNumber));
+                            _singleRowErrors.Add(_excelExtensions.LogCellException(workSheet.Name, column, cell.Address, rowNumber));
                         }
                         break;
                     }
@@ -562,12 +558,12 @@ namespace ExcelExtensions.Providers.Import.Parse
         /// <param name="coltemplate"></param>
         /// <param name="cell"></param>
         /// <param name="value"></param>
-        private void SetValue(ExcelWorksheet workSheet, int rowNumber, ImportColumnTemplate coltemplate, ExcelRange cell, object value)
+        private void SetValue(ExcelWorksheet workSheet, int rowNumber, InformedImportColumn coltemplate, ExcelRange cell, object value)
         {
             try
             {
                 // get info about property
-                PropertyInfo modelPropertyInfo = _model.GetType().GetProperty(coltemplate.Column.ModelProperty);
+                PropertyInfo modelPropertyInfo = _model.GetType().GetProperty(coltemplate.ModelProperty);
 
                 // set value of property
                 modelPropertyInfo.SetValue(_model, value, null);

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
 using ExcelExtensions.Models;
+using ExcelExtensions.Models.Columns.Import;
 using OfficeOpenXml;
 using System.Collections.Generic;
 
@@ -12,7 +13,7 @@ namespace ExcelExtensions.Interfaces.Import.Parse
     /// <typeparam name="T">Object the excel data is being mapped to.</typeparam>
     public interface ITableParser<T>
     {
-        ParsedTable<T> ScanForColumnsAndParseTable(List<ImportColumnTemplate> columns, ExcelWorksheet workSheet, int headerRowNumber = 1, int maxScanHeaderRowThreashold = 100);
-        ParsedTable<T> ParseTable(List<ImportColumnTemplate> columns, ExcelWorksheet workSheet, int headerRowNumber = 1);
+        ParsedTable<T> UninformedParseTable(List<UninformedImportColumn> columns, ExcelWorksheet workSheet, int headerRowNumber = 1, int maxScanHeaderRowThreashold = 100);
+        ParsedTable<T> InformedParseTable(List<InformedImportColumn> columns, ExcelWorksheet workSheet, int headerRowNumber = 1);
     }
 }

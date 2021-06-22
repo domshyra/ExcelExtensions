@@ -2,7 +2,9 @@
 
 using ExcelExtensions.Interfaces;
 using ExcelExtensions.Interfaces.Export;
-using ExcelExtensions.Models;
+using ExcelExtensions.Models.Columns;
+using ExcelExtensions.Models.Columns.Export;
+using ExcelExtensions.Models.Export;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -36,7 +38,7 @@ namespace ExcelExtensions.Providers.Export
         {
             Type exportModelType = rows.GetType().GetGenericArguments().Single();
 
-            foreach (Column column in columns)
+            foreach (ExportColumn column in columns)
             {
                 int rowNumber = headerRow;
                 rowNumber = SetTableHeaderRowNumber(sheet, displayNameAdditionalText, column, rowNumber);
@@ -46,10 +48,11 @@ namespace ExcelExtensions.Providers.Export
                     try
                     {
                         PropertyInfo propertyInfo = exportModelType.GetProperty(column.ModelProperty);
+                        CheckForNullColumnNumber(column);
                         try
                         {
                             object value = propertyInfo.GetValue(row);
-                            sheet.Cells[rowNumber++, _excelProvider.GetColumnNumber(column.ColumnLetter)].Value = value;
+                            sheet.Cells[rowNumber++, (int)column.ColumnNumber].Value = value;
                         }
                         catch (NullReferenceException e)
                         {
@@ -76,32 +79,48 @@ namespace ExcelExtensions.Providers.Export
         /// <param name="column"></param>
         /// <param name="row"></param>
         /// <returns></returns>
-        private int SetTableHeaderRowNumber(ExcelWorksheet sheet, string displayNameAdditionalText, Column column, int row)
+        private static int SetTableHeaderRowNumber(ExcelWorksheet sheet, string displayNameAdditionalText, Column column, int row)
         {
+            CheckForNullColumnNumber(column);
             if (string.IsNullOrEmpty(displayNameAdditionalText))
             {
-                sheet.Cells[row++, _excelProvider.GetColumnNumber(column.ColumnLetter)].Value = column.HeaderTitle;
+                sheet.Cells[row++, (int)column.ColumnNumber].Value = column.DisplayName;
             }
             else
             {
-                sheet.Cells[row++, _excelProvider.GetColumnNumber(column.ColumnLetter)].Value = $"{column.HeaderTitle} {displayNameAdditionalText}"; ;
+                sheet.Cells[row++, (int)column.ColumnNumber].Value = $"{column.DisplayName} {displayNameAdditionalText}"; ;
             }
 
             return row;
         }
 
+        private static void CheckForNullColumnNumber(Column column)
+        {
+            if (column.ColumnNumber is null)
+            {
+                throw new NullReferenceException($"Col number cannot be null for property {column.ModelProperty}");
+            }
+        }
+
         /// <inheritdoc/>
         public void FormatColumn(Column column, ref ExcelWorksheet sheet)
         {
-            FormatColumn(ref sheet, column.ColumnLetter, column.Format, column.DecimalPrecision);
+            CheckForNullColumnNumber(column);
+            FormatColumn(ref sheet, (int)column.ColumnNumber, column.Format, column.DecimalPrecision);
         }
+
+        public void FormatColumn(ref ExcelWorksheet sheet, string columnLetter, FormatType formatter, int? decimalPrecision = null)
+        {
+            FormatColumn(ref sheet, _excelProvider.GetColumnNumber(columnLetter), formatter, decimalPrecision);
+        }
+
         /// <inheritdoc/>
-        public void FormatColumn(ref ExcelWorksheet sheet, string column, FormatType formatter, int? decimalPrecision = null)
+        public void FormatColumn(ref ExcelWorksheet sheet, int columnNumber, FormatType formatter, int? decimalPrecision = null)
         {
             //Styling
             if (formatter == FormatType.String)
             {
-                sheet.Column(_excelProvider.GetColumnNumber(column)).Width = 21;
+                sheet.Column(columnNumber).Width = 21;
             }
             else if (formatter == FormatType.Currency)
             {
@@ -109,27 +128,27 @@ namespace ExcelExtensions.Providers.Export
                 {
                     string formatString = "$#,##0";
                     formatString = _excelProvider.AddDecimalPlacesToFormat(decimalPrecision, formatString);
-                    sheet.Column(_excelProvider.GetColumnNumber(column)).Style.Numberformat.Format = formatString;
+                    sheet.Column(columnNumber).Style.Numberformat.Format = formatString;
                 }
                 else
                 {
-                    sheet.Column(_excelProvider.GetColumnNumber(column)).Style.Numberformat.Format = "$#,##0.00";
+                    sheet.Column(columnNumber).Style.Numberformat.Format = "$#,##0.00";
                 }
-                sheet.Column(_excelProvider.GetColumnNumber(column)).Width = 17;
+                sheet.Column(columnNumber).Width = 17;
             }
             else if (formatter == FormatType.Date)
             {
                 if (DateTimeFormatInfo.CurrentInfo != null)
                 {
-                    sheet.Column(_excelProvider.GetColumnNumber(column)).Style.Numberformat.Format = DateTimeFormatInfo.CurrentInfo.ShortDatePattern;
+                    sheet.Column(columnNumber).Style.Numberformat.Format = DateTimeFormatInfo.CurrentInfo.ShortDatePattern;
                 }
-                sheet.Column(_excelProvider.GetColumnNumber(column)).Width = 15;
+                sheet.Column(columnNumber).Width = 15;
             }
             else if (formatter == FormatType.Duration)
             {
 
-                sheet.Column(_excelProvider.GetColumnNumber(column)).Style.Numberformat.Format = "[h]:mm:ss";
-                sheet.Column(_excelProvider.GetColumnNumber(column)).Width = 15;
+                sheet.Column(columnNumber).Style.Numberformat.Format = "[h]:mm:ss";
+                sheet.Column(columnNumber).Width = 15;
             }
             else if (formatter == FormatType.Decimal)
             {
@@ -137,18 +156,18 @@ namespace ExcelExtensions.Providers.Export
                 {
                     string formatString = "#,##0";
                     formatString = _excelProvider.AddDecimalPlacesToFormat(decimalPrecision, formatString);
-                    sheet.Column(_excelProvider.GetColumnNumber(column)).Style.Numberformat.Format = formatString;
+                    sheet.Column(columnNumber).Style.Numberformat.Format = formatString;
                 }
                 else
                 {
-                    sheet.Column(_excelProvider.GetColumnNumber(column)).Style.Numberformat.Format = "#,##0.0000";
+                    sheet.Column(columnNumber).Style.Numberformat.Format = "#,##0.0000";
                 }
-                sheet.Column(_excelProvider.GetColumnNumber(column)).Width = 15;
+                sheet.Column(columnNumber).Width = 15;
             }
             else if (formatter == FormatType.Int)
             {
-                sheet.Column(_excelProvider.GetColumnNumber(column)).Style.Numberformat.Format = "0";
-                sheet.Column(_excelProvider.GetColumnNumber(column)).Width = 13;
+                sheet.Column(columnNumber).Style.Numberformat.Format = "0";
+                sheet.Column(columnNumber).Width = 13;
             }
             else if (formatter == FormatType.Percent)
             {
@@ -156,24 +175,35 @@ namespace ExcelExtensions.Providers.Export
                 {
                     string formatString = "0";
                     formatString = _excelProvider.AddDecimalPlacesToFormat(decimalPrecision, formatString);
-                    sheet.Column(_excelProvider.GetColumnNumber(column)).Style.Numberformat.Format = formatString += "%";
+                    sheet.Column(columnNumber).Style.Numberformat.Format = formatString += "%";
                 }
                 else
                 {
-                    sheet.Column(_excelProvider.GetColumnNumber(column)).Style.Numberformat.Format = "0%";
+                    sheet.Column(columnNumber).Style.Numberformat.Format = "0%";
                 }
-                sheet.Column(_excelProvider.GetColumnNumber(column)).Width = 13;
+                sheet.Column(columnNumber).Width = 13;
             }
         }
 
         /// <inheritdoc/>
         public void FormatColumnRange(ExcelWorksheet itemcodeSheet, string startColumn, string endColumn, FormatType format, int? decimalPrecision = null)
         {
-            if (_excelProvider.GetColumnNumber(startColumn) > _excelProvider.GetColumnNumber(endColumn))
+            int start = _excelProvider.GetColumnNumber(startColumn);
+            int end = _excelProvider.GetColumnNumber(endColumn);
+            if (start > end)
             {
                 throw new ArgumentOutOfRangeException(nameof(startColumn), $"{nameof(startColumn)} must be less than {nameof(endColumn)}");
             }
-            string currenctColumn = startColumn;
+            FormatColumnRange(itemcodeSheet, start, end, format, decimalPrecision);
+        }
+        public void FormatColumnRange(ExcelWorksheet itemcodeSheet, int startColumn, int endColumn, FormatType format, int? decimalPrecision = null)
+        {
+            
+            if (startColumn > endColumn)
+            {
+                throw new ArgumentOutOfRangeException(nameof(startColumn), $"{nameof(startColumn)} must be less than {nameof(endColumn)}");
+            }
+            int currenctColumn = startColumn;
             do
             {
                 FormatColumn(ref itemcodeSheet, currenctColumn, format, decimalPrecision);
@@ -183,7 +213,7 @@ namespace ExcelExtensions.Providers.Export
                 {
                     break;
                 }
-                currenctColumn = _excelProvider.GetColumnLetter(_excelProvider.GetColumnNumber(currenctColumn) + 1);
+                currenctColumn++;
             }
             while (currenctColumn != endColumn);
         }

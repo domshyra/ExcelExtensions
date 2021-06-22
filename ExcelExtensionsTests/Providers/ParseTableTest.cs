@@ -11,6 +11,7 @@ using System.Linq;
 using Xunit;
 using static ExcelExtensions.Enums.Enums;
 using ExcelExtensions.Interfaces;
+using ExcelExtensions.Models.Columns.Import;
 
 namespace ExcelExtensionsTests
 {
@@ -67,15 +68,15 @@ namespace ExcelExtensionsTests
 
         }
 
-        private List<ImportColumnTemplate> GetScannedColumns()
+        private List<UninformedImportColumn> GetScannedColumns()
         {
             Type type = typeof(ParseTableTestBaseModel);
-            return new List<ImportColumnTemplate>()
+            return new List<UninformedImportColumn>()
             {
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.RequiredText),   FormatType.String),   true),
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Date),           FormatType.Date),     true),
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Decimal),        FormatType.Decimal),  true),
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.OptionalText),   FormatType.String),   false),
+                new UninformedImportColumn(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.RequiredText),   FormatType.String),   true),
+                new UninformedImportColumn(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Date),           FormatType.Date),     true),
+                new UninformedImportColumn(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Decimal),        FormatType.Decimal),  true),
+                new UninformedImportColumn(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.OptionalText),   FormatType.String),   false),
             };
         }
         /// <summary>
@@ -83,17 +84,17 @@ namespace ExcelExtensionsTests
         /// </summary>
         /// <param name="colStart"></param>
         /// <returns></returns>
-        private List<ImportColumnTemplate> GetKnownColumns(int colStart)
+        private List<UninformedImportColumn> GetKnownColumns(int colStart)
         {
 
             int i = colStart;
             Type type = typeof(ParseTableTestBaseModel);
-            return new List<ImportColumnTemplate>()
+            return new List<UninformedImportColumn>()
             {
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.RequiredText),   FormatType.String,     i++),   true),
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Date),           FormatType.Date,       i++),   true),
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Decimal),        FormatType.Decimal,    i++),   true),
-                new ImportColumnTemplate(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.OptionalText),   FormatType.String,     i++),   false),
+                new UninformedImportColumn(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.RequiredText),   FormatType.String,     i++),   true),
+                new UninformedImportColumn(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Date),           FormatType.Date,       i++),   true),
+                new UninformedImportColumn(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.Decimal),        FormatType.Decimal,    i++),   true),
+                new UninformedImportColumn(new Column(_excelExtensionsProvider, type, nameof(ParseTableTestBaseModel.OptionalText),   FormatType.String,     i++),   false),
             };
         }
 
@@ -156,7 +157,7 @@ namespace ExcelExtensionsTests
             CreateTestFile(ref worksheet, rowsOfTestData);
 
             //Act
-            var result = _tableParser.ParseTable(GetKnownColumns(1), worksheet).Rows;
+            var result = _tableParser.InformedParseTable(GetKnownColumns(1), worksheet).Rows;
 
             //Assert
             Assert.Equal(rowsOfTestData.First(), result.First().Value);
@@ -174,7 +175,7 @@ namespace ExcelExtensionsTests
             CreateTestFile(ref worksheet, rowsOfTestData);
 
             //Act
-            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _tableParser.ParseTable(GetScannedColumns(), worksheet).Rows);
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _tableParser.InformedParseTable(GetScannedColumns(), worksheet).Rows);
 
             //Assert
             Assert.Equal("All ColumnTemplate's must have a ColumnNumber. If the ColumnNumber is unknown use the ScanForColumnsAndParseTable method. (Parameter 'columns')", ex.Message);
@@ -196,7 +197,7 @@ namespace ExcelExtensionsTests
             CreateTestFile(ref worksheet, rowsOfTestData);
 
             //Act
-            var result = _tableParser.ScanForColumnsAndParseTable(GetScannedColumns(), worksheet).Rows;
+            var result = _tableParser.UninformedParseTable(GetScannedColumns(), worksheet).Rows;
 
             //Assert
             Assert.Equal(rowsOfTestData.First(), result.First().Value);
@@ -218,7 +219,7 @@ namespace ExcelExtensionsTests
             CreateTestFile(ref worksheet, rowsOfTestData, row, col);
 
             //Act
-            var result = _tableParser.ScanForColumnsAndParseTable(GetScannedColumns(), worksheet, row).Rows;
+            var result = _tableParser.UninformedParseTable(GetScannedColumns(), worksheet, row).Rows;
 
             //Assert
             Assert.Equal(rowsOfTestData.First(), result.First().Value);
@@ -252,7 +253,7 @@ namespace ExcelExtensionsTests
             CreateTestFile(ref worksheet, rowsOfTestData, row, col);
 
             //Act
-            var result = _tableParser.ScanForColumnsAndParseTable(GetScannedColumns(), worksheet).Rows;
+            var result = _tableParser.UninformedParseTable(GetScannedColumns(), worksheet).Rows;
 
             //Assert
             Assert.Equal(rowsOfTestData.First(), result.First().Value);
@@ -271,7 +272,7 @@ namespace ExcelExtensionsTests
             CreateTestFile(ref worksheet, rowsOfTestData, 104, 1);
 
             //Act
-            var result = _tableParser.ScanForColumnsAndParseTable(GetScannedColumns(), worksheet, 5).Rows;
+            var result = _tableParser.UninformedParseTable(GetScannedColumns(), worksheet, 5).Rows;
 
             //Assert
             Assert.Equal(rowsOfTestData.First(), result.First().Value);
@@ -315,7 +316,7 @@ namespace ExcelExtensionsTests
             }
 
             //Act
-            var result = _tableParser.ScanForColumnsAndParseTable(GetScannedColumns(), worksheet);
+            var result = _tableParser.UninformedParseTable(GetScannedColumns(), worksheet);
 
             //Assert
             Assert.Equal(rowsOfTestData.First(), result.Rows.First().Value);
@@ -339,7 +340,7 @@ namespace ExcelExtensionsTests
             CreateTestFile(ref worksheet, rowsOfTestData, 101, 1);
 
             //Act
-            var result = _tableParser.ScanForColumnsAndParseTable(GetScannedColumns(), worksheet).Exceptions;
+            var result = _tableParser.UninformedParseTable(GetScannedColumns(), worksheet).Exceptions;
             string errorMsg = "Could not find columns. Please check spelling of header columns and make sure all required columns are in the worksheet.";
             //Assert
             Assert.Equal(errorMsg, result.First().Value.Message);
@@ -380,7 +381,7 @@ namespace ExcelExtensionsTests
             }
 
             //Act
-            ParseException result = _tableParser.ScanForColumnsAndParseTable(GetScannedColumns(), worksheet).Exceptions.First().Value;
+            ParseException result = _tableParser.UninformedParseTable(GetScannedColumns(), worksheet).Exceptions.First().Value;
 
             //Assert
             Assert.Equal(errorMessage.Severity, result.Severity);
@@ -410,7 +411,7 @@ namespace ExcelExtensionsTests
             CreateTestFile(ref worksheet, rowsOfTestData, 1, 1);
 
             //Act
-            var result = _tableParser.ScanForColumnsAndParseTable(GetScannedColumns(), worksheet);
+            var result = _tableParser.UninformedParseTable(GetScannedColumns(), worksheet);
 
             //Assert
             Assert.Equal(rowsOfTestData.First(x => x.RequiredText == "First Valid Data"), result.Rows[2]);
