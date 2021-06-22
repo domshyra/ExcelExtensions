@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
 using ExcelExtensions.Interfaces;
+using static ExcelExtensions.Enums.Enums;
 
 namespace ExcelExtensions.Models
 {
@@ -23,6 +24,11 @@ namespace ExcelExtensions.Models
         public ExportColumn(IExtensions excelExtensions, string exportColumnLetter) : this(excelExtensions.GetColumnNumber(exportColumnLetter))
         {
 
+        }
+
+        public ExportColumn(string modelPropertyName, string displayName, int columnNumber, FormatType format, int? decimalPrecision = null) : base(modelPropertyName, displayName, format, decimalPrecision)
+        {
+            ColumnNumber = columnNumber;
         }
     }
 }
