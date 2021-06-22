@@ -40,5 +40,7 @@ namespace ExcelExtensions.Models
 
         public int? ImportColumnNumber { get; set; }
 
+        //TODO THROW ERRORS IF BOTH EXPORTS OR BOTH IMPORTS ARE DEFINED
+
     }
 }

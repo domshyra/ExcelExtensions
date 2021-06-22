@@ -1,7 +1,5 @@
 ﻿// Copyright (c) Dominic Schira <domshyra@gmail.com>. All Rights Reserved.
 
-using ExcelExtensions.Interfaces;
-using System;
 using static ExcelExtensions.Enums.Enums;
 
 namespace ExcelExtensions.Models
@@ -11,19 +9,11 @@ namespace ExcelExtensions.Models
     /// </summary>
     public class Column
     {
-        /// <summary>
-        /// Represents the location/letter of the excel column. Ex "C"
-        /// <para>Used for exports and import where we know where to look and are not parsing for new col locations</para>
-        /// </summary>
-        public string ExportColumnLetter { get; set; }
-        /// <summary>
-        /// Represents property name for the mapping object.
-        /// </summary>
         public string ModelProperty { get; set; }
         /// <summary>
         /// Represents the human readable column header name/title
         /// </summary>
-        public string TableHeaderTitle { get; set; }
+        public string DisplayName { get; set; }
         /// <summary>
         /// Represents the format type for the excel object
         /// </summary>
@@ -37,32 +27,10 @@ namespace ExcelExtensions.Models
         {
 
         }
-        public Column(string modelPropertyName, string headerTitle, string columnLetter, FormatType format, int? decimalPrecision = null)
+        public Column(string modelPropertyName, string displayName, FormatType format, int? decimalPrecision = null)
         {
-            ExportColumnLetter = columnLetter;
             ModelProperty = modelPropertyName;
-            TableHeaderTitle = headerTitle;
-            Format = format;
-            DecimalPrecision = decimalPrecision;
-        }
-        public Column(IExtensions _excelExtensions, Type modelType, string modelPropertyName, FormatType format, string columnLetter = null, int? decimalPrecision = null)
-        {
-            _excelExtensions.GetExportModelPropertyNameAndDisplayName(modelType, modelPropertyName, out string textTitle);
-            if (columnLetter != null)
-            {
-                ExportColumnLetter = columnLetter;
-            }
-            ModelProperty = modelPropertyName;
-            TableHeaderTitle = textTitle;
-            Format = format;
-            DecimalPrecision = decimalPrecision;
-        }
-        public Column(IExtensions _excelExtensions, Type modelType, string modelPropertyName, FormatType format, int columnLetterAsInt, int? decimalPrecision = null)
-        {
-            _excelExtensions.GetExportModelPropertyNameAndDisplayName(modelType, modelPropertyName, out string textTitle);
-            ExportColumnLetter = _excelExtensions.GetColumnLetter(columnLetterAsInt);
-            ModelProperty = modelPropertyName;
-            TableHeaderTitle = textTitle;
+            DisplayName = displayName;
             Format = format;
             DecimalPrecision = decimalPrecision;
         }

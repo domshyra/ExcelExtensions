@@ -18,20 +18,20 @@ namespace ExcelExtensions.Providers
     public class Extensions : IExtensions
     {
         #region developer exceptions 
-        public KeyValuePair<string, ParseException> LogDeveloperException(string worksheetName, ImportColumn importColumn, string cellAddress, string message, string modelPropertyName)
+        public KeyValuePair<string, ParseException> LogDeveloperException(string worksheetName, UninformedImportColumn importColumn, string cellAddress, string message, string modelPropertyName)
         {
             ParseException parseException = LogDeveloperExceptionParseException(worksheetName, importColumn, cellAddress, message);
 
             return new KeyValuePair<string, ParseException>(modelPropertyName, parseException);
         }
-        public KeyValuePair<int, ParseException> LogDeveloperException(string worksheetName, ImportColumn importColumn, string cellAddress, int rowNumber, string message)
+        public KeyValuePair<int, ParseException> LogDeveloperException(string worksheetName, UninformedImportColumn importColumn, string cellAddress, int rowNumber, string message)
         {
             ParseException parseException = LogDeveloperExceptionParseException(worksheetName, importColumn, cellAddress, message);
 
             return new KeyValuePair<int, ParseException>(rowNumber, parseException);
         }
 
-        private ParseException LogDeveloperExceptionParseException(string worksheetName, ImportColumn importColumn, string cellAddress, string exeptionMessage)
+        private ParseException LogDeveloperExceptionParseException(string worksheetName, UninformedImportColumn importColumn, string cellAddress, string exeptionMessage)
         {
             //ParseException parseException = new(worksheetName, displayName, cellAddress, null, "An error occurred when trying to set the property info. The error is: " + message)
             ParseException parseException = new(worksheetName, importColumn.Column)
@@ -45,21 +45,21 @@ namespace ExcelExtensions.Providers
             return parseException;
         }
 
-        public KeyValuePair<string, ParseException> LogNullReferenceException(string worksheetName, ImportColumn displayName, string cellAddress, string modelPropertyName)
+        public KeyValuePair<string, ParseException> LogNullReferenceException(string worksheetName, UninformedImportColumn displayName, string cellAddress, string modelPropertyName)
         {
             ParseException parseException = LogNullReferenceExceptionParseException(worksheetName, displayName, cellAddress);
 
             return new KeyValuePair<string, ParseException>(modelPropertyName, parseException);
         }
 
-        public KeyValuePair<int, ParseException> LogNullReferenceException(string worksheetName, ImportColumn displayName, string cellAddress, int rowNumber)
+        public KeyValuePair<int, ParseException> LogNullReferenceException(string worksheetName, UninformedImportColumn displayName, string cellAddress, int rowNumber)
         {
             ParseException parseException = LogNullReferenceExceptionParseException(worksheetName, displayName, cellAddress);
 
             return new KeyValuePair<int, ParseException>(rowNumber, parseException);
         }
 
-        private ParseException LogNullReferenceExceptionParseException(string worksheetName, ImportColumn column, string cellAddress)
+        private ParseException LogNullReferenceExceptionParseException(string worksheetName, UninformedImportColumn column, string cellAddress)
         {
             ParseException parseException = new(worksheetName, column)
             {
@@ -71,21 +71,21 @@ namespace ExcelExtensions.Providers
             return parseException;
         }
 
-        public KeyValuePair<string, ParseException> LogCellException(string worksheetName, ImportColumn displayName, string cellAddress, string modelPropertyName)
+        public KeyValuePair<string, ParseException> LogCellException(string worksheetName, UninformedImportColumn displayName, string cellAddress, string modelPropertyName)
         {
             ParseException parseException = LogCellExceptionParseException(worksheetName, displayName, cellAddress);
 
             return new KeyValuePair<string, ParseException>(modelPropertyName, parseException);
         }
 
-        public KeyValuePair<int, ParseException> LogCellException(string worksheetName, ImportColumn displayName, string cellAddress, int rowNumber)
+        public KeyValuePair<int, ParseException> LogCellException(string worksheetName, UninformedImportColumn displayName, string cellAddress, int rowNumber)
         {
             ParseException parseException = LogCellExceptionParseException(worksheetName, displayName, cellAddress);
 
             return new KeyValuePair<int, ParseException>(rowNumber, parseException);
         }
 
-        private ParseException LogCellExceptionParseException(string worksheetName, ImportColumn column, string cellAddress)
+        private ParseException LogCellExceptionParseException(string worksheetName, UninformedImportColumn column, string cellAddress)
         {
             ParseException parseException = new(worksheetName, column)
             {

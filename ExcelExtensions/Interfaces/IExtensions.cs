@@ -104,12 +104,12 @@ namespace ExcelExtensions.Interfaces
 
         ///
 
-        KeyValuePair<string, ParseException> LogDeveloperException(string worksheetName, ImportColumn displayName, string cellAddress, string message, string modelPropertyName);
-        KeyValuePair<int, ParseException> LogDeveloperException(string worksheetName, ImportColumn displayName, string cellAddress, int rowNumber, string message);
-        KeyValuePair<string, ParseException> LogNullReferenceException(string worksheetName, ImportColumn displayName, string cellAddress, string modelPropertyName);
-        KeyValuePair<int, ParseException> LogNullReferenceException(string worksheetName, ImportColumn displayName, string cellAddress, int rowNumber);
-        KeyValuePair<int, ParseException> LogCellException(string worksheetName, ImportColumn displayName, string cellAddress, int rowNumber);
-        KeyValuePair<string, ParseException> LogCellException(string worksheetName, ImportColumn displayName, string cellAddress, string modelPropertyName);
+        KeyValuePair<string, ParseException> LogDeveloperException(string worksheetName, UninformedImportColumn displayName, string cellAddress, string message, string modelPropertyName);
+        KeyValuePair<int, ParseException> LogDeveloperException(string worksheetName, UninformedImportColumn displayName, string cellAddress, int rowNumber, string message);
+        KeyValuePair<string, ParseException> LogNullReferenceException(string worksheetName, UninformedImportColumn displayName, string cellAddress, string modelPropertyName);
+        KeyValuePair<int, ParseException> LogNullReferenceException(string worksheetName, UninformedImportColumn displayName, string cellAddress, int rowNumber);
+        KeyValuePair<int, ParseException> LogCellException(string worksheetName, UninformedImportColumn displayName, string cellAddress, int rowNumber);
+        KeyValuePair<string, ParseException> LogCellException(string worksheetName, UninformedImportColumn displayName, string cellAddress, string modelPropertyName);
 
     }
 }

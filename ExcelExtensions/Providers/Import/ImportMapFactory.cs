@@ -23,7 +23,7 @@ namespace ExcelExtensions.Providers.Import
         }
 
 
-        public List<ImportColumn> MapObjectToImportColumns(Type modelType, FormatType formatType = FormatType.String, int startColumnNumber = 1)
+        public List<UninformedImportColumn> MapObjectToImportColumns(Type modelType, FormatType formatType = FormatType.String, int startColumnNumber = 1)
         {
             //If you give me an int you know where it is, or if you give me a letter you know where it is
 
@@ -40,7 +40,7 @@ namespace ExcelExtensions.Providers.Import
             //Could possible make Column and protected class and make ImportColumn and ExportColum  then a class that encapsulates both for a LazyColumn
 
             int currentColumnNumber = startColumnNumber;
-            List<ImportColumn> excelColumnDefinitionArray = new();
+            List<UninformedImportColumn> excelColumnDefinitionArray = new();
 
             foreach (PropertyInfo item in modelType.GetProperties())
             {
@@ -57,7 +57,7 @@ namespace ExcelExtensions.Providers.Import
                 bool required = attribute?.IsRequired ?? true; //<see cref="ParseExceptionSeverity.Error"/>
                 List<string> importKeys = attribute?.ImportColumnTitleOptions ?? new List<string>() { modelPropertyName, textTitle };
 
-                excelColumnDefinitionArray.Add(new ImportColumnWithCellAddress()
+                excelColumnDefinitionArray.Add(new InformedImportColumn()
                 {
                     //If already know our column letter lets use that. 
                     ImportColumnNumber = attribute?.ExportColumnLetter == null ? 0 : _excelExtensions.GetColumnNumber(attribute.ExportColumnLetter),
@@ -66,7 +66,7 @@ namespace ExcelExtensions.Providers.Import
                                         letter,
                                         format,
                                         attribute?.DecimalPrecision),
-                    ColumnHeaderOptions = importKeys,
+                    DisplayNameOptions = importKeys,
                     IsRequired = required
                 });
                 //next column

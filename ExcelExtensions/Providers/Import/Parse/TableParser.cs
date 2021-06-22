@@ -33,7 +33,7 @@ namespace ExcelExtensions.Providers.Import.Parse
             _parseResults = new ParsedTable<T>();
             _requiredFieldMissingMessages = new List<ParseException>();
         }
-        public ParsedTable<T> ScanForColumnsAndParseTable(List<ImportColumn> columns, ExcelWorksheet workSheet, int headerRowNumber = 1, int maxScanHeaderRowThreashold = 100)
+        public ParsedTable<T> UninformedParseTable(List<UninformedImportColumn> columns, ExcelWorksheet workSheet, int headerRowNumber = 1, int maxScanHeaderRowThreashold = 100)
         {
             if (_excelExtensions is null)
             {
@@ -41,7 +41,7 @@ namespace ExcelExtensions.Providers.Import.Parse
             }
             int rowScanCount = 0;
 
-            List<ImportColumnWithCellAddress> columnsWithCellAddresses = CheckForMissingColumnNumbersInImportColumnTemplates(columns);
+            List<InformedImportColumn> columnsWithCellAddresses = CheckForMissingColumnNumbersInImportColumnTemplates(columns);
 
             //Check for each of the expected columns in 
             ScanForHeaderRow(columnsWithCellAddresses, ref workSheet, ref headerRowNumber, maxScanHeaderRowThreashold, ref rowScanCount);
@@ -55,27 +55,37 @@ namespace ExcelExtensions.Providers.Import.Parse
             return ParseRows(columnsWithCellAddresses, workSheet, headerRowNumber);
         }
 
-        public ParsedTable<T> ParseTable(List<ImportColumn> columns, ExcelWorksheet workSheet, int headerRowNumber = 1)
+        public ParsedTable<T> InformedParseTable(List<UninformedImportColumn> columns, ExcelWorksheet workSheet, int headerRowNumber = 1)
         {
             if (_excelExtensions is null)
             {
                 throw new ArgumentNullException(nameof(IExtensions), $"Make sure when TableParser is constructed that {nameof(IExtensions)} gets passed in.");
             }
 
-            List<ImportColumnWithCellAddress> columnsWithCellAddresses = CheckForMissingColumnNumbersInImportColumnTemplates(columns);
+            List<InformedImportColumn> columnsWithCellAddresses = CheckForMissingColumnNumbersInImportColumnTemplates(columns);
 
-            if (columnsWithCellAddresses.Any(x => x.IsRequired && x.ImportColumnNumber <= 0))
+            return InformedParseTable(columnsWithCellAddresses, workSheet, headerRowNumber);
+        }
+        public ParsedTable<T> InformedParseTable(List<InformedImportColumn> columns, ExcelWorksheet workSheet, int headerRowNumber = 1)
+        {
+            if (_excelExtensions is null)
+            {
+                throw new ArgumentNullException(nameof(IExtensions), $"Make sure when TableParser is constructed that {nameof(IExtensions)} gets passed in.");
+            }
+
+            if (columns.Any(x => x.IsRequired && x.ImportColumnNumber <= 0))
             {
                 throw new ArgumentOutOfRangeException(nameof(columns), "All ColumnTemplate's must have a ColumnNumber. If the ColumnNumber is unknown use the ScanForColumnsAndParseTable method.");
             }
             //Assign required columns
-            foreach (ImportColumnWithCellAddress col in columnsWithCellAddresses.Where(x => x.IsRequired))
+            foreach (InformedImportColumn col in columns.Where(x => x.IsRequired))
             {
-                _requiredFieldsColumnLocations.Add(col.Column.ExportColumnLetter);
+                //TODO this might need changed... 
+                _requiredFieldsColumnLocations.Add(_excelExtensions.GetColumnLetter(col.ImportColumnNumber));
             }
 
             //Parse each row
-            return ParseRows(columnsWithCellAddresses, workSheet, headerRowNumber);
+            return ParseRows(columns, workSheet, headerRowNumber);
         }
 
         /// <summary>
@@ -85,7 +95,7 @@ namespace ExcelExtensions.Providers.Import.Parse
         /// <param name="workSheet"></param>
         /// <param name="headerRowId"></param>
         /// <returns></returns>
-        private ParsedTable<T> ParseRows(List<ImportColumnWithCellAddress> columnsWithCellAddresses, ExcelWorksheet workSheet, int headerRowId)
+        private ParsedTable<T> ParseRows(List<InformedImportColumn> columnsWithCellAddresses, ExcelWorksheet workSheet, int headerRowId)
         {
             for (int rowNumber = headerRowId + 1; rowNumber <= workSheet.Dimension.End.Row; rowNumber++)
             {
@@ -93,7 +103,7 @@ namespace ExcelExtensions.Providers.Import.Parse
                 _singleRowErrors.Clear();
                 _model = Activator.CreateInstance<T>();
 
-                foreach (ImportColumnWithCellAddress coltemplate in columnsWithCellAddresses)
+                foreach (InformedImportColumn coltemplate in columnsWithCellAddresses)
                 {
                     //If its at defualt(0) or we have reached the end of the sheet bail out
                     if (coltemplate.ImportColumnNumber < 1 || coltemplate.ImportColumnNumber > workSheet.Dimension.End.Column)
@@ -143,12 +153,12 @@ namespace ExcelExtensions.Providers.Import.Parse
         /// Get the cell address using the extension from the data the user provided in the import map 
         /// </summary>
         /// <param name="columns"></param>
-        private List<ImportColumnWithCellAddress> CheckForMissingColumnNumbersInImportColumnTemplates(List<ImportColumn> columns)
+        private List<InformedImportColumn> CheckForMissingColumnNumbersInImportColumnTemplates(List<UninformedImportColumn> columns)
         {
-            List<ImportColumnWithCellAddress> columnsWithCellAddresses = new();
-            foreach (ImportColumn item in columns)
+            List<InformedImportColumn> columnsWithCellAddresses = new();
+            foreach (UninformedImportColumn item in columns)
             {
-                columnsWithCellAddresses.Add(new ImportColumnWithCellAddress(_excelExtensions, item));
+                columnsWithCellAddresses.Add(new InformedImportColumn(_excelExtensions, item));
             }
             return columnsWithCellAddresses;
         }
@@ -163,7 +173,7 @@ namespace ExcelExtensions.Providers.Import.Parse
         /// <param name="maxScanHeaderRowThreashold"></param>
         /// <param name="rowScanCount"></param>
         /// <remarks>There must be at least one required field.</remarks>
-        private void ScanForHeaderRow(List<ImportColumnWithCellAddress> columns, ref ExcelWorksheet workSheet, ref int headerRowNumber, int maxScanHeaderRowThreashold, ref int rowScanCount)
+        private void ScanForHeaderRow(List<InformedImportColumn> columns, ref ExcelWorksheet workSheet, ref int headerRowNumber, int maxScanHeaderRowThreashold, ref int rowScanCount)
         {
             do
             {
@@ -205,7 +215,7 @@ namespace ExcelExtensions.Providers.Import.Parse
         /// <param name="maxScanHeaderRowThreashold"></param>
         /// <param name="rowScanCount"></param>
         /// <returns></returns>
-        private bool CheckMissingScannedColumns(int headerRowId, int maxScanHeaderRowThreashold, int rowScanCount, List<ImportColumn> columns)
+        private bool CheckMissingScannedColumns(int headerRowId, int maxScanHeaderRowThreashold, int rowScanCount, List<UninformedImportColumn> columns)
         {
 
             if (rowScanCount >= maxScanHeaderRowThreashold && _requiredFieldMissingMessages.Count == columns.Where(x => x.IsRequired).Count())
@@ -251,13 +261,13 @@ namespace ExcelExtensions.Providers.Import.Parse
         /// <param name="headerRowId"></param>
         /// <param name="RequiredFields"></param>
         /// <param name="parseResults"></param>
-        private void FindColumnNamesAndCheckRequiredColumns(List<ImportColumnWithCellAddress> columns, ref ExcelWorksheet workSheet, ref int headerRowId)
+        private void FindColumnNamesAndCheckRequiredColumns(List<InformedImportColumn> columns, ref ExcelWorksheet workSheet, ref int headerRowId)
         {
-            foreach (ImportColumnWithCellAddress coltemplate in columns)
+            foreach (InformedImportColumn coltemplate in columns)
             {
                 foreach (ExcelRangeBase firstRowCell in workSheet.Cells[headerRowId, workSheet.Dimension.Start.Column, headerRowId, workSheet.Dimension.End.Column])
                 {
-                    if (coltemplate.ColumnHeaderOptions.Any(x => x.Equals(firstRowCell.Text, StringComparison.OrdinalIgnoreCase)))
+                    if (coltemplate.DisplayNameOptions.Any(x => x.Equals(firstRowCell.Text, StringComparison.OrdinalIgnoreCase)))
                     {
                         coltemplate.ImportColumnNumber = firstRowCell.Start.Column;
                         continue;
@@ -303,7 +313,7 @@ namespace ExcelExtensions.Providers.Import.Parse
         /// <param name="coltemplate"></param>
         /// <param name="cell"></param>
         /// <remarks>Will throw <see cref="NullReferenceException"/> errors. disable them when debugging through this dll file. </remarks>
-        private void ParseCell(ExcelWorksheet workSheet, int rowNumber, ImportColumn coltemplate, ExcelRange cell)
+        private void ParseCell(ExcelWorksheet workSheet, int rowNumber, UninformedImportColumn coltemplate, ExcelRange cell)
         {
             switch (coltemplate.Column.Format)
             {
@@ -460,7 +470,7 @@ namespace ExcelExtensions.Providers.Import.Parse
                                 decimalList = (Dictionary<string, decimal?>)list;
                             }
 
-                            decimalList.Add(coltemplate.ColumnHeaderOptions[0], val);
+                            decimalList.Add(coltemplate.DisplayNameOptions[0], val);
 
                             modelPropertyInfo.SetValue(_model, decimalList, null);
                         }
@@ -519,7 +529,7 @@ namespace ExcelExtensions.Providers.Import.Parse
                                 stringlist = (Dictionary<string, string>)list;
                             }
 
-                            stringlist.Add(coltemplate.ColumnHeaderOptions[0], cellVal);
+                            stringlist.Add(coltemplate.DisplayNameOptions[0], cellVal);
 
                             modelPropertyInfo.SetValue(_model, stringlist, null);
                         }
@@ -563,7 +573,7 @@ namespace ExcelExtensions.Providers.Import.Parse
         /// <param name="coltemplate"></param>
         /// <param name="cell"></param>
         /// <param name="value"></param>
-        private void SetValue(ExcelWorksheet workSheet, int rowNumber, ImportColumn coltemplate, ExcelRange cell, object value)
+        private void SetValue(ExcelWorksheet workSheet, int rowNumber, UninformedImportColumn coltemplate, ExcelRange cell, object value)
         {
             try
             {
