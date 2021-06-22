@@ -228,7 +228,6 @@ namespace ExcelExtensions.Providers
         {
             try
             {
-                //TODO make custome attribute and read info from here
                 MemberInfo property = objType.GetProperty(modelPropertyName);
 
                 TextInfo usEnglishTextInfo = new CultureInfo("en-US", false).TextInfo;
